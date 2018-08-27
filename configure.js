@@ -2,6 +2,7 @@ const prompt = require('prompt');
 const util = require('./src/common/util');
 
 const generate = options => `
+  const path = require('path');
   const ${options.bot} = require('./src/hearts/${options.bot}');
   module.exports = {
     server: '${options.server}',
