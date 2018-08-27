@@ -1,6 +1,5 @@
 const path = require('path');
 const util = require('../common/util');
-const HeartsClient = require('./HeartsClient');
 const {
   Match, Game, Player, Deal, Hand,
   Cards, Card, PlayedCard, Pass, Round
