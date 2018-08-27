@@ -2,16 +2,16 @@ const prompt = require('prompt');
 const util = require('./src/common/util');
 
 const generate = options => `
-  const path = require('path');
-  const ${options.bot} = require('./src/hearts/${options.bot}');
-  module.exports = {
-    server: '${options.server}',
-    token: '${options.token}',
-    playerNumber: ${options.number},
-    playerName: '${options.name}',
-    bot: new ${options.bot}(),
-    logs: path.join(__dirname, '${options.logs}'),
-  };
+const path = require('path');
+const ${options.bot} = require('./src/hearts/${options.bot}');
+module.exports = {
+  server: '${options.server}',
+  token: '${options.token}',
+  playerNumber: ${options.number},
+  playerName: '${options.name}',
+  bot: new ${options.bot}(),
+  logs: path.join(__dirname, '${options.logs}'),
+};
 `;
 
 prompt.start();
