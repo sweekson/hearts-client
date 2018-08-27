@@ -25,4 +25,4 @@ class HeartsBotC0 extends HeartsBotBase {
   }
 }
 
-module.exports = HeartsBotC1;
+module.exports = HeartsBotC0;
