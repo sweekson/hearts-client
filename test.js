@@ -3,7 +3,7 @@ const util = require('./src/common/util');
 const {
   Match, Game, Player, Deal, Hand,
   Cards, Card, PlayedCard, Pass, Round
-} = require('./HeartsDataModels');
+} = require('./src/hearts/HeartsDataModels');
 
 /* // T1
 const cards = Cards.create(['KS','5S','4S','QH','8H','5H','AC','5C','4C','2C','AD','TD','5D']);
