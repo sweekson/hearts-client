@@ -1,8 +1,5 @@
 const HeartsBotBase = require('./HeartsBotBase');
-const {
-  Match, Game, Player, Deal, Hand,
-  Cards, Card, PlayedCard, Pass, Round
-} = require('./HeartsDataModels');
+const { Cards, Card } = require('./HeartsDataModels');
 
 class HeartsBotC0 extends HeartsBotBase {
   pass (middleware) {
