@@ -60,12 +60,11 @@ class HeartsClientMiddleware {
   }
 
   onExposeCards () {
-    // const cards = this.bot.expose(this);
-    // this.client.expose(this.deal.number, cards);
+    const cards = this.bot.expose(this);
+    this.client.expose(this.deal.number, cards);
   }
 
   onExposeCardsEnd (data) {
-    const match = this.match;
     const deal = this.deal;
     data.players.forEach(({ playerNumber: number, exposedCards }) => {
       const hand = deal.hands.get(number);
@@ -89,15 +88,16 @@ class HeartsClientMiddleware {
     round.played.push(played);
     deal.played.push(played);
     round.played.length === 1 && (round.lead = played);
-    hand.canFollowLead;
     played.suit !== round.lead.suit && (hand.voids[round.lead.fullsuit] = true);
     played.isHeart && (deal.isHeartBroken = round.isHeartBroken = true);
   }
 
   onYourTurn (data) {
     const hand = this.hand;
+    const round = this.round;
     hand.valid.clear();
     hand.valid.push(...Cards.create(data.self.candidateCards));
+    hand.canFollowLead = !round.lead ? true : hand.valid.list.some(v => v.suit === round.lead.suit);
 
     const card = this.bot.pick(this);
     // this.client.pick(this.deal.number, this.round.number, card);
@@ -113,6 +113,7 @@ class HeartsClientMiddleware {
     round.won = new PlayedCard(player.number, hand.played.last.value);
     round.score = Cards.scoring(round.played, isAceHeartExposed) * (hasTenClub ? 2 : 1);
     hand.score = Cards.scoring(hand.gained, isAceHeartExposed);
+    this.round = null;
   }
 
   onDealEnd (data) {
@@ -125,7 +126,7 @@ class HeartsClientMiddleware {
       const number = v.playerNumber;
       const hand = hands.get(number);
       players.get(number).score = v.gameScore;
-      hand.hadShotTheMoon;
+      hand.hadShotTheMoon = v.shootingTheMoon;
       hand.valid.clear();
       if (number === match.self) { return; }
       const to = game.getPassToPlayer(deal.number, number);
@@ -135,10 +136,15 @@ class HeartsClientMiddleware {
       hand.pass = new Pass(to, Cards.create(v.pickedCards));
       hand.receive = new Pass(from, Cards.create(v.receivedCards));
     });
+    this.deal = null;
+    this.hand = null;
   }
 
   onGameEnd () {
     this.game = null;
+    this.deal = null;
+    this.hand = null;
+    this.round = null;
   }
 
   onMessage (detail) {
@@ -150,13 +156,8 @@ class HeartsClientMiddleware {
   }
 
   onClose () {
-    const dest = 'logs';
-    const dir = util.date.format(new Date(), 'mm-dd-hh-MM');
-    util.folder.create(path.join(__dirname, dest));
-    util.folder.create(path.join(__dirname, dest, dir));
-    util.file.write(path.join(__dirname, dest, dir, 'detail.json'), this.detail);
-    util.file.write(path.join(__dirname, dest, dir, 'events.json'), this.events);
     console.log('Disconnected from server');
+    this.export();
   }
 
   onOpen (data) {
@@ -164,6 +165,15 @@ class HeartsClientMiddleware {
   }
 
   onError () {}
+
+  export () {
+    const dest = path.join(__dirname, 'logs');
+    const dir = util.date.format(new Date(), 'mm-dd-hh-MM');
+    util.folder.create(dest);
+    util.folder.create(path.join(dest, dir));
+    util.file.write(path.join(dest, dir, 'detail.json'), this.detail);
+    util.file.write(path.join(dest, dir, 'events.json'), this.events);
+  }
 }
 
 module.exports = HeartsClientMiddleware;

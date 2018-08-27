@@ -17,6 +17,7 @@ class HeartsBotC0 extends HeartsBotBase {
   }
 
   expose (middleware) {
+    return [];
   }
 
   pick (middleware) {
