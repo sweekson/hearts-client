@@ -147,6 +147,10 @@ class HeartsClientMiddleware {
     this.round = null;
   }
 
+  onGameStop () {
+    this.export();
+  }
+
   onMessage (detail) {
     const { eventName, data } = detail;
     const handler = 'on' + util.string.toUpperCamelCase(eventName);
