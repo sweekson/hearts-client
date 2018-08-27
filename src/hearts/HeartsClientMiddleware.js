@@ -45,7 +45,7 @@ class HeartsClientMiddleware {
 
   onPassCards () {
     const cards = this.bot.pass(this);
-    this.emit(HeartsClient.actions.pass, { cards });
+    this.client.pass(this.deal.number, cards);
   }
 
   onPassCardsEnd (data) {
@@ -62,7 +62,7 @@ class HeartsClientMiddleware {
 
   onExposeCards () {
     // const cards = this.bot.expose(this);
-    // this.emit(HeartsClient.actions.expose, { cards });
+    // this.client.expose(this.deal.number, cards);
   }
 
   onExposeCardsEnd (data) {
@@ -101,7 +101,7 @@ class HeartsClientMiddleware {
     hand.valid.push(...Cards.create(data.self.candidateCards));
 
     const card = this.bot.pick(this);
-    // this.emit(HeartsClient.actions.pick, { card });
+    // this.client.pick(this.deal.number, this.round.number, card);
   }
 
   onRoundEnd (data) {
@@ -165,10 +165,6 @@ class HeartsClientMiddleware {
   }
 
   onError () {}
-
-  emit (action, data) {
-    this.client.send(action, data);
-  }
 }
 
 module.exports = HeartsClientMiddleware;

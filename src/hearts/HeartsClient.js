@@ -60,10 +60,4 @@ class HeartsClient {
   }
 }
 
-HeartsClient.actions = {
-  pass: 'pass_my_cards',
-  expose: 'expose',
-  pick: '',
-};
-
 module.exports = HeartsClient;
