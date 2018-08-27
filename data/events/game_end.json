@@ -1,0 +1,132 @@
+{
+  "eventName": "game_end",
+  "data": {
+    "players": [
+      {
+        "playerNumber": 1,
+        "playerName": "player1",
+        "gameScore": -9,
+        "timeoutCount": 0,
+        "errorCount": 0,
+        "rank": 1,
+        "deals": [
+          {
+            "dealNumber": 1,
+            "score": -1,
+            "exposedCards": [
+              "AH"
+            ]
+          },
+          {
+            "dealNumber": 2,
+            "score": 0,
+            "exposedCards": [],
+            "shootingTheMoon": true
+          },
+          {
+            "dealNumber": 3,
+            "score": -5,
+            "exposedCards": []
+          },
+          {
+            "dealNumber": 4,
+            "score": -3,
+            "exposedCards": []
+          }
+        ]
+      },
+      {
+        "playerNumber": 2,
+        "playerName": "player2",
+        "gameScore": -50,
+        "timeoutCount": 0,
+        "errorCount": 0,
+        "rank": 2,
+        "deals": [
+          {
+            "dealNumber": 1,
+            "score": -10,
+            "exposedCards": []
+          },
+          {
+            "dealNumber": 2,
+            "score": -20,
+            "exposedCards": [
+              "AH"
+            ]
+          },
+          {
+            "dealNumber": 3,
+            "score": -5,
+            "exposedCards": []
+          },
+          {
+            "dealNumber": 4,
+            "score": -15,
+            "exposedCards": []
+          }
+        ]
+      },
+      {
+        "playerNumber": 3,
+        "playerName": "player3",
+        "gameScore": -50,
+        "timeoutCount": 0,
+        "errorCount": 0,
+        "rank": 2,
+        "deals": [
+          {
+            "dealNumber": 1,
+            "score": -10,
+            "exposedCards": []
+          },
+          {
+            "dealNumber": 2,
+            "score": -20,
+            "exposedCards": []
+          },
+          {
+            "dealNumber": 3,
+            "score": 0,
+            "exposedCards": []
+          },
+          {
+            "dealNumber": 4,
+            "score": -20,
+            "exposedCards": []
+          }
+        ]
+      },
+      {
+        "playerNumber": 4,
+        "playerName": "player4",
+        "gameScore": -60,
+        "timeoutCount": 0,
+        "errorCount": 0,
+        "rank": 4,
+        "deals": [
+          {
+            "dealNumber": 1,
+            "score": -10,
+            "exposedCards": []
+          },
+          {
+            "dealNumber": 2,
+            "score": 0,
+            "exposedCards": []
+          },
+          {
+            "dealNumber": 3,
+            "score": -50,
+            "exposedCards": []
+          },
+          {
+            "dealNumber":4.
+                    "score": 0,
+            "exposedCards": []
+          }
+        ]
+      }
+    ]
+  }
+}
