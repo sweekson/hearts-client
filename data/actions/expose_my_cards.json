@@ -1,0 +1,9 @@
+{
+  "eventName": "expose_my_cards",
+  "data": {
+    "dealNumber": 1,
+    "cards": [
+      "AH"
+    ]
+  }
+}

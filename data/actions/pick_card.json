@@ -1,0 +1,8 @@
+{
+  "eventName": "pick_card",
+  "data": {
+    "dealNumber": 1,
+    "roundNumber": 1,
+    "turnCard": "3H"
+  }
+}

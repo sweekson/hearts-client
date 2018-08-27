@@ -1,0 +1,11 @@
+{
+  "eventName": "pass_my_cards",
+  "data": {
+    "dealNumber": 1,
+    "cards": [
+      "3H",
+      "4H",
+      "5H"
+    ]
+  }
+}

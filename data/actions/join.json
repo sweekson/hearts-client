@@ -1,0 +1,8 @@
+{
+  "eventName": "join",
+  "data": {
+    "playerNumber": 1,
+    "playerName": "player1",
+    "token": "12345678"
+  }
+}
