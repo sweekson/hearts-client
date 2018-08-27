@@ -1,0 +1,28 @@
+{
+  "eventName": "new_game",
+  "data": {
+    "gameNumber": 1,
+    "players": [
+      {
+        "playerNumber": 1,
+        "playerName": "Human",
+        "status": 0
+      },
+      {
+        "playerNumber": 2,
+        "playerName": "Human2",
+        "status": 0
+      },
+      {
+        "playerNumber": 3,
+        "playerName": "Human3",
+        "status": 0
+      },
+      {
+        "playerNumber": 4,
+        "playerName": "Human4",
+        "status": 0
+      }
+    ]
+  }
+}

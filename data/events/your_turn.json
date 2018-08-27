@@ -1,0 +1,163 @@
+{
+  "eventName": "your_turn",
+  "data": {
+    "dealNumber": 1,
+    "roundNumber": 1,
+    "gameNumber": 1,
+    "players": [
+      {
+        "playerNumber": 1,
+        "playerName": "Human",
+        "gameScore": 0,
+        "errorCount": 0,
+        "timeoutCount": 0,
+        "dealScore": 0,
+        "scoreCards": [],
+        "cards": [
+          "9S",
+          "7S",
+          "2S",
+          "JH",
+          "8H",
+          "6H",
+          "QC",
+          "JC",
+          "8C",
+          "6C",
+          "JD",
+          "TD",
+          "3D"
+        ],
+        "cardsCount": 13,
+        "pickedCards": [
+          "5C",
+          "3H",
+          "8D"
+        ],
+        "receivedCards": [
+          "6H",
+          "8C",
+          "JD"
+        ],
+        "receivedFrom": "Human4",
+        "exposedCards": [],
+        "shootingTheMoon": false,
+        "serverRandom": false,
+        "roundCard": "",
+        "candidateCards": [
+          "QC",
+          "JC",
+          "8C",
+          "6C"
+        ],
+        "status": 0,
+        "isHuman": false
+      },
+      {
+        "playerNumber": 2,
+        "playerName": "Human2",
+        "gameScore": 0,
+        "errorCount": 0,
+        "timeoutCount": 0,
+        "dealScore": 0,
+        "scoreCards": [],
+        "cardsCount": 13,
+        "receivedFrom": "Human",
+        "exposedCards": [],
+        "shootingTheMoon": false,
+        "serverRandom": false,
+        "roundCard": "",
+        "status": 0,
+        "isHuman": false
+      },
+      {
+        "playerNumber": 3,
+        "playerName": "Human3",
+        "gameScore": 0,
+        "errorCount": 0,
+        "timeoutCount": 0,
+        "dealScore": 0,
+        "scoreCards": [],
+        "cardsCount": 13,
+        "receivedFrom": "Human2",
+        "exposedCards": [],
+        "shootingTheMoon": false,
+        "serverRandom": false,
+        "roundCard": "",
+        "status": 0,
+        "isHuman": false
+      },
+      {
+        "playerNumber": 4,
+        "playerName": "Human4",
+        "gameScore": 0,
+        "errorCount": 0,
+        "timeoutCount": 1,
+        "dealScore": 0,
+        "scoreCards": [],
+        "cardsCount": 12,
+        "receivedFrom": "Human3",
+        "exposedCards": [],
+        "shootingTheMoon": false,
+        "serverRandom": true,
+        "roundCard": "2C",
+        "status": 0,
+        "isHuman": false
+      }
+    ],
+    "self": {
+      "playerNumber": 1,
+      "playerName": "Human",
+      "gameScore": 0,
+      "errorCount": 0,
+      "timeoutCount": 0,
+      "dealScore": 0,
+      "scoreCards": [],
+      "cards": [
+        "9S",
+        "7S",
+        "2S",
+        "JH",
+        "8H",
+        "6H",
+        "QC",
+        "JC",
+        "8C",
+        "6C",
+        "JD",
+        "TD",
+        "3D"
+      ],
+      "cardsCount": 13,
+      "pickedCards": [
+        "5C",
+        "3H",
+        "8D"
+      ],
+      "receivedCards": [
+        "6H",
+        "8C",
+        "JD"
+      ],
+      "receivedFrom": "Human4",
+      "exposedCards": [],
+      "shootingTheMoon": false,
+      "serverRandom": false,
+      "roundCard": "",
+      "candidateCards": [
+        "QC",
+        "JC",
+        "8C",
+        "6C"
+      ],
+      "status": 0,
+      "isHuman": false
+    },
+    "roundPlayers": [
+      "Human4",
+      "Human",
+      "Human2",
+      "Human3"
+    ]
+  }
+}
