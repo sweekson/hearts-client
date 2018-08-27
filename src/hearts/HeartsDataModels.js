@@ -53,6 +53,11 @@ class Deal {
 }
 
 class Cards extends MapList {
+  random () {
+    const random = Math.floor(Math.random() * this.length);
+    return this.list[random];
+  }
+
   shuffle (times = 200) {
     const length = this.length;
     const list = this.list;
