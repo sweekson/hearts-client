@@ -30,6 +30,18 @@ class HeartsClient {
     (this.options.middlewares || []).forEach(v => this.use(v));
   }
 
+  pick (dealNumber, roundNumber, turnCard) {
+    this.send('pick_card', { dealNumber, roundNumber, turnCard });
+  }
+
+  expose (dealNumber, cards) {
+    this.send('expose_my_cards', { dealNumber, cards });
+  }
+
+  pass (dealNumber, cards) {
+    this.send('pass_my_cards', { dealNumber, cards });
+  }
+
   join () {
     const { token, playerNumber, playerName } = this.options;
     this.send('join', { token, playerNumber, playerName });
