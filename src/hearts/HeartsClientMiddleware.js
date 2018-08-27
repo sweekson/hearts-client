@@ -171,7 +171,7 @@ class HeartsClientMiddleware {
   onError () {}
 
   export () {
-    const dest = path.join(__dirname, 'logs');
+    const dest = this.client.options.logs;
     const dir = util.date.format(new Date(), 'mm-dd-hh-MM');
     util.folder.create(dest);
     util.folder.create(path.join(dest, dir));
