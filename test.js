@@ -1,6 +1,6 @@
 const path = require('path');
-const { Collection } = require('./src/common/common');
-const util = require('./src/common/util');
+const { Collection } = require('./src/shared/common');
+const util = require('./src/shared/util');
 const {
   Match, Game, Player, Deal, Hand,
   Cards, Card, PlayedCard, Pass, Round

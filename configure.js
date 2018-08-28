@@ -1,5 +1,5 @@
 const prompt = require('prompt');
-const util = require('./src/common/util');
+const util = require('./src/shared/util');
 
 const generate = options => `
 const path = require('path');

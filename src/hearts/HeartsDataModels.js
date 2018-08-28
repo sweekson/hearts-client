@@ -1,4 +1,4 @@
-const { Collection } = require('../common/common');
+const { Collection } = require('../shared/common');
 
 class Match {
   constructor () {
