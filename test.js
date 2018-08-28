@@ -118,3 +118,15 @@ console.log(cards.hasAll('7H', 'TD', '2C')); // true
 console.log(cards.hasAll(cards.first)); // true
 console.log(cards.hasAll('7H', 'TD', '2C', '5C')); // false
 console.log(cards.hasAll(cards.first, card)); // false */
+
+/* // T7
+const cards = Cards.instanciate(['9S', '5S', '8S', '7S', 'TS', 'JS', '6S']);
+
+console.log(cards.gt('7S'));
+console.log(cards.gt(cards.first));
+console.log(cards.ge('7S'));
+console.log(cards.ge(cards.first));
+console.log(cards.lt('8S'));
+console.log(cards.lt(cards.first));
+console.log(cards.le('8S'));
+console.log(cards.le(cards.first)); */
