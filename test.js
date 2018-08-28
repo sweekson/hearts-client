@@ -104,8 +104,8 @@ const cards = new MapList(['5S', '7H', 'TD', '2C']);
 
 console.log(cards.contains('5S', '8H'));
 console.log(cards.contains('6S', '8H'));
-console.log(cards.hasAll('7H', 'TD', '2C'));
-console.log(cards.hasAll('7H', 'TD', '2C', '5C')); */
+console.log(cards.covers('7H', 'TD', '2C'));
+console.log(cards.covers('7H', 'TD', '2C', '5C')); */
 
 /* // T6
 const cards = Cards.instanciate(['5S', '7H', 'TD', '2C']);
@@ -114,10 +114,10 @@ const card = new Card('AS');
 console.log(cards.contains('5S', '8H')); // true
 console.log(cards.contains(cards.first, card)); // true
 console.log(cards.contains('6S', '8H')); // false
-console.log(cards.hasAll('7H', 'TD', '2C')); // true
-console.log(cards.hasAll(cards.first)); // true
-console.log(cards.hasAll('7H', 'TD', '2C', '5C')); // false
-console.log(cards.hasAll(cards.first, card)); // false */
+console.log(cards.covers('7H', 'TD', '2C')); // true
+console.log(cards.covers(cards.first)); // true
+console.log(cards.covers('7H', 'TD', '2C', '5C')); // false
+console.log(cards.covers(cards.first, card)); // false */
 
 /* // T7
 const cards = Cards.instanciate(['9S', '5S', '8S', '7S', 'TS', 'JS', '6S']);
