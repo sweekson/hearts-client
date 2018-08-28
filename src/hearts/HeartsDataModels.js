@@ -1,9 +1,9 @@
-const { MapList } = require('../common/common');
+const { Collection } = require('../common/common');
 
 class Match {
   constructor () {
-    this.games = new MapList();
-    this.players = new MapList();
+    this.games = new Collection();
+    this.players = new Collection();
     this.self = 0;
   }
 }
@@ -11,7 +11,7 @@ class Match {
 class Game {
   constructor (number) {
     this.number = number;
-    this.deals = new MapList();
+    this.deals = new Collection();
   }
 
   getPassToPlayer (dealNumber, playerNumber) {
@@ -44,15 +44,15 @@ class Player {
 class Deal {
   constructor (number) {
     this.number = number;
-    this.hands = new MapList();
-    this.rounds = new MapList();
+    this.hands = new Collection();
+    this.rounds = new Collection();
     this.exposed = new Cards();
     this.played = new Cards();
     this.isHeartBroken = false;
   }
 }
 
-class Cards extends MapList {
+class Cards extends Collection {
   random () {
     const random = Math.floor(Math.random() * this.length);
     return this.list[random];

@@ -1,5 +1,5 @@
 const path = require('path');
-const { MapList } = require('./src/common/common');
+const { Collection } = require('./src/common/common');
 const util = require('./src/common/util');
 const {
   Match, Game, Player, Deal, Hand,
@@ -100,7 +100,7 @@ const cards = Cards.instanciate(Cards.deck).shuffle();
 console.log(JSON.stringify(cards)); */
 
 /* // T5
-const cards = new MapList(['5S', '7H', 'TD', '2C']);
+const cards = new Collection(['5S', '7H', 'TD', '2C']);
 
 console.log(cards.contains('5S', '8H'));
 console.log(cards.contains('6S', '8H'));

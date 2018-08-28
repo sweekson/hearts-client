@@ -1,5 +1,5 @@
 
-class MapList {
+class Collection {
   constructor (list) {
     this.list = [];
     this.map = new Map();
@@ -88,4 +88,4 @@ class MapList {
   }
 }
 
-module.exports = { MapList };
+module.exports = { Collection };
