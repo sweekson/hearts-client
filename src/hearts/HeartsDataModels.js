@@ -77,6 +77,16 @@ class Cards extends MapList {
     return this;
   }
 
+  hasAll (...items) {
+    const cards = items.map(v => typeof v === 'string' ? this.find(v) : v);
+    return super.hasAll(...cards);
+  }
+
+  hasAny (...items) {
+    const cards = items.map(v => typeof v === 'string' ? this.find(v) : v);
+    return super.hasAny(...cards);
+  }
+
   has (value) {
     return this.list.find(v => v.value === value);
   }
