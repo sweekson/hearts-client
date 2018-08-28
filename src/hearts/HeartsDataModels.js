@@ -87,10 +87,6 @@ class Cards extends MapList {
     return super.hasAny(...cards);
   }
 
-  has (value) {
-    return this.list.find(v => v.value === value);
-  }
-
   find (target) {
     if (typeof target === 'function') { return super.find(target); }
     if (typeof target === 'string') { return super.find(v => v.value === target); }
@@ -134,8 +130,8 @@ Cards.create = values => values.map(v => new Card(v));
 Cards.instanciate = values => new Cards(Cards.create(values));
 Cards.scoring = (cards, isAceHeartExposed) => {
   const hearts = cards.hearts;
-  const hasTenClub = cards.has('TC');
-  const hasQueenSpade = cards.has('QS');
+  const hasTenClub = cards.hasAny('TC');
+  const hasQueenSpade = cards.hasAny('QS');
   const hadShotTheMoon = hearts.length === 13 && hasQueenSpade;
   const score1 = hearts.score * (isAceHeartExposed ? 2 : 1);
   const score2 = hasQueenSpade ? new Card('QS').score : 0;
