@@ -6,6 +6,10 @@ class MapList {
     list && list.forEach(v => this.push(v));
   }
 
+  discard (...items) {
+    return this.list.filter(v => items.indexOf(v) === -1);
+  }
+
   covers (...items) {
     return items.every(v => this.list.indexOf(v) > -1);
   }
