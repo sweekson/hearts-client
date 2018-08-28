@@ -136,6 +136,10 @@ class Cards extends Collection {
     return super.find(v => v === target);
   }
 
+  get values () {
+    return JSON.stringify(this.list);
+  }
+
   get score () {
     return this.list.reduce((s, v) => s + v.score, 0);
   }
