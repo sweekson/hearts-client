@@ -100,7 +100,7 @@ class HeartsClientMiddleware {
     hand.canFollowLead = !round.lead ? true : hand.valid.list.some(v => v.suit === round.lead.suit);
 
     const card = this.bot.pick(this);
-    // this.client.pick(this.deal.number, this.round.number, card);
+    this.client.pick(this.deal.number, this.round.number, card);
   }
 
   onRoundEnd (data) {
