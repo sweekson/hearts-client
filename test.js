@@ -1,4 +1,5 @@
 const path = require('path');
+const { MapList } = require('./src/common/common');
 const util = require('./src/common/util');
 const {
   Match, Game, Player, Deal, Hand,
@@ -97,3 +98,11 @@ cases.forEach(v => {
 /* // T4
 const cards = Cards.create(Cards.deck).shuffle();
 console.log(JSON.stringify(cards)); */
+
+/* // T5
+const cards = new MapList(['5S', '7H', 'TD', '2C']);
+
+console.log(cards.hasAny('5S', '8H'));
+console.log(cards.hasAny('6S', '8H'));
+console.log(cards.hasAll('7H', 'TD', '2C'));
+console.log(cards.hasAll('7H', 'TD', '2C', '5C')); */
