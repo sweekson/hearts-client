@@ -72,8 +72,22 @@ class Cards extends Collection {
   }
 
   sort (ascending = true) {
+    const l = this.length;
+    const s = this.spades;
+    const h = this.hearts;
+    const d = this.diamonds;
+    const c = this.clubs;
     const sorting = ascending ? (a, b) => a.number - b.number : (a, b) => b.number - a.number;
-    this.list.sort(sorting);
+    if (s.length === l || h.length === l || d.length === l || c.length === l) {
+      this.list.sort(sorting);
+      return this;
+    }
+    s.sort(ascending);
+    h.sort(ascending);
+    d.sort(ascending);
+    c.sort(ascending);
+    this.clear();
+    this.push(...s.list, ...h.list, ...c.list, ...d.list);
     return this;
   }
 
