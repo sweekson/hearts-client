@@ -145,6 +145,7 @@ class HeartsClientMiddleware {
     this.deal = null;
     this.hand = null;
     this.round = null;
+    this.export();
   }
 
   onGameStop () {
