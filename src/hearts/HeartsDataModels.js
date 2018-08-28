@@ -81,6 +81,12 @@ class Cards extends MapList {
     return this.list.find(v => v.value === value);
   }
 
+  find (target) {
+    if (typeof target === 'function') { return super.find(target); }
+    if (typeof target === 'string') { return super.find(v => v.value === target); }
+    return super.find(v => v === target);
+  }
+
   get score () {
     return this.list.reduce((s, v) => s + v.score, 0);
   }
