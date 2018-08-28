@@ -166,6 +166,30 @@ class Card {
     this.value = value;
   }
 
+  eq (card) {
+    return this.number === card.number;
+  }
+
+  le (card) {
+    return this.number <= card.number;
+  }
+
+  lt (card) {
+    return this.number < card.number;
+  }
+
+  ge (card) {
+    return this.number >= card.number;
+  }
+
+  gt (card) {
+    return this.number > card.number;
+  }
+
+  is (value) {
+    return this.value === value;
+  }
+
   get score () {
     if (this.suit === 'H') { return -1; }
     if (this.value === 'QS') { return -13; }
