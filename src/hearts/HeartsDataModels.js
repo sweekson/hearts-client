@@ -107,6 +107,10 @@ class Cards extends Collection {
     return super.contains(...cards);
   }
 
+  finds (...targets) {
+    return targets.map(v => this.find(target));
+  }
+
   find (target) {
     if (typeof target === 'function') { return super.find(target); }
     if (typeof target === 'string') { return super.find(v => v.value === target); }
