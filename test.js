@@ -130,3 +130,10 @@ console.log(cards.lt('8S'));
 console.log(cards.lt(cards.first));
 console.log(cards.le('8S'));
 console.log(cards.le(cards.first)); */
+
+/* // T8
+const initial = Cards.instanciate(['KS','5S','4S','QH','8H','5H','AC','5C','4C','2C','AD','TD','5D']);
+const pass = ['KS', 'AC', 'AD'];
+const receive = ['TS', 'TC', 'JD'];
+const cards = new Cards(initial.discard(...pass).concat(Cards.create(receive)));
+console.log(JSON.stringify(cards.sort())); */
