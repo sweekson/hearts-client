@@ -55,8 +55,8 @@ class HeartsClientMiddleware {
     const me = data.players.find(v => v.playerNumber === match.self);
     const to = game.getPassToPlayer(deal.number, match.self);
     const from = game.getPassFromPlayer(deal.number, match.self);
-    hand.pass = new Pass(to, Cards.create(me.pickedCards));
-    hand.receive = new Pass(from, Cards.create(me.receivedCards));
+    hand.pass = new Pass(to, Cards.instanciate(me.pickedCards));
+    hand.receive = new Pass(from, Cards.instanciate(me.receivedCards));
   }
 
   onExposeCards () {
@@ -133,8 +133,8 @@ class HeartsClientMiddleware {
       const from = game.getPassFromPlayer(deal.number, number);
       hand.cards.push(...Cards.create(v.initialCards));
       hand.receive;
-      hand.pass = new Pass(to, Cards.create(v.pickedCards));
-      hand.receive = new Pass(from, Cards.create(v.receivedCards));
+      hand.pass = new Pass(to, Cards.instanciate(v.pickedCards));
+      hand.receive = new Pass(from, Cards.instanciate(v.receivedCards));
     });
     this.deal = null;
     this.hand = null;
