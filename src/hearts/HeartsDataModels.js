@@ -115,6 +115,7 @@ class Cards extends MapList {
 }
 
 Cards.create = values => values.map(v => new Card(v));
+Cards.instanciate = values => new Cards(Cards.create(values));
 Cards.scoring = (cards, isAceHeartExposed) => {
   const hearts = cards.hearts;
   const hasTenClub = cards.has('TC');
