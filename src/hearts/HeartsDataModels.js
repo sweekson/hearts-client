@@ -108,7 +108,7 @@ class Cards extends Collection {
   }
 
   finds (...targets) {
-    return targets.map(v => this.find(target));
+    return targets.map(v => this.find(v));
   }
 
   find (target) {
