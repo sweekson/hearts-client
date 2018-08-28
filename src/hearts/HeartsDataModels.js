@@ -279,6 +279,14 @@ class Round {
   get hasPenaltyCard () {
     return this.played.list.some(v => v.isPenal);
   }
+
+  get isLast () {
+    return this.played.length === 3;
+  }
+
+  get isFirst () {
+    return this.played.length === 0;
+  }
 }
 
 module.exports = {
