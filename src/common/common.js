@@ -22,7 +22,7 @@ class MapList {
     return this.list.find(callback);
   }
 
-  forEach (callback) {
+  each (callback) {
     return this.list.map(callback);
   }
 
