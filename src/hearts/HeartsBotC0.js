@@ -18,7 +18,7 @@ class HeartsBotC0 extends HeartsBotBase {
   }
 
   pick (middleware) {
-
+    return middleware.hand.valid.random();
   }
 }
 
