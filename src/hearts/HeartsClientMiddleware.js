@@ -131,10 +131,10 @@ class HeartsClientMiddleware {
       if (number === match.self) { return; }
       const to = game.getPassToPlayer(deal.number, number);
       const from = game.getPassFromPlayer(deal.number, number);
-      hand.cards.push(...Cards.create(v.initialCards));
-      hand.receive;
+      const initial = Cards.instanciate(v.initialCards);
       hand.pass = new Pass(to, Cards.instanciate(v.pickedCards));
       hand.receive = new Pass(from, Cards.instanciate(v.receivedCards));
+      hand.cards.push(...initial.discard(...hand.pass.cards.values).concat(hand.receive.cards.list));
     });
     this.deal = null;
     this.hand = null;
