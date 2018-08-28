@@ -97,6 +97,11 @@ class Cards extends Collection {
     return this.list.filter(v => v.lt(card));
   }
 
+  discard (...items) {
+    const cards = this.finds(...items);
+    return this.list.filter(v => cards.indexOf(v) === -1);
+  }
+
   covers (...items) {
     const cards = items.map(v => typeof v === 'string' ? this.find(v) : v);
     return super.covers(...cards);
