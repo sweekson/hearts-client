@@ -7,7 +7,7 @@ const {
 } = require('./src/hearts/HeartsDataModels');
 
 /* // T1
-const cards = Cards.create(['KS','5S','4S','QH','8H','5H','AC','5C','4C','2C','AD','TD','5D']);
+const cards = Cards.instanciate(['KS','5S','4S','QH','8H','5H','AC','5C','4C','2C','AD','TD','5D']);
 
 console.log(cards.spades.list);
 console.log(cards.spades.max);
@@ -23,7 +23,7 @@ console.log(cards.clubs.max);
 console.log(cards.clubs.min); */
 
 /* // T2
-const cards = Cards.create(['KS','5S','4S','QH','8H','5H','AC','5C','4C','2C','AD','TD','5D']);
+const cards = Cards.instanciate(['KS','5S','4S','QH','8H','5H','AC','5C','4C','2C','AD','TD','5D']);
 
 const suit = new Cards([
   cards.spades.max,
@@ -87,7 +87,7 @@ const cases = [
 ];
 
 cases.forEach(v => {
-  const cards = Cards.create(v.cards);
+  const cards = Cards.instanciate(v.cards);
   const score = Cards.scoring(cards, v.isAceHeartExposed);
   console.log(JSON.stringify(cards));
   console.log(score, v.expect, score === v.expect);
@@ -96,7 +96,7 @@ cases.forEach(v => {
 
 
 /* // T4
-const cards = Cards.create(Cards.deck).shuffle();
+const cards = Cards.instanciate(Cards.deck).shuffle();
 console.log(JSON.stringify(cards)); */
 
 /* // T5
