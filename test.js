@@ -102,8 +102,8 @@ console.log(JSON.stringify(cards)); */
 /* // T5
 const cards = new MapList(['5S', '7H', 'TD', '2C']);
 
-console.log(cards.hasAny('5S', '8H'));
-console.log(cards.hasAny('6S', '8H'));
+console.log(cards.contains('5S', '8H'));
+console.log(cards.contains('6S', '8H'));
 console.log(cards.hasAll('7H', 'TD', '2C'));
 console.log(cards.hasAll('7H', 'TD', '2C', '5C')); */
 
@@ -111,9 +111,9 @@ console.log(cards.hasAll('7H', 'TD', '2C', '5C')); */
 const cards = Cards.instanciate(['5S', '7H', 'TD', '2C']);
 const card = new Card('AS');
 
-console.log(cards.hasAny('5S', '8H')); // true
-console.log(cards.hasAny(cards.first, card)); // true
-console.log(cards.hasAny('6S', '8H')); // false
+console.log(cards.contains('5S', '8H')); // true
+console.log(cards.contains(cards.first, card)); // true
+console.log(cards.contains('6S', '8H')); // false
 console.log(cards.hasAll('7H', 'TD', '2C')); // true
 console.log(cards.hasAll(cards.first)); // true
 console.log(cards.hasAll('7H', 'TD', '2C', '5C')); // false

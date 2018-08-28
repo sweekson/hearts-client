@@ -97,14 +97,14 @@ class Cards extends MapList {
     return this.list.filter(v => v.lt(card));
   }
 
-  hasAll (...items) {
+  covers (...items) {
     const cards = items.map(v => typeof v === 'string' ? this.find(v) : v);
-    return super.hasAll(...cards);
+    return super.covers(...cards);
   }
 
-  hasAny (...items) {
+  contains (...items) {
     const cards = items.map(v => typeof v === 'string' ? this.find(v) : v);
-    return super.hasAny(...cards);
+    return super.contains(...cards);
   }
 
   find (target) {
@@ -150,8 +150,8 @@ Cards.create = values => values.map(v => new Card(v));
 Cards.instanciate = values => new Cards(Cards.create(values));
 Cards.scoring = (cards, isAceHeartExposed) => {
   const hearts = cards.hearts;
-  const hasTenClub = cards.hasAny('TC');
-  const hasQueenSpade = cards.hasAny('QS');
+  const hasTenClub = cards.contains('TC');
+  const hasQueenSpade = cards.contains('QS');
   const hadShotTheMoon = hearts.length === 13 && hasQueenSpade;
   const score1 = hearts.score * (isAceHeartExposed ? 2 : 1);
   const score2 = hasQueenSpade ? new Card('QS').score : 0;

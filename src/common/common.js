@@ -6,11 +6,11 @@ class MapList {
     list && list.forEach(v => this.push(v));
   }
 
-  hasAll (...items) {
+  covers (...items) {
     return items.every(v => this.list.indexOf(v) > -1);
   }
 
-  hasAny (...items) {
+  contains (...items) {
     return items.some(v => this.list.indexOf(v) > -1);
   }
 

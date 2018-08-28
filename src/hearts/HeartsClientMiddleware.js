@@ -107,8 +107,8 @@ class HeartsClientMiddleware {
     const round = this.round;
     const player = this.match.players.find(v => v.name === data.roundPlayer);
     const hand = this.deal.hands.get(player.number);
-    const isAceHeartExposed = this.deal.exposed.hasAny('AH');
-    const hasTenClub = hand.gained.hasAny('TC');
+    const isAceHeartExposed = this.deal.exposed.contains('AH');
+    const hasTenClub = hand.gained.contains('TC');
     hand.gained.push(...round.played.penalties);
     round.won = new PlayedCard(player.number, hand.played.last.value);
     round.score = Cards.scoring(round.played, isAceHeartExposed) * (hasTenClub ? 2 : 1);
