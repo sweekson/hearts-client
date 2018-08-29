@@ -173,7 +173,7 @@ class Cards extends Collection {
   }
 }
 
-Cards.create = values => values.map(v => new Card(v));
+Cards.create = (values, player) => values.map(v => !player ? new Card(v) : new PlayedCard(player, v));
 Cards.instanciate = values => new Cards(Cards.create(values));
 Cards.scoring = (cards, isAceHeartExposed) => {
   const hearts = cards.hearts;
