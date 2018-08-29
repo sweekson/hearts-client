@@ -113,7 +113,7 @@ class Cards extends Collection {
 
   discard (...items) {
     const cards = this.finds(...items);
-    return this.list.filter(v => cards.indexOf(v) === -1);
+    return new Cards(this.list.filter(v => cards.indexOf(v) === -1));
   }
 
   covers (...items) {
