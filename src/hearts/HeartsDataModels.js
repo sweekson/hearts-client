@@ -93,22 +93,22 @@ class Cards extends Collection {
 
   ge (target) {
     const card = typeof target === 'string' ? new Card(target) : target;
-    return this.list.filter(v => v.ge(card));
+    return new Cards(this.list.filter(v => v.ge(card)));
   }
 
   gt (target) {
     const card = typeof target === 'string' ? new Card(target) : target;
-    return this.list.filter(v => v.gt(card));
+    return new Cards(this.list.filter(v => v.gt(card)));
   }
 
   le (target) {
     const card = typeof target === 'string' ? new Card(target) : target;
-    return this.list.filter(v => v.le(card));
+    return new Cards(this.list.filter(v => v.le(card)));
   }
 
   lt (target) {
     const card = typeof target === 'string' ? new Card(target) : target;
-    return this.list.filter(v => v.lt(card));
+    return new Cards(this.list.filter(v => v.lt(card)));
   }
 
   discard (...items) {
