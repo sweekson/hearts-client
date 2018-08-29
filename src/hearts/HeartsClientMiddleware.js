@@ -74,7 +74,7 @@ class HeartsClientMiddleware {
       hand.exposed.push(...exposed);
       deal.exposed.push(...exposed);
     });
-    console.log(`Exposed: ${deal.exposed.list.join(', ')}`);
+    console.log(deal.exposed.length ? `Exposed: ${deal.exposed.list.join(', ')}` : 'Exposed: (None)');
   }
 
   onNewRound (data) {
