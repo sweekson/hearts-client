@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./main.js",
-    "test": "node ./test.js",
+    "test": "jasmine",
     "configure": "node ./configure.js"
   },
   "keywords": [],
