@@ -45,7 +45,7 @@ class Collection {
   delete (key) {
     const item = this.map.get(key);
     const index = this.list.indexOf(item);
-    this.list.splice(index, 0);
+    this.list.splice(index, 1);
     this.map.delete(key);
   }
 
