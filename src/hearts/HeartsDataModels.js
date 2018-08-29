@@ -92,22 +92,22 @@ class Cards extends Collection {
   }
 
   ge (target) {
-    const card = this.find(target);
+    const card = typeof target === 'string' ? new Card(target) : target;
     return this.list.filter(v => v.ge(card));
   }
 
   gt (target) {
-    const card = this.find(target);
+    const card = typeof target === 'string' ? new Card(target) : target;
     return this.list.filter(v => v.gt(card));
   }
 
   le (target) {
-    const card = this.find(target);
+    const card = typeof target === 'string' ? new Card(target) : target;
     return this.list.filter(v => v.le(card));
   }
 
   lt (target) {
-    const card = this.find(target);
+    const card = typeof target === 'string' ? new Card(target) : target;
     return this.list.filter(v => v.lt(card));
   }
 
@@ -127,7 +127,7 @@ class Cards extends Collection {
   }
 
   finds (...targets) {
-    return targets.map(v => this.find(v));
+    return targets.map(v => this.find(v)).filter(v => v !== undefined);
   }
 
   find (target) {
