@@ -174,7 +174,7 @@ class Cards extends Collection {
 }
 
 Cards.create = (values, player) => values.map(v => !player ? new Card(v) : new PlayedCard(player, v));
-Cards.instanciate = values => new Cards(Cards.create(values));
+Cards.instanciate = (values, player) => new Cards(Cards.create(values, player));
 Cards.scoring = (cards, isAceHeartExposed) => {
   const hearts = cards.hearts;
   const hasTenClub = cards.contains('TC');
