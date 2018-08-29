@@ -68,7 +68,7 @@ class HeartsClientMiddleware {
     const deal = this.deal;
     data.players.forEach(({ playerNumber: number, exposedCards }) => {
       const hand = deal.hands.get(number);
-      const exposed = Cards.create(exposedCards);
+      const exposed = Cards.create(exposedCards, number);
       hand.exposed.push(...exposed);
       deal.exposed.push(...exposed);
     });
