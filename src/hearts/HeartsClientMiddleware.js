@@ -134,7 +134,7 @@ class HeartsClientMiddleware {
       const initial = Cards.instanciate(v.initialCards);
       hand.pass = new Pass(to, Cards.instanciate(v.pickedCards));
       hand.receive = new Pass(from, Cards.instanciate(v.receivedCards));
-      hand.cards.push(...initial.discard(...hand.pass.cards.values).concat(hand.receive.cards.list));
+      hand.cards.push(...initial.discard(...hand.pass.cards.values).push(...hand.receive.cards.list));
     });
     this.deal = null;
     this.hand = null;
