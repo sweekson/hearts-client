@@ -23,7 +23,7 @@ class HeartsClientMiddleware {
     const match = this.match;
     const game = this.game = new Game(data.gameNumber);
     match.games.add(game.number, game);
-    data.players.forEach(v => match.players.add(
+    game.isFirst && data.players.forEach(v => match.players.add(
       v.playerNumber,
       new Player(v.playerNumber, v.playerName)
     ));
