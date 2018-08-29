@@ -27,6 +27,7 @@ class HeartsClientMiddleware {
       v.playerNumber,
       new Player(v.playerNumber, v.playerName)
     ));
+    console.log(`Game: ${this.game.number}`);
   }
 
   onNewDeal (data) {
@@ -40,6 +41,7 @@ class HeartsClientMiddleware {
     });
     this.hand.cards.push(...Cards.create(data.self.cards)).sort();
     this.game.deals.add(deal.number, deal);
+    console.log(`Deal: ${this.deal.number}`);
   }
 
   onPassCards () {
@@ -72,10 +74,12 @@ class HeartsClientMiddleware {
       hand.exposed.push(...exposed);
       deal.exposed.push(...exposed);
     });
+    console.log(`Exposed: ${deal.exposed.list.join(', ')}`);
   }
 
   onNewRound (data) {
     this.deal.rounds.push(this.round = new Round(data.roundNumber));
+    console.log(`Round: ${this.round.number}`);
   }
 
   onTurnEnd (data) {
@@ -114,6 +118,7 @@ class HeartsClientMiddleware {
     round.score = Cards.scoring(round.played, isAceHeartExposed) * (hasTenClub ? 2 : 1);
     hand.score = Cards.scoring(hand.gained, isAceHeartExposed);
     this.round = null;
+    console.log(`Won: ${player.name}, Card: ${round.won.value}, Score: ${round.score}`);
   }
 
   onDealEnd (data) {
@@ -128,6 +133,7 @@ class HeartsClientMiddleware {
       players.get(number).score = v.gameScore;
       hand.hadShotTheMoon = v.shootingTheMoon;
       hand.valid.clear();
+      console.log(`Player: ${v.playerName}, Score: ${v.gameScore}`);
       if (number === match.self) { return; }
       const to = game.getPassToPlayer(deal.number, number);
       const from = game.getPassFromPlayer(deal.number, number);
