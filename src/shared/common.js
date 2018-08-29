@@ -23,7 +23,8 @@ class Collection {
   }
 
   each (callback) {
-    return this.list.map(callback);
+    this.list.forEach(callback);
+    return this;
   }
 
   map (callback) {
