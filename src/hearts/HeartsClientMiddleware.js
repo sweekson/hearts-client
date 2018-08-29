@@ -38,7 +38,7 @@ class HeartsClientMiddleware {
       deal.hands.add(number, new Hand(number));
       number === match.self && (this.hand = deal.hands.get(number));
     });
-    this.hand.cards.push(...Cards.create(data.self.cards));
+    this.hand.cards.push(...Cards.create(data.self.cards)).sort();
     this.game.deals.add(deal.number, deal);
   }
 
