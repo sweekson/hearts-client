@@ -29,6 +29,10 @@ class Game {
       [3, 4, 1, 2],
     ][dealNumber - 1][playerNumber - 1];
   }
+
+  get isFirst () {
+    return this.number === 1;
+  }
 }
 
 class Player {
