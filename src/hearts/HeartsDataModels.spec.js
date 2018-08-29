@@ -3,7 +3,7 @@ const {
   Cards, Card, PlayedCard, Pass, Round
 } = require('./HeartsDataModels');
 
-describe('Test Cards', function () {
+describe('Test Card', function () {
   it('should create a Card', function () {
     const as = new Card('AS');
     expect(as.value).toEqual('AS');
