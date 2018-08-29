@@ -35,11 +35,13 @@ class Collection {
       this.list.push(item);
       this.map.set(this.list.indexOf(item), item);
     });
+    return this;
   }
 
   add (key, item) {
     this.list.push(item);
     this.map.set(key, item);
+    return this;
   }
 
   delete (key) {
@@ -47,15 +49,18 @@ class Collection {
     const index = this.list.indexOf(item);
     this.list.splice(index, 1);
     this.map.delete(key);
+    return this;
   }
 
   merge (key, item) {
     Object.assign(this.map.get(key), item);
+    return this;
   }
 
   set (key, item) {
     this.delete(key);
     this.add(key, item);
+    return this;
   }
 
   get (key) {
@@ -65,6 +70,7 @@ class Collection {
   clear () {
     this.list.splice(0);
     this.map.clear();
+    return this;
   }
 
   toString () {
