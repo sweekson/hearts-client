@@ -70,6 +70,10 @@ class Collection {
     return this.map.get(key);
   }
 
+  keyof (value) {
+    return this.map.keys().find(key => this.map.get(key) === value);
+  }
+
   clear () {
     this.list.splice(0);
     this.map.clear();
