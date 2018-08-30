@@ -7,7 +7,7 @@ class Collection {
   }
 
   discard (...items) {
-    return this.list.filter(v => items.indexOf(v) === -1);
+    return new Collection(this.list.filter(v => items.indexOf(v) === -1));
   }
 
   covers (...items) {
