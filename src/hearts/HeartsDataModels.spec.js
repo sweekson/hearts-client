@@ -172,10 +172,10 @@ describe('Test Cards', function () {
     expect(items[1].is('AC')).toBe(true);
   });
 
-  it('should discard items', function () {
+  it('should skip items', function () {
     const cards = Cards.instanciate(values);
     const unwanted = ['KS', 'AC', 'AD'];
-    expect(cards.discard(...unwanted).contains(...unwanted)).toBe(false);
+    expect(cards.skip(...unwanted).contains(...unwanted)).toBe(false);
   });
 
   it('should scoring cards properly', function () {
