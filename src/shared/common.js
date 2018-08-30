@@ -3,6 +3,7 @@ class Collection {
   constructor (list) {
     this.list = [];
     this.map = new Map();
+    this.deleted = 0;
     list && list.forEach(v => this.push(v));
   }
 
@@ -34,7 +35,7 @@ class Collection {
   push (...items) {
     items.forEach(item => {
       this.list.push(item);
-      this.map.set(this.list.indexOf(item), item);
+      this.map.set(this.list.indexOf(item) + this.deleted, item);
     });
     return this;
   }
@@ -50,6 +51,7 @@ class Collection {
     const index = this.list.indexOf(item);
     this.list.splice(index, 1);
     this.map.delete(key);
+    ++this.deleted;
     return this;
   }
 
