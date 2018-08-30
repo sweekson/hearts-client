@@ -134,13 +134,19 @@ class HeartsClientMiddleware {
       hand.hadShotTheMoon = v.shootingTheMoon;
       hand.valid.clear();
       console.log(`Player: ${v.playerName}, Score: ${v.gameScore}`);
+
       if (number === match.self) { return; }
-      const to = game.getPassToPlayer(deal.number, number);
-      const from = game.getPassFromPlayer(deal.number, number);
-      const initial = Cards.instanciate(v.initialCards);
-      hand.pass = new Pass(to, Cards.instanciate(v.pickedCards));
-      hand.receive = new Pass(from, Cards.instanciate(v.receivedCards));
-      hand.cards.push(...initial.discard(...hand.pass.cards.values).push(...hand.receive.cards.list).list);
+
+      hand.cards.push(...Cards.create(v.initialCards));
+
+      if (deal.number <= 3) {
+        const to = game.getPassToPlayer(deal.number, number);
+        const from = game.getPassFromPlayer(deal.number, number);
+        hand.pass = new Pass(to, Cards.instanciate(v.pickedCards));
+        hand.receive = new Pass(from, Cards.instanciate(v.receivedCards));
+        hand.cards.discard(...hand.pass.cards.values).push(...hand.receive.cards.list);
+      }
+
       hand.cards.sort();
     });
     this.deal = null;
