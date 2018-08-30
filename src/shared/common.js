@@ -52,6 +52,7 @@ class Collection {
   }
 
   delete (key) {
+    if (!this.map.has(key)) { return this; }
     const item = this.map.get(key);
     const index = this.list.indexOf(item);
     this.list.splice(index, 1);
