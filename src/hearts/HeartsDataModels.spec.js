@@ -178,6 +178,12 @@ describe('Test Cards', function () {
     expect(cards.skip(...unwanted).contains(...unwanted)).toBe(false);
   });
 
+  it('should discard items', function () {
+    const cards = Cards.instanciate(values);
+    const unwanted = ['KS', 'AC', 'AD'];
+    expect(cards.discard(...unwanted).contains(...unwanted)).toBe(false);
+  });
+
   it('should scoring cards properly', function () {
     const cases = [
       {
