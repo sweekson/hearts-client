@@ -15,6 +15,7 @@ class Game {
   }
 
   getPassToPlayer (dealNumber, playerNumber) {
+    if (dealNumber === 4) { return playerNumber; }
     return [
       [2, 3, 4, 1],
       [4, 1, 2, 3],
@@ -23,6 +24,7 @@ class Game {
   }
 
   getPassFromPlayer (dealNumber, playerNumber) {
+    if (dealNumber === 4) { return playerNumber; }
     return [
       [4, 1, 2, 3],
       [2, 3, 4, 1],
