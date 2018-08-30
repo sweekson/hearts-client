@@ -37,6 +37,18 @@ describe('Test Collection', function () {
     expect(list.length).toEqual(2);
   });
 
+  it('should discard items', function () {
+    expect(list.length).toEqual(3);
+
+    list.discard('B', 'C');
+
+    expect(list.length).toEqual(1);
+
+    list.discard('D');
+
+    expect(list.length).toEqual(1);
+  });
+
   it('should clear list', function () {
     expect(list.length).toEqual(3);
 
