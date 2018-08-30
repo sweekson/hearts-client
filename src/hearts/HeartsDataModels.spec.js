@@ -81,6 +81,14 @@ describe('Test Cards', function () {
     expect(cards.diamonds.length).toEqual(3);
   });
 
+  it('should be filtered by suit', function () {
+    const cards = Cards.instanciate(values);
+    expect(cards.suit('S').length).toEqual(3);
+    expect(cards.suit('H').length).toEqual(3);
+    expect(cards.suit('C').length).toEqual(4);
+    expect(cards.suit('D').length).toEqual(3);
+  });
+
   it('should retrieve the maximun card of each suit', function () {
     const cards = Cards.instanciate(values);
     expect(cards.spades.max.value).toEqual('KS');
