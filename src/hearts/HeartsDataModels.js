@@ -354,6 +354,10 @@ class Round {
     return this.played.list.some(v => v.isPenal);
   }
 
+  get followed () {
+    return this.played.suit(this.lead.suit);
+  }
+
   get isLast () {
     return this.played.length === 3;
   }
