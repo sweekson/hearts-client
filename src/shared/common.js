@@ -71,7 +71,7 @@ class Collection {
   }
 
   keyof (value) {
-    return this.map.keys().find(key => this.map.get(key) === value);
+    return [...this.map.keys()].find(key => this.map.get(key) === value);
   }
 
   clear () {
