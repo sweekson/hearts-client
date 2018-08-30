@@ -146,6 +146,10 @@ class Cards extends Collection {
     return super.discard(...this.finds(...values));
   }
 
+  suit (suit) {
+    return new Cards(this.list.filter(v => v.suit === suit));
+  }
+
   get values () {
     return JSON.stringify(this.list);
   }
