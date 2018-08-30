@@ -175,11 +175,11 @@ class Cards extends Collection {
   }
 
   get max () {
-    return new Cards(this.list).sort().last;
+    return this.length ? new Cards(this.list).sort().last : undefined;
   }
 
   get min () {
-    return new Cards(this.list).sort().first;
+    return this.length ? new Cards(this.list).sort().first : undefined;
   }
 }
 
