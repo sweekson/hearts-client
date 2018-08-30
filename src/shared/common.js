@@ -46,6 +46,11 @@ class Collection {
     return this;
   }
 
+  discard (...values) {
+    values.forEach(v => this.delete(this.keyof(v)));
+    return this;
+  }
+
   delete (key) {
     const item = this.map.get(key);
     const index = this.list.indexOf(item);
