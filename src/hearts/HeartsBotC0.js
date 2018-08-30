@@ -5,7 +5,7 @@ class HeartsBotC0 extends HeartsBotBase {
   pass (middleware) {
     const cards = middleware.hand.cards;
     const high = [];
-    [].push(
+    high.push(
       ...cards.spades.sort(false).list.slice(0, 3),
       ...cards.hearts.sort(false).list.slice(0, 3),
       ...cards.diamonds.sort(false).list.slice(0, 3),
