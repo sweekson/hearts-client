@@ -103,6 +103,7 @@ class HeartsClientMiddleware {
     const round = this.round;
     hand.valid.clear();
     hand.valid.push(...Cards.create(data.self.candidateCards));
+    hand.voids.update(hand.current);
     hand.canFollowLead = !round.lead ? true : hand.valid.list.some(v => v.suit === round.lead.suit);
 
     const card = this.bot.pick(this);
