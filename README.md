@@ -44,3 +44,33 @@ As default, log files are exported at `/logs/*/detail.json` and `/logs/*/events.
 - Game ended (event: game_end)
 - Game stopped (event: game_stop)
 - Disconnected from server. For example, game server is forced shutdown.
+
+## Test Bots in Local
+
+### Create configuration file
+Run commands as following to create a configuration file for local game execution.
+
+```
+npm run configure -- --mode local
+```
+
+Then, enter option value for each prompt:
+
+```
+prompt: (optional) Enter player name for player 1:  (Bot 1)
+prompt: Enter bot module name for player 1:  HeartsBotC0
+prompt: (optional) Enter player name for player 2:  (Bot 2)
+prompt: Enter bot module name for player 2:  HeartsBotC0
+prompt: (optional) Enter player name for player :  (Bot 3)
+prompt: Enter bot module name for player 3:  HeartsBotC0
+prompt: (optional) Enter player name for player 4:  (Bot 4)
+prompt: Enter bot module name for player 4:  HeartsBotC0
+prompt: (optional) Enter logs detination folder:  (logs)
+```
+
+## Run Game in Local
+Run commands as following to execute a game in local.
+
+```
+npm run local
+```
