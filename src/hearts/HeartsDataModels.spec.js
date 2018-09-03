@@ -251,3 +251,19 @@ describe('Test Cards', function () {
     });
   });
 });
+
+describe('Test Hand', function () {
+  const values = ['KS', '5S', '4S', 'QH', '8H', '5H', 'AC', '5C', '4C', '2C', 'AD', 'TD', '5D'];
+
+  it('should get hand.current from hand.cards skip hand.played', function () {
+    const cards = Cards.instanciate(values);
+    const played = cards.finds('4S', 'AC', 'AD');
+    const hand = new Hand(1);
+    hand.cards.push(...cards.list);
+    hand.played.push(...played);
+    expect(hand.cards.length).toEqual(13);
+    expect(hand.played.length).toEqual(3);
+    expect(hand.current.length).toEqual(10);
+    expect(hand.current.contains(...played)).toBe(false);
+  });
+});
