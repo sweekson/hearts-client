@@ -151,7 +151,7 @@ class Cards extends Collection {
   }
 
   get values () {
-    return JSON.stringify(this.list);
+    return this.list.map(v => v.value);
   }
 
   get score () {
@@ -230,7 +230,6 @@ class Hand {
     this.score = 0;
     this.cards = new Cards();
     this.exposed = new Cards();
-    this.current = new Cards();
     this.played = new Cards();
     this.valid = new Cards();
     this.gained = new Cards();
@@ -239,6 +238,10 @@ class Hand {
     this.receive = null;
     this.canFollowLead = false;
     this.hadShotTheMoon = false;
+  }
+
+  get current () {
+    return this.cards.skip(...this.played.values);
   }
 }
 
