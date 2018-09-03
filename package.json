@@ -15,6 +15,7 @@
   "dependencies": {
     "dateformat": "^3.0.3",
     "prompt": "^1.0.0",
+    "ps-grab": "^1.0.1",
     "ws": "^6.0.0"
   }
 }
