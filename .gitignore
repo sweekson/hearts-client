@@ -1,4 +1,5 @@
 .DS_Store
 node_modules
 logs
-config.js
+main.config.js
+local.config.js
