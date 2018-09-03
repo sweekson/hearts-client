@@ -151,7 +151,7 @@ class Cards extends Collection {
   }
 
   get values () {
-    return JSON.stringify(this.list);
+    return this.list.map(v => v.value);
   }
 
   get score () {
