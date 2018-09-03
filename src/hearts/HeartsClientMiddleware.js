@@ -94,7 +94,7 @@ class HeartsClientMiddleware {
     deal.played.push(played);
     round.played.length === 1 && (round.lead = played);
     played.suit !== round.lead.suit && (hand.voids[round.lead.fullsuit] = true);
-    played.isHeart && (deal.isHeartBroken = round.isHeartBroken = true);
+    deal.isHeartBroken = round.isHeartBroken = deal.isHeartBroken || played.isHeart;
   }
 
   onYourTurn (data) {
