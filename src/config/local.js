@@ -64,6 +64,7 @@ const HeartsClientMiddleware = require('./src/hearts/HeartsClientMiddleware');
 ${bots(options)}
 module.exports = {
   record: ${record(options.record)},
+  logs: '${options.logs}',
   clients: [
     new HeartsClientLocal({
       playerNumber: 1,
