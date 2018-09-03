@@ -59,7 +59,6 @@ class HeartsClientMiddleware {
     const from = game.getPassFromPlayer(deal.number, match.self);
     hand.pass = new Pass(to, Cards.instanciate(me.pickedCards));
     hand.receive = new Pass(from, Cards.instanciate(me.receivedCards));
-    hand.cards.discard(...hand.pass.cards.values).push(...hand.receive.cards.list);
     hand.cards.sort();
   }
 
@@ -147,7 +146,6 @@ class HeartsClientMiddleware {
         const from = game.getPassFromPlayer(deal.number, number);
         hand.pass = new Pass(to, Cards.instanciate(v.pickedCards));
         hand.receive = new Pass(from, Cards.instanciate(v.receivedCards));
-        hand.cards.discard(...hand.pass.cards.values).push(...hand.receive.cards.list);
       }
 
       hand.cards.sort();
