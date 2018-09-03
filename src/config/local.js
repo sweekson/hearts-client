@@ -37,12 +37,19 @@ const schema = {
       message: 'Bot module name is required',
       required: true,
     },
+    record: {
+      description: '(optional) Provide existing logs for default player cards (yy-mm-HH-MM)',
+      pattern: /^\d\d-\d\d-\d\d-\d\d$/,
+      message: 'Invalid source path',
+    },
     logs: {
       description: '(optional) Enter logs detination folder',
       default: 'logs',
     },
   }
 };
+
+const record = source => source ? `'${source}'` : false;
 
 const bot = bot => `const ${bot} = require('./src/hearts/${bot}');`;
 
@@ -56,6 +63,7 @@ const HeartsClientLocal = require('./src/hearts/HeartsClientLocal');
 const HeartsClientMiddleware = require('./src/hearts/HeartsClientMiddleware');
 ${bots(options)}
 module.exports = {
+  record: ${record(options.record)},
   clients: [
     new HeartsClientLocal({
       playerNumber: 1,
