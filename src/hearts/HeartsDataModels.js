@@ -241,7 +241,11 @@ class Hand {
   }
 
   get current () {
-    return this.cards.skip(...this.played.values);
+    const current = this.cards.skip(...this.played.values);
+    if (!this.pass && !this.receive) { return current; }
+    if (this.pass && !this.receive) { return current.skip(...this.pass.cards.values); }
+    if (!this.pass && this.receive) { return current.push(...this.receive.cards.list); }
+    return current.skip(...this.pass.cards.values).push(...this.receive.cards.list);
   }
 }
 
