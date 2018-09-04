@@ -255,13 +255,22 @@ describe('Test Cards', function () {
 describe('Test Hand', function () {
   const values = ['KS', '5S', '4S', 'QH', '8H', '5H', 'AC', '5C', '4C', '2C', 'AD', 'TD', '5D'];
 
-  it('should get hand.current from hand.cards skip hand.played', function () {
+  it('should get current from cards, played, pass, and receive', function () {
     const cards = Cards.instanciate(values);
     const played = cards.finds('4S', 'AC', 'AD');
     const hand = new Hand(1);
+    const pass = new Pass(2, Cards.instanciate(['KS', 'QH', 'TD']));
+    const receive = new Pass(4, Cards.instanciate(['QS', 'AS', 'KC']));
     hand.cards.push(...cards.list);
-    hand.played.push(...played);
     expect(hand.cards.length).toEqual(13);
+    expect(hand.current.length).toEqual(13);
+    hand.pass = pass;
+    expect(hand.current.length).toEqual(10);
+    expect(hand.current.contains(...pass.cards.values)).toBe(false);
+    hand.receive = receive;
+    expect(hand.current.length).toEqual(13);
+    expect(hand.current.contains(...receive.cards.values)).toBe(true);
+    hand.played.push(...played);
     expect(hand.played.length).toEqual(3);
     expect(hand.current.length).toEqual(10);
     expect(hand.current.contains(...played)).toBe(false);
