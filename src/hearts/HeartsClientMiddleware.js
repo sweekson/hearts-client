@@ -94,7 +94,7 @@ class HeartsClientMiddleware {
     deal.played.push(played);
     round.played.length === 1 && (round.lead = played);
     played.suit !== round.lead.suit && (hand.voids[round.lead.fullsuit] = true);
-    played.isHeart && (deal.isHeartBroken = round.isHeartBroken = true);
+    deal.isHeartBroken = round.isHeartBroken = deal.isHeartBroken || played.isHeart;
   }
 
   onYourTurn (data) {
@@ -187,7 +187,7 @@ class HeartsClientMiddleware {
 
   export () {
     const dest = this.client.options.logs;
-    const dir = util.date.format(new Date(), 'mm-dd-hh-MM');
+    const dir = util.date.format(new Date(), 'mm-dd-HH-MM');
     util.folder.create(dest);
     util.folder.create(path.join(dest, dir));
     util.file.write(path.join(dest, dir, 'detail.json'), this.detail);
