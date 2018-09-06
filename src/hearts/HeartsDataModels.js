@@ -6,6 +6,10 @@ class Match {
     this.players = new Collection();
     this.self = 0;
   }
+
+  get isFirstGame () {
+    return this.games.length === 1;
+  }
 }
 
 class Game {
@@ -30,10 +34,6 @@ class Game {
       [2, 3, 4, 1],
       [3, 4, 1, 2],
     ][dealNumber - 1][playerNumber - 1];
-  }
-
-  get isFirst () {
-    return this.number === 1;
   }
 }
 
