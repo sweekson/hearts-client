@@ -1,13 +1,17 @@
 {
   "name": "hearts-client",
   "version": "1.0.0",
-  "description": "",
+  "description": "Hearts client for connecting to hearts server",
   "main": "index.js",
   "scripts": {
     "start": "node ./main.js",
     "local": "node ./local.js",
     "test": "jasmine",
     "configure": "node ./configure.js"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://adc.github.trendmicro.com/wilson-su/hearts-client.git"
   },
   "keywords": [],
   "author": "",
