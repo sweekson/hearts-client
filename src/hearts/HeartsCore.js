@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 const util = require('../shared/util');
 const { Collection } = require('../shared/common');
 const {
-  Match, Game, Deal, Hand,
+  Match, Game, Deal, Hand, Pass,
   Cards, Card, PlayedCard, Round
 } = require('./HeartsDataModels');
 
@@ -235,7 +235,6 @@ class HeartsCore extends EventEmitter {
       const hand = new Hand(player.playerNumber);
       deal.hands.add(player.playerNumber, hand);
       hand.cards.push(...deck.get(index).list);
-      hand.current.push(...hand.cards.list);
       Object.assign(player, {
         gameScore: 0,
         errorCount: 0,
@@ -310,7 +309,6 @@ class HeartsCore extends EventEmitter {
     const hand = deal.hands.get(player);
     const index = players.list.indexOf(sender);
     const next = players.list[(index + 1) % players.length];
-    hand.current.discard(played.value);
     hand.played.push(new Card(played.value));
     deal.isHeartBroken = round.isHeartBroken = deal.isHeartBroken || played.isHeart;
     Object.assign(sender, {
@@ -342,29 +340,33 @@ class HeartsCore extends EventEmitter {
     this.doExposeCardsEnd();
   }
 
-  onPlayerPassCards (client, { dealNumber, cards }) {
-    const players = this.match.players;
-    const game = this.game;
-    const deal = game.deals.get(dealNumber);
-    const player = this.targets.get(client);
-    const sender = players.get(player);
-    const senderHand = deal.hands.get(player);
-    const receiver = game.getPassToPlayer(deal.number, player) - 1;
-    const opponent = players.list[receiver];
-    const opponentHand = deal.hands.get(opponent.playerNumber);
-    cards = Cards.instanciate(cards.map(v => v.value || v));
-    senderHand.current.discard(...cards.values);
-    opponentHand.current.push(...cards.list);
-    ++deal.passed;
-    Object.assign(sender, {
-      cards: senderHand.current.values,
-      pickedCards: cards.values
-    });
-    Object.assign(opponent, {
-      cards: opponentHand.current.values,
+  onOpponentReceiveCards (sender, receiver, cards) {
+    const deal = this.deal;
+    const hand = deal.hands.get(receiver.playerNumber);
+    hand.receive = new Pass(sender.playerNumber, cards);
+    Object.assign(receiver, {
+      cards: hand.current.sort().values,
       receivedCards: cards.values,
       receivedFrom: sender.playerName
     });
+  }
+
+  onPlayerPassCards (client, { dealNumber, cards }) {
+    const players = this.match.players;
+    const deal = this.deal;
+    const player = this.targets.get(client);
+    const sender = players.get(player);
+    const hand = deal.hands.get(player);
+    const target = this.game.getPassToPlayer(deal.number, player) - 1;
+    const receiver = players.list[target];
+    cards = Cards.instanciate(cards.map(v => v.value || v));
+    hand.pass = new Pass(receiver.playerNumber, cards);
+    this.onOpponentReceiveCards(sender, receiver, cards);
+    Object.assign(sender, {
+      cards: hand.current.values,
+      pickedCards: cards.values
+    });
+    ++deal.passed;
     deal.passed === 4 && this.doPassCardsEnd();
   }
 
