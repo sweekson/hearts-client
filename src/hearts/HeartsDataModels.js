@@ -6,10 +6,6 @@ class Match {
     this.players = new Collection();
     this.self = 0;
   }
-
-  get isFirstGame () {
-    return this.games.length === 1;
-  }
 }
 
 class Game {
