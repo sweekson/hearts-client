@@ -8,6 +8,9 @@ class HeartsBotBase {
 
   pick (detail) {
   }
+
+  watch (player, card) {
+  }
 }
 
 module.exports = HeartsBotBase;
