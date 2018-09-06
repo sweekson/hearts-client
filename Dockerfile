@@ -3,6 +3,7 @@ FROM node:8
 ARG dest=/trend-hearts/
 
 # Create app directory
+RUN mkdir /log
 RUN mkdir -p $dest
 WORKDIR $dest
 

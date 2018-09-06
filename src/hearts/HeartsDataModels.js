@@ -31,16 +31,13 @@ class Game {
       [3, 4, 1, 2],
     ][dealNumber - 1][playerNumber - 1];
   }
-
-  get isFirst () {
-    return this.number === 1;
-  }
 }
 
 class Player {
-  constructor (number, name) {
+  constructor (number, name, position) {
     this.number = number;
     this.name = name;
+    this.position = position;
     this.score = 0;
     this.rank = 0;
     this.isHuman = false;
