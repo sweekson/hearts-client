@@ -188,10 +188,11 @@ class HeartsClientMiddleware {
   export () {
     const dest = this.client.options.logs;
     const dir = util.date.format(new Date(), 'mm-dd-HH-MM');
+    const prod = this.client.options.prod;
     util.folder.create(dest);
     util.folder.create(path.join(dest, dir));
     util.file.write(path.join(dest, dir, 'detail.json'), this.detail);
-    util.file.write(path.join(dest, dir, 'events.json'), this.events);
+    !prod && util.file.write(path.join(dest, dir, 'events.json'), this.events);
   }
 }
 

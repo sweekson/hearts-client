@@ -68,9 +68,60 @@ prompt: Enter bot module name for player 4:  HeartsBotC0
 prompt: (optional) Enter logs detination folder:  (logs)
 ```
 
-## Run Game in Local
+### Run Game in Local
 Run commands as following to execute a game in local.
 
 ```
 npm run local
+```
+
+## Build & Deploy Client
+**Make sure that you have created the configuration file before running the following commands**
+
+Build an image
+
+```
+make build
+```
+
+Run a new container
+
+```
+make run name=<player-name> number=<player-number> token=<token> server=<server>
+```
+
+Create a tag with with `practice`
+
+```
+make tag-practice team=<team-number>
+```
+
+Create a tag with with `rank`
+
+```
+make tag-rank team=<team-number>
+```
+
+Log in to a Docker registry
+
+```
+make login
+```
+
+Push an image with `practice` to Docker registry
+
+```
+make push-practice team=<team-number>
+```
+
+Push an image with `rank` to Docker registry
+
+```
+make push-rank team=<team-number>
+```
+
+Clean untagged images
+
+```
+make clean
 ```
