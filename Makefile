@@ -12,11 +12,11 @@ run:
 
 ## Create a tag with practice
 tag-practice:
-	sudo docker tag $(PROJECT):latest $(REGISTRY)/$(team)/$(PROJECT):practice
+	sudo docker tag -f $(PROJECT):latest $(REGISTRY)/$(team)/$(PROJECT):practice
 
 ## Create a tag with rank
 tag-rank:
-	sudo docker tag $(PROJECT):latest $(REGISTRY)/$(team)/$(PROJECT):rank
+	sudo docker tag -f $(PROJECT):latest $(REGISTRY)/$(team)/$(PROJECT):rank
 
 ## Log in to a Docker registry
 login:
