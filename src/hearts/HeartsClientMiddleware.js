@@ -18,6 +18,7 @@ class HeartsClientMiddleware {
     this.round = null;
     this.events = [];
     this.actions = [];
+    this.candidates = [];
   }
 
   onNewGame (data) {
@@ -109,6 +110,7 @@ class HeartsClientMiddleware {
     hand.voids.update(hand.current);
     hand.canFollowLead = !round.lead ? true : hand.valid.list.some(v => v.suit === round.lead.suit);
 
+    this.candidates.push({ round: round.number, cards: hand.valid.values });
     const card = this.bot.pick(this);
     const payload = this.client.pick(this.deal.number, this.round.number, card);
     this.actions.push(payload);
@@ -198,6 +200,7 @@ class HeartsClientMiddleware {
     util.folder.create(path.join(dest, dir));
     util.file.write(path.join(dest, dir, 'detail.json'), this.detail);
     util.file.write(path.join(dest, dir, 'actions.json'), this.actions);
+    util.file.write(path.join(dest, dir, 'candidates.json'), this.candidates);
     !prod && util.file.write(path.join(dest, dir, 'events.json'), this.events);
   }
 }
