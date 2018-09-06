@@ -31,20 +31,20 @@ class HeartsClient {
   }
 
   pick (dealNumber, roundNumber, turnCard) {
-    this.send('pick_card', { dealNumber, roundNumber, turnCard });
+    return this.send('pick_card', { dealNumber, roundNumber, turnCard });
   }
 
   expose (dealNumber, cards) {
-    this.send('expose_my_cards', { dealNumber, cards });
+    return this.send('expose_my_cards', { dealNumber, cards });
   }
 
   pass (dealNumber, cards) {
-    this.send('pass_my_cards', { dealNumber, cards });
+    return this.send('pass_my_cards', { dealNumber, cards });
   }
 
   join () {
     const { token, playerNumber, playerName } = this.options;
-    this.send('join', { token, playerNumber, playerName });
+    return this.send('join', { token, playerNumber, playerName });
   }
 
   notify (method, detail) {
@@ -56,7 +56,9 @@ class HeartsClient {
   }
 
   send (eventName, data) {
-    this.socket.send(JSON.stringify({ eventName, data }));
+    const payload = { eventName, data };
+    this.socket.send(JSON.stringify(payload));
+    return payload;
   }
 }
 

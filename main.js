@@ -13,7 +13,7 @@ prod && Object.assign(options, {
   token,
   playerNumber,
   playerName,
-  logs: path.resolve('/log'),
+  logs: path.join('/log'),
   prod,
 });
 

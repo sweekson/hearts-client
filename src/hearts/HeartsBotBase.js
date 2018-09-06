@@ -1,12 +1,15 @@
 
 class HeartsBotBase {
-  pass (detail) {
+  pass (middleware) {
   }
 
-  expose (detail) {
+  expose (middleware) {
   }
 
-  pick (detail) {
+  pick (middleware) {
+  }
+
+  watch (player, card) {
   }
 }
 
