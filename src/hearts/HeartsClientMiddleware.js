@@ -17,6 +17,7 @@ class HeartsClientMiddleware {
     this.hand = null;
     this.round = null;
     this.events = [];
+    this.actions = [];
   }
 
   onNewGame (data) {
@@ -46,7 +47,8 @@ class HeartsClientMiddleware {
 
   onPassCards () {
     const cards = this.bot.pass(this);
-    this.client.pass(this.deal.number, cards);
+    const payload = this.client.pass(this.deal.number, cards);
+    this.actions.push(payload);
   }
 
   onPassCardsEnd (data) {
@@ -64,7 +66,8 @@ class HeartsClientMiddleware {
 
   onExposeCards () {
     const cards = this.bot.expose(this);
-    this.client.expose(this.deal.number, cards);
+    const payload = this.client.expose(this.deal.number, cards);
+    this.actions.push(payload);
   }
 
   onExposeCardsEnd (data) {
@@ -107,7 +110,8 @@ class HeartsClientMiddleware {
     hand.canFollowLead = !round.lead ? true : hand.valid.list.some(v => v.suit === round.lead.suit);
 
     const card = this.bot.pick(this);
-    this.client.pick(this.deal.number, this.round.number, card);
+    const payload = this.client.pick(this.deal.number, this.round.number, card);
+    this.actions.push(payload);
   }
 
   onRoundEnd (data) {
@@ -193,6 +197,7 @@ class HeartsClientMiddleware {
     util.folder.create(dest);
     util.folder.create(path.join(dest, dir));
     util.file.write(path.join(dest, dir, 'detail.json'), this.detail);
+    util.file.write(path.join(dest, dir, 'actions.json'), this.actions);
     !prod && util.file.write(path.join(dest, dir, 'events.json'), this.events);
   }
 }
