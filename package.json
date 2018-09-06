@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node ./main.js",
     "local": "node ./local.js",
+    "parse": "node ./parse.js",
     "test": "jasmine",
     "configure": "node ./configure.js"
   },
