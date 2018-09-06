@@ -25,9 +25,9 @@ class HeartsClientMiddleware {
     const match = this.match;
     const game = this.game = new Game(data.gameNumber);
     match.games.add(game.number, game);
-    match.isFirstGame && data.players.forEach(v => match.players.add(
+    data.players.forEach((v, i) => match.players.add(
       v.playerNumber,
-      new Player(v.playerNumber, v.playerName)
+      new Player(v.playerNumber, v.playerName, i + 1)
     ));
     console.log(`Game: ${this.game.number}`);
   }
@@ -57,11 +57,14 @@ class HeartsClientMiddleware {
     const game = this.game;
     const deal = this.deal;
     const hand = this.hand;
-    const me = data.players.find(v => v.playerNumber === match.self);
-    const to = game.getPassToPlayer(deal.number, match.self);
-    const from = game.getPassFromPlayer(deal.number, match.self);
-    hand.pass = new Pass(to, Cards.instanciate(me.pickedCards));
-    hand.receive = new Pass(from, Cards.instanciate(me.receivedCards));
+    const { pickedCards, receivedCards } = data.players.find(v => v.playerNumber === match.self);
+    const player = match.players.get(match.self);
+    const to = game.getPassToPlayer(deal.number, player.position);
+    const toPlayer = match.players.find(v => v.position === to);
+    const from = game.getPassFromPlayer(deal.number, player.position);
+    const fromPlayer = match.players.find(v => v.position === from);
+    hand.pass = new Pass(toPlayer.number, Cards.instanciate(pickedCards));
+    hand.receive = new Pass(fromPlayer.number, Cards.instanciate(receivedCards));
     hand.cards.sort();
   }
 
@@ -149,10 +152,13 @@ class HeartsClientMiddleware {
       hand.cards.push(...Cards.create(v.initialCards));
 
       if (deal.number <= 3) {
-        const to = game.getPassToPlayer(deal.number, number);
-        const from = game.getPassFromPlayer(deal.number, number);
-        hand.pass = new Pass(to, Cards.instanciate(v.pickedCards));
-        hand.receive = new Pass(from, Cards.instanciate(v.receivedCards));
+        const player = players.get(number);
+        const to = game.getPassToPlayer(deal.number, player.position);
+        const toPlayer = players.find(v => v.position === to);
+        const from = game.getPassFromPlayer(deal.number, player.position);
+        const fromPlayer = players.find(v => v.position === from);
+        hand.pass = new Pass(toPlayer.number, Cards.instanciate(v.pickedCards));
+        hand.receive = new Pass(fromPlayer.number, Cards.instanciate(v.receivedCards));
       }
 
       hand.cards.sort();
