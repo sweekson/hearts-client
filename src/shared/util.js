@@ -9,6 +9,16 @@ util.string.toUpperCamelCase = text => {
   return text.replace(pattern, (m, s, w) => w.slice(0, 1).toUpperCase() + w.slice(1, s.length));
 };
 
+util.fs = {};
+
+util.fs.isDir = path => {
+  return fs.statSync(path).isDirectory();
+};
+
+util.fs.isFile = path => {
+  return fs.statSync(path).isFile();
+};
+
 util.file = {};
 
 util.file.read = (path, { type = 'json', encoding = 'utf8', flag = 'r' } = {}) => {
