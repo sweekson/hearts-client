@@ -1,5 +1,6 @@
 const path = require('path');
 const util = require('../shared/util');
+const Logger = require('../shared/Logger');
 const {
   Match, Game, Player, Deal, Hand,
   Cards, Card, PlayedCard, Pass, Round
@@ -9,6 +10,7 @@ class HeartsClientMiddleware {
   constructor (client) {
     this.client = client;
     this.bot = client.options.bot;
+    this.logger = client.options.logger || new Logger('info');
     this.detail = {};
     this.detail.match = new Match();
     this.match = this.detail.match;
@@ -29,7 +31,7 @@ class HeartsClientMiddleware {
       v.playerNumber,
       new Player(v.playerNumber, v.playerName, i + 1)
     ));
-    console.log(`Game: ${this.game.number}`);
+    this.logger.info(`Game: ${this.game.number}`);
   }
 
   onNewDeal (data) {
@@ -43,7 +45,7 @@ class HeartsClientMiddleware {
     });
     match.self && this.hand.cards.push(...Cards.create(data.self.cards)).sort();
     this.game.deals.add(deal.number, deal);
-    console.log(`Deal: ${this.deal.number}`);
+    this.logger.info(`Deal: ${this.deal.number}`);
   }
 
   onPassCards () {
@@ -83,12 +85,12 @@ class HeartsClientMiddleware {
       hand.exposed.push(...exposed);
       deal.exposed.push(...exposed);
     });
-    console.log(deal.exposed.length ? `Exposed: ${deal.exposed.list.join(', ')}` : 'Exposed: (None)');
+    this.logger.info(deal.exposed.length ? `Exposed: ${deal.exposed.list.join(', ')}` : 'Exposed: (None)');
   }
 
   onNewRound (data) {
     this.deal.rounds.push(this.round = new Round(data.roundNumber));
-    console.log(`Round: ${this.round.number}`);
+    this.logger.info(`Round: ${this.round.number}`);
   }
 
   onTurnEnd (data) {
@@ -131,7 +133,7 @@ class HeartsClientMiddleware {
     round.score = Cards.scoring(round.played, isAceHeartExposed) * (hasTenClub ? 2 : 1);
     hand.score = Cards.scoring(hand.gained, isAceHeartExposed);
     this.round = null;
-    console.log(`Won: ${player.name}, Card: ${round.won.value}, Score: ${round.score}`);
+    this.logger.info(`Won: ${player.name}, Card: ${round.won.value}, Score: ${round.score}`);
   }
 
   onDealEnd (data) {
@@ -146,7 +148,7 @@ class HeartsClientMiddleware {
       players.get(number).score = v.gameScore;
       hand.hadShotTheMoon = v.shootingTheMoon;
       hand.valid.clear();
-      console.log(`Player: ${v.playerName}, Score: ${v.gameScore}`);
+      this.logger.info(`Player: ${v.playerName}, Score: ${v.gameScore}`);
 
       if (number === match.self) { return; }
 
@@ -183,18 +185,18 @@ class HeartsClientMiddleware {
   onMessage (detail) {
     const { eventName, data } = detail;
     const handler = 'on' + util.string.toUpperCamelCase(eventName);
-    console.log(`Event: ${handler}`);
+    this.logger.info(`Event: ${handler}`);
     this.events.push(detail);
     this[handler] && this[handler](data);
   }
 
   onClose () {
-    console.log('Disconnected from server');
+    this.logger.info('Disconnected from server');
     this.export();
   }
 
   onOpen (data) {
-    console.log('Connected to server');
+    this.logger.info('Connected to server');
   }
 
   onError () {}
