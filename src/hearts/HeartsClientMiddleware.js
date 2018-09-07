@@ -98,7 +98,7 @@ class HeartsClientMiddleware {
     const played = new PlayedCard(player.number, data.turnCard);
     const hand = deal.hands.get(player.number);
     hand.played.push(new Card(data.turnCard));
-    round.played.push(played);
+    round.played.add(player.number, played);
     deal.played.push(played);
     round.played.length === 1 && (round.lead = played);
     played.suit !== round.lead.suit && (hand.voids[round.lead.fullsuit] = true);
