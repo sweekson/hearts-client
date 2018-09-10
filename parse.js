@@ -6,7 +6,6 @@ const HeartsClientBase = require('./src/hearts/HeartsClientBase');
 const HeartsBotBase = require('./src/hearts/HeartsBotBase');
 
 const source = grab('--source');
-const team = grab('--team');
 const filepath = path.resolve(__dirname, `${source}.json`);
 
 if (!util.file.exist(filepath)) { return console.log(`File '${filepath}' not exists`); }
@@ -18,9 +17,4 @@ const options = { bot, logs };
 const client = new HeartsClientBase(options);
 const middleware = new HeartsClientMiddleware(client);
 
-log.events.forEach(e => {
-  e.data.players && Object.assign(e.data, {
-    self: e.data.players.find(v => v.playerNumber === Number(team))
-  });
-  middleware.onMessage(e);
-});
+log.events.forEach(e => middleware.onMessage(e));

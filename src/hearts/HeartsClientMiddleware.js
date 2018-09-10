@@ -35,13 +35,13 @@ class HeartsClientMiddleware {
   onNewDeal (data) {
     const match = this.match;
     const deal = this.deal = new Deal(data.dealNumber);
-    match.self = data.self.playerNumber;
+    data.self && (match.self = data.self.playerNumber);
     data.players.forEach(({ playerNumber: number, isHuman }) => {
       match.players.merge(number, { isHuman });
       deal.hands.add(number, new Hand(number));
       number === match.self && (this.hand = deal.hands.get(number));
     });
-    this.hand.cards.push(...Cards.create(data.self.cards)).sort();
+    match.self && this.hand.cards.push(...Cards.create(data.self.cards)).sort();
     this.game.deals.add(deal.number, deal);
     console.log(`Deal: ${this.deal.number}`);
   }
@@ -53,6 +53,7 @@ class HeartsClientMiddleware {
   }
 
   onPassCardsEnd (data) {
+    if (!this.match.self) { return; }
     const match = this.match;
     const game = this.game;
     const deal = this.deal;
@@ -97,7 +98,7 @@ class HeartsClientMiddleware {
     const played = new PlayedCard(player.number, data.turnCard);
     const hand = deal.hands.get(player.number);
     hand.played.push(new Card(data.turnCard));
-    round.played.push(played);
+    round.played.add(player.number, played);
     deal.played.push(played);
     round.played.length === 1 && (round.lead = played);
     played.suit !== round.lead.suit && (hand.voids[round.lead.fullsuit] = true);
