@@ -49,6 +49,16 @@ describe('Test Card', function () {
     expect(jc.ge(jc)).toBe(true);
     expect(jc.ge(tc)).toBe(true);
   });
+
+  it('should get card strength properly', function () {
+    const as = new Card('AS');
+    const qh = new Card('QH');
+    const jc = new Card('JC');
+
+    expect(as.strength).toEqual(15);
+    expect(qh.strength).toEqual(4);
+    expect(jc.strength).toEqual(0);
+  });
 });
 
 describe('Test Cards', function () {
@@ -71,6 +81,17 @@ describe('Test Cards', function () {
     expect(cards.covers('QH', 'AC')).toBe(true);
     expect(cards.covers('4C', '6D')).toBe(false);
     expect(cards.map.get(0).value).toEqual('KS');
+  });
+
+  it('should get strength of cards properly', function () {
+    const spades = Cards.instanciate(Cards.spades);
+    const hearts = Cards.instanciate(Cards.hearts);
+    const diamonds = Cards.instanciate(Cards.diamonds);
+    const clubs = Cards.instanciate(Cards.clubs);
+    expect(spades.strength).toEqual(43);
+    expect(hearts.strength).toEqual(21);
+    expect(diamonds.strength).toEqual(10);
+    expect(clubs.strength).toEqual(6);
   });
 
   it('should be separated by suit', function () {
