@@ -11,6 +11,7 @@ class HeartsClientMiddleware {
     this.client = client;
     this.bot = client.options.bot;
     this.logger = client.options.logger || new Logger('info');
+    this.exporting = client.options.exporting !== undefined ? client.options.exporting : true;
     this.detail = {};
     this.detail.match = new Match();
     this.match = this.detail.match;
@@ -202,6 +203,7 @@ class HeartsClientMiddleware {
   onError () {}
 
   export () {
+    if (!this.exporting) { return; }
     const dest = this.client.options.logs;
     const dir = util.date.format(new Date(), 'mm-dd-HH-MM');
     const prod = this.client.options.prod;
