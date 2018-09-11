@@ -12,13 +12,19 @@ run:
 
 ## Create a tag with practice
 tag-practice:
-	sudo docker rmi $(REGISTRY)/$(team)/$(PROJECT):practice
 	sudo docker tag $(PROJECT):latest $(REGISTRY)/$(team)/$(PROJECT):practice
+
+## Remove image which is tagged with practice
+untag-practice:
+	sudo docker rmi $(REGISTRY)/$(team)/$(PROJECT):practice
 
 ## Create a tag with rank
 tag-rank:
-	sudo docker rmi $(REGISTRY)/$(team)/$(PROJECT):rank
 	sudo docker tag $(PROJECT):latest $(REGISTRY)/$(team)/$(PROJECT):rank
+
+## Remove image which is tagged with rank
+untag-rank:
+	sudo docker rmi $(REGISTRY)/$(team)/$(PROJECT):rank
 
 ## Log in to a Docker registry
 login:
