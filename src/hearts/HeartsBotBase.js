@@ -9,7 +9,13 @@ class HeartsBotBase {
   pick (middleware) {
   }
 
-  watch (player, card) {
+  onTurnEnd (middleware) {
+  }
+
+  onRoundEnd (middleware) {
+  }
+
+  onDealEnd (middleware) {
   }
 }
 
