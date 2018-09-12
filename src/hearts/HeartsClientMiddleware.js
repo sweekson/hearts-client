@@ -32,6 +32,7 @@ class HeartsClientMiddleware {
       v.playerNumber,
       new Player(v.playerNumber, v.playerName, i + 1)
     ));
+    this.bot.onNewGame(this);
     this.logger.info(`Game: ${this.game.number}`);
   }
 
@@ -46,6 +47,7 @@ class HeartsClientMiddleware {
     });
     match.self && this.hand.cards.push(...Cards.create(data.self.cards)).sort();
     this.game.deals.add(deal.number, deal);
+    this.bot.onNewDeal(this);
     this.logger.info(`Deal: ${this.deal.number}`);
   }
 
@@ -70,6 +72,7 @@ class HeartsClientMiddleware {
     hand.pass = new Pass(toPlayer.number, Cards.instanciate(pickedCards));
     hand.receive = new Pass(fromPlayer.number, Cards.instanciate(receivedCards));
     hand.cards.sort();
+    this.bot.onPassCardsEnd(this);
   }
 
   onExposeCards () {
@@ -86,11 +89,13 @@ class HeartsClientMiddleware {
       hand.exposed.push(...exposed);
       deal.exposed.push(...exposed);
     });
+    this.bot.onExposeCardsEnd(this);
     this.logger.info(deal.exposed.length ? `Exposed: ${deal.exposed.list.join(', ')}` : 'Exposed: (None)');
   }
 
   onNewRound (data) {
     this.deal.rounds.push(this.round = new Round(data.roundNumber));
+    this.bot.onNewRound(this);
     this.logger.info(`Round: ${this.round.number}`);
   }
 
