@@ -106,7 +106,7 @@ class HeartsClientMiddleware {
     round.played.length === 1 && (round.lead = played);
     played.suit !== round.lead.suit && (hand.voids[round.lead.fullsuit] = true);
     deal.isHeartBroken = round.isHeartBroken = deal.isHeartBroken || played.isHeart;
-    this.bot.watch(player, played);
+    this.bot.onTurnEnd(this);
   }
 
   onYourTurn (data) {
@@ -133,6 +133,7 @@ class HeartsClientMiddleware {
     round.won = new PlayedCard(player.number, hand.played.last.value);
     round.score = Cards.scoring(round.played, isAceHeartExposed) * (hasTenClub ? 2 : 1);
     hand.score = Cards.scoring(hand.gained, isAceHeartExposed);
+    this.bot.onRoundEnd(this);
     this.round = null;
     this.logger.info(`Won: ${player.name}, Card: ${round.won.value}, Score: ${round.score}`);
   }
@@ -167,6 +168,7 @@ class HeartsClientMiddleware {
 
       hand.cards.sort();
     });
+    this.bot.onDealEnd(this);
     this.deal = null;
     this.hand = null;
   }
