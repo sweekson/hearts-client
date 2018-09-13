@@ -20,14 +20,11 @@ class ScoreLessBot extends HeartsBotBase {
       ...cards.diamonds.sort(false).list.slice(0, 3),
       ...cards.clubs.sort(false).list.slice(0, 3),
     );
-    return new Cards(high).sort(false).list.slice(0, 3);
+    return high.sort((a, b) => b.number - a.number).slice(0, 3);
   }
 
   expose (middleware) {
-    const cards = middleware.hand.cards;
-    const spades = cards.spades.ge('QS');
-    const hearts = cards.hearts.ge('TH');
-    return spades.length > 2 && hearts.length > 3 ? [] : ['AH'];
+    return [];
   }
 
   pick (middleware) {
@@ -66,7 +63,7 @@ class ScoreLessBot extends HeartsBotBase {
         if (round.isLast && round.hasPenaltyCard) { //have score on this round
           return this.valid.lt(followed.max).max || this.valid.skip('QS').max;
         }
-        if(!round.isLast){ //Case “2nd or 3rd player”   "why 2nd or 3nd do not care score?"
+        if(!round.isLast){ //Case “2nd or 3rd player”
           return this.valid.lt(followed.max).max || this.valid.skip('QS').min;
         }
       }
@@ -89,19 +86,13 @@ class ScoreLessBot extends HeartsBotBase {
       const largePlayedCount = this.dealPlayedCards.suit(card.suit).gt(card).length;
       const score = this.getScore(number, length, smallPlayedCount, largePlayedCount);
       const lessSmallCardCount = number - 2 - smallPlayedCount //2 is the small card number
-
-      //** Never play only KS or QS
-      //** Choose high score card
-      //** When lead(min card), score tie-breaker: smaller lessSmallCardCount >> smaller length
-      //** When follow(max card), score tie-breaker: larger lessSmallCardCount >> smaller length
-      if(!((card.eq(this.QS) || card.eq(this.KS)) && length === 1)) {
-        !pick.card && select(card, score, length, lessSmallCardCount);
-        score > pick.score && select(card, score, length, lessSmallCardCount);
-        score === pick.score && this.isFirst ? lessSmallCardCount < pick.lessSmallCardCount : lessSmallCardCount > pick.lessSmallCardCount && select(card, score, length, lessSmallCardCount);
-        score === pick.score && lessSmallCardCount === pick.lessSmallCardCount && length < pick.length && select(card, score, length, lessSmallCardCount);
-      }
+      
+      if((card.is(this.QS.value) || card.is(this.KS.value)) && length === 1) { return ; } //** Never play only KS or QS
+      !pick.card && select(card, score, length, lessSmallCardCount);
+      score > pick.score && select(card, score, length, lessSmallCardCount);
+      score === pick.score && (this.isFirst ? lessSmallCardCount < pick.lessSmallCardCount : lessSmallCardCount > pick.lessSmallCardCount) && select(card, score, length, lessSmallCardCount);
+      score === pick.score && lessSmallCardCount === pick.lessSmallCardCount && length < pick.length && select(card, score, length, lessSmallCardCount);
     });
-    console.log(pick.card);
     return pick.card;
   }
 
@@ -118,18 +109,17 @@ class ScoreLessBot extends HeartsBotBase {
       this.valid.diamonds.max,
       this.valid.clubs.max,
     ];
-    console.log(new Cards((this.isFirst ? minCards : maxCards).filter(v => !!v)));
     return new Cards((this.isFirst ? minCards : maxCards).filter(v => !!v));
   }
 
-
   getScore(number, length, smallPlayedCount, largePlayedCount) {
     const a = number - 2 - smallPlayedCount;
-    const b = 14 - number - (length - 1 ) - largePlayedCount; 
+    const b = 14 - number - (length - 1 ) - largePlayedCount;   
     const c = length*length;
-    const score = this.isFirst ? (b-a + (b+a))/c : (a-b + (b+a))/c;
+    const coefficient = (b+a)/c;
+    const score = this.isFirst ? (b-a) + coefficient : (a-b) + coefficient;
     return score;
-  }
+ } 
 }
 
 module.exports = ScoreLessBot;
