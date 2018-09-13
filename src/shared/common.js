@@ -8,7 +8,7 @@ class Collection {
   }
 
   skip (...items) {
-    return new Collection(this.list.filter(v => items.indexOf(v) === -1));
+    return new this.constructor(this.list.filter(v => items.indexOf(v) === -1));
   }
 
   covers (...items) {

@@ -122,27 +122,27 @@ class Cards extends Collection {
 
   ge (target) {
     const card = typeof target === 'string' ? new Card(target) : target;
-    return new Cards(this.list.filter(v => v.ge(card)));
+    return new this.constructor(this.list.filter(v => v.ge(card)));
   }
 
   gt (target) {
     const card = typeof target === 'string' ? new Card(target) : target;
-    return new Cards(this.list.filter(v => v.gt(card)));
+    return new this.constructor(this.list.filter(v => v.gt(card)));
   }
 
   le (target) {
     const card = typeof target === 'string' ? new Card(target) : target;
-    return new Cards(this.list.filter(v => v.le(card)));
+    return new this.constructor(this.list.filter(v => v.le(card)));
   }
 
   lt (target) {
     const card = typeof target === 'string' ? new Card(target) : target;
-    return new Cards(this.list.filter(v => v.lt(card)));
+    return new this.constructor(this.list.filter(v => v.lt(card)));
   }
 
   skip (...items) {
     const cards = this.finds(...items);
-    return new Cards(this.list.filter(v => cards.indexOf(v) === -1));
+    return new this.constructor(this.list.filter(v => cards.indexOf(v) === -1));
   }
 
   covers (...items) {
@@ -170,7 +170,7 @@ class Cards extends Collection {
   }
 
   suit (suit) {
-    return new Cards(this.list.filter(v => v.suit === suit));
+    return new this.constructor(this.list.filter(v => v.suit === suit));
   }
 
   get values () {
@@ -190,27 +190,27 @@ class Cards extends Collection {
   }
 
   get spades () {
-    return new Cards(this.list.filter(v => v.isSpade));
+    return new this.constructor(this.list.filter(v => v.isSpade));
   }
 
   get hearts () {
-    return new Cards(this.list.filter(v => v.isHeart));
+    return new this.constructor(this.list.filter(v => v.isHeart));
   }
 
   get diamonds () {
-    return new Cards(this.list.filter(v => v.isDiamond));
+    return new this.constructor(this.list.filter(v => v.isDiamond));
   }
 
   get clubs () {
-    return new Cards(this.list.filter(v => v.isClub));
+    return new this.constructor(this.list.filter(v => v.isClub));
   }
 
   get max () {
-    return this.length ? new Cards(this.list).sort().last : undefined;
+    return this.length ? new this.constructor(this.list).sort().last : undefined;
   }
 
   get min () {
-    return this.length ? new Cards(this.list).sort().first : undefined;
+    return this.length ? new this.constructor(this.list).sort().first : undefined;
   }
 }
 
