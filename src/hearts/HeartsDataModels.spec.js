@@ -160,6 +160,40 @@ describe('Test Cards', function () {
     expect(cards.list[12].value).toEqual('5D');
   });
 
+  it('should be sorted by number first then sorted by S -> H -> C -> D', function () {
+    const cards = Cards.instanciate(values);
+
+    cards.sort(true, true);
+    expect(cards.list[0].value).toEqual('2C');
+    expect(cards.list[1].value).toEqual('4S');
+    expect(cards.list[2].value).toEqual('4C');
+    expect(cards.list[3].value).toEqual('5S');
+    expect(cards.list[4].value).toEqual('5H');
+    expect(cards.list[5].value).toEqual('5D');
+    expect(cards.list[6].value).toEqual('5C');
+    expect(cards.list[7].value).toEqual('8H');
+    expect(cards.list[8].value).toEqual('TD');
+    expect(cards.list[9].value).toEqual('QH');
+    expect(cards.list[10].value).toEqual('KS');
+    expect(cards.list[11].value).toEqual('AD');
+    expect(cards.list[12].value).toEqual('AC');
+
+    cards.sort(false, true);
+    expect(cards.list[0].value).toEqual('AD');
+    expect(cards.list[1].value).toEqual('AC');
+    expect(cards.list[2].value).toEqual('KS');
+    expect(cards.list[3].value).toEqual('QH');
+    expect(cards.list[4].value).toEqual('TD');
+    expect(cards.list[5].value).toEqual('8H');
+    expect(cards.list[6].value).toEqual('5S');
+    expect(cards.list[7].value).toEqual('5H');
+    expect(cards.list[8].value).toEqual('5D');
+    expect(cards.list[9].value).toEqual('5C');
+    expect(cards.list[10].value).toEqual('4S');
+    expect(cards.list[11].value).toEqual('4C');
+    expect(cards.list[12].value).toEqual('2C');
+  });
+
   it('should be sorted by number', function () {
     const cards = Cards.instanciate(values);
 
@@ -168,7 +202,7 @@ describe('Test Cards', function () {
     expect(ascending.list[1].value).toEqual('8H');
     expect(ascending.list[2].value).toEqual('QH');
 
-    const descending  = cards.hearts.sort(false);
+    const descending = cards.hearts.sort(false);
     expect(descending.list[0].value).toEqual('QH');
     expect(descending.list[1].value).toEqual('8H');
     expect(descending.list[2].value).toEqual('5H');

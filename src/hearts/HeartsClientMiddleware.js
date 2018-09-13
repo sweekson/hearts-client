@@ -11,6 +11,7 @@ class HeartsClientMiddleware {
     this.client = client;
     this.bot = client.options.bot;
     this.logger = client.options.logger || new Logger('info');
+    this.exporting = client.options.exporting !== undefined ? client.options.exporting : true;
     this.detail = {};
     this.detail.match = new Match();
     this.match = this.detail.match;
@@ -31,6 +32,7 @@ class HeartsClientMiddleware {
       v.playerNumber,
       new Player(v.playerNumber, v.playerName, i + 1)
     ));
+    this.bot.onNewGame(this);
     this.logger.info(`Game: ${this.game.number}`);
   }
 
@@ -45,6 +47,7 @@ class HeartsClientMiddleware {
     });
     match.self && this.hand.cards.push(...Cards.create(data.self.cards)).sort();
     this.game.deals.add(deal.number, deal);
+    this.bot.onNewDeal(this);
     this.logger.info(`Deal: ${this.deal.number}`);
   }
 
@@ -69,6 +72,7 @@ class HeartsClientMiddleware {
     hand.pass = new Pass(toPlayer.number, Cards.instanciate(pickedCards));
     hand.receive = new Pass(fromPlayer.number, Cards.instanciate(receivedCards));
     hand.cards.sort();
+    this.bot.onPassCardsEnd(this);
   }
 
   onExposeCards () {
@@ -85,11 +89,13 @@ class HeartsClientMiddleware {
       hand.exposed.push(...exposed);
       deal.exposed.push(...exposed);
     });
+    this.bot.onExposeCardsEnd(this);
     this.logger.info(deal.exposed.length ? `Exposed: ${deal.exposed.list.join(', ')}` : 'Exposed: (None)');
   }
 
   onNewRound (data) {
     this.deal.rounds.push(this.round = new Round(data.roundNumber));
+    this.bot.onNewRound(this);
     this.logger.info(`Round: ${this.round.number}`);
   }
 
@@ -105,7 +111,7 @@ class HeartsClientMiddleware {
     round.played.length === 1 && (round.lead = played);
     played.suit !== round.lead.suit && (hand.voids[round.lead.fullsuit] = true);
     deal.isHeartBroken = round.isHeartBroken = deal.isHeartBroken || played.isHeart;
-    this.bot.watch(player, played);
+    this.bot.onTurnEnd(this);
   }
 
   onYourTurn (data) {
@@ -132,6 +138,7 @@ class HeartsClientMiddleware {
     round.won = new PlayedCard(player.number, hand.played.last.value);
     round.score = Cards.scoring(round.played, isAceHeartExposed) * (hasTenClub ? 2 : 1);
     hand.score = Cards.scoring(hand.gained, isAceHeartExposed);
+    this.bot.onRoundEnd(this);
     this.round = null;
     this.logger.info(`Won: ${player.name}, Card: ${round.won.value}, Score: ${round.score}`);
   }
@@ -166,6 +173,7 @@ class HeartsClientMiddleware {
 
       hand.cards.sort();
     });
+    this.bot.onDealEnd(this);
     this.deal = null;
     this.hand = null;
   }
@@ -176,6 +184,7 @@ class HeartsClientMiddleware {
     this.hand = null;
     this.round = null;
     this.export();
+    process.exit();
   }
 
   onGameStop () {
@@ -202,6 +211,7 @@ class HeartsClientMiddleware {
   onError () {}
 
   export () {
+    if (!this.exporting) { return; }
     const dest = this.client.options.logs;
     const dir = util.date.format(new Date(), 'mm-dd-HH-MM');
     const prod = this.client.options.prod;
