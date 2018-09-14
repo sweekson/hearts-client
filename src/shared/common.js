@@ -32,6 +32,10 @@ class Collection {
     return this.list.map(callback);
   }
 
+  select (begin, end) {
+    return this.list.slice(begin, end);
+  }
+
   push (...items) {
     items.forEach(item => {
       this.list.push(item);
