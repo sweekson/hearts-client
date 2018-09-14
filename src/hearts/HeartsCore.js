@@ -300,6 +300,7 @@ class HeartsCore extends EventEmitter {
   }
 
   onPlayerPickCard (client, { dealNumber, roundNumber, turnCard }) {
+    if (!turnCard) { throw Error('Card is undefined'); }
     const players = this.match.players;
     const deal = this.deal;
     const round = this.round;
