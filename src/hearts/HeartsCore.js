@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 const util = require('../shared/util');
+const Logger = require('../shared/Logger');
 const { Collection } = require('../shared/common');
 const {
   Match, Game, Deal, Hand, Pass,
@@ -10,6 +11,7 @@ class HeartsCore extends EventEmitter {
   constructor (options) {
     super();
     this.options = options || {};
+    this.logger = options.logger || new Logger('info');
     this.clients = new Collection();
     this.match = new Match();
     this.targets = new Map();
@@ -152,7 +154,7 @@ class HeartsCore extends EventEmitter {
     const next = !this.round ? null : this.round.won.player;
     const round = this.round = new Round(deal.rounds.length + 1);
     deal.rounds.push(round);
-    console.log(`Core: New Round ${round.number}`);
+    this.logger.info(`Core: New Round ${round.number}`);
     players.each(player => {
       this.notify('new_round', {
         gameNumber: game.number,
@@ -291,7 +293,7 @@ class HeartsCore extends EventEmitter {
   doStartNewGame () {
     this.game = new Game(this.match.games.length + 1);
     this.match.games.add(this.game.number, this.game);
-    console.log(`Core: Game ${this.game.number} Start`);
+    this.logger.info(`Core: Game ${this.game.number} Start`);
     this.notify('new_game', {
       gameNumber: this.game.number,
       players: this.match.players.list
@@ -337,7 +339,7 @@ class HeartsCore extends EventEmitter {
     Object.assign(sender, {
       exposedCards: values
     });
-    console.log(values.length ? `Core: Exposed ${values.join(', ')}` : 'Core: Exposed None');
+    this.logger.info(values.length ? `Core: Exposed ${values.join(', ')}` : 'Core: Exposed None');
     this.doExposeCardsEnd();
   }
 
@@ -372,7 +374,7 @@ class HeartsCore extends EventEmitter {
   }
 
   onPlayerJoin (client, { playerNumber: number, playerName: name }) {
-    console.log(`Core: Join (${number}-${name})`);
+    this.logger.info(`Core: Join (${number}-${name})`);
     this.targets.set(number, client);
     this.targets.set(client, number);
     this.match.players.add(number, {
@@ -403,7 +405,7 @@ class HeartsCore extends EventEmitter {
   }
 
   notify (eventName, data, target) {
-    console.log(`Core: Notify ${eventName}`);
+    this.logger.info(`Core: Notify ${eventName}`);
     const client = target ? this.targets.get(target) : null;
     if (client) { return client.emit('message', { eventName, data }); }
     this.clients.each(c => c.emit('message', { eventName, data }));
