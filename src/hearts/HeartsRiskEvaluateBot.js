@@ -209,7 +209,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
       return round.hasPenaltyCard ? (valid.lt(followed.max).max || valid.max) : (valid.skip('QS').max || valid.max);
     }
     detail.rule = 104;
-    return valid.safety;
+    return valid.lt(followed.max).max || valid.safety;
   }
 
   findPassingCards (middleware) {
