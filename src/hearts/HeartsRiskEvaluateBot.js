@@ -37,7 +37,7 @@ RiskCards.evaluate = (cards, played = new Cards()) => {
       const ogt = others.gt(card.value).length;
       const plt = psuit.lt(card.value).length;
       const pgt = psuit.gt(card.value).length;
-      const risk = card.number - vlt - vgt + olt - ogt - plt + pgt + pl;
+      const risk = card.number + vlt - vgt + olt - ogt - plt + pgt + pl;
       return new RiskCard(card.value, risk);
     })
     .sort((a, b) => a.risk - b.risk)
