@@ -31,7 +31,7 @@ const logger = {
   },
 };
 
-const evaluator1 = (cards, valid, played) => {
+const evaluator1 = (valid, played) => {
   return new RiskCards(
     valid.list.map(card => {
       const vsuit = valid.suit(card.suit);
@@ -46,10 +46,10 @@ const evaluator1 = (cards, valid, played) => {
       const ogt = others.gt(card.value).length;
       const plt = psuit.lt(card.value).length;
       const pgt = psuit.gt(card.value).length;
-      const risk = card.number - vlt - vgt + olt - ogt - plt + pgt + pl;
+      const risk = card.number + vlt - vgt + olt - ogt - plt + pgt + pl;
       console.log(
         card.value, '->', `${card.number}(no)`,
-        `-${vlt}(vlt)`, `+${vgt}(vgt)`,
+        `+${vlt}(vlt)`, `-${vgt}(vgt)`,
         `+${olt}(olt)`, `-${ogt}(ogt)`,
         `-${plt}(plt)`, `+${pgt}(pgt)`,
         `+${pl}(pl)`,
@@ -60,12 +60,10 @@ const evaluator1 = (cards, valid, played) => {
   );
 };
 
-const evaluate = (cards, valid, played, evaluator) => {
-  cards = Cards.instanciate(cards);
+const evaluate = (valid, played, evaluator) => {
   valid = Cards.instanciate(valid);
   played = Cards.instanciate(played);
-  const evaluatd = evaluator(cards, valid, played);
-  // logger.cards('   Cards: ', cards);
+  const evaluatd = evaluator(valid, played);
   logger.cards('  Played: ', played);
   logger.cards('   Valid: ', valid);
   logger.evaluated('Evaluatd: ', evaluatd);
@@ -77,13 +75,11 @@ const enabled = (...groups) => Array.isArray(targets) ? groups.some(v => targets
 
 enabled(1) && evaluate(
   ['2D'],
-  ['2D'],
   [],
   evaluator1,
 );
 
 enabled(1) && evaluate(
-  ['2D', '3D'],
   ['2D', '3D'],
   [],
   evaluator1,
@@ -91,13 +87,11 @@ enabled(1) && evaluate(
 
 enabled(1) && evaluate(
   ['2D', '3D', '5D', '6D', '7D'],
-  ['2D', '3D', '5D', '6D', '7D'],
   [],
   evaluator1,
 );
 
 enabled(1, 2) && evaluate(
-  ['6D'],
   ['6D'],
   [],
   evaluator1,
@@ -105,20 +99,17 @@ enabled(1, 2) && evaluate(
 
 enabled(1, 2) && evaluate(
   ['AD'],
-  ['AD'],
   [],
   evaluator1,
 );
 
 enabled(2) && evaluate(
   ['6D'],
-  ['6D'],
   ['7D'],
   evaluator1,
 );
 
 enabled(2) && evaluate(
-  ['6D'],
   ['6D'],
   ['2D'],
   evaluator1,
@@ -126,13 +117,11 @@ enabled(2) && evaluate(
 
 enabled(2) && evaluate(
   ['AD'],
-  ['AD'],
   ['7D'],
   evaluator1,
 );
 
 enabled(3) && evaluate(
-  ['5D', '6D'],
   ['5D', '6D'],
   [],
   evaluator1,
@@ -140,13 +129,11 @@ enabled(3) && evaluate(
 
 enabled(3) && evaluate(
   ['5D', '6D'],
-  ['5D', '6D'],
   ['7D'],
   evaluator1,
 );
 
 enabled(3) && evaluate(
-  ['5D', '6D'],
   ['5D', '6D'],
   ['2D'],
   evaluator1,
@@ -154,20 +141,17 @@ enabled(3) && evaluate(
 
 enabled(4) && evaluate(
   ['6D', '6H', 'QS'],
-  ['6D', '6H', 'QS'],
   ['2D', '3D', '4D', '5D', '7D', '8D', '9D', 'TD', 'JD', 'QD', 'KD', 'AD'],
   evaluator1,
 );
 
 enabled(4) && evaluate(
   ['6D', 'AH', 'QS'],
-  ['6D', 'AH', 'QS'],
   ['2D', '3D', '4D', '5D', '7D', '8D', '9D', 'TD', 'JD', 'QD', 'KD', 'AD'],
   evaluator1,
 );
 
 enabled(4) && evaluate(
-  ['6D', 'AH', 'QS'],
   ['6D', 'AH', 'QS'],
   ['2D', '4D', '5D', '7D', '8D', '9D', 'TD', 'JD', 'QD', 'KD', 'AD'],
   evaluator1,
@@ -175,13 +159,11 @@ enabled(4) && evaluate(
 
 enabled(4) && evaluate(
   ['6D', 'AH', 'QS'],
-  ['6D', 'AH', 'QS'],
   ['2D', '5D', '7D', '8D', '9D', 'TD', 'JD', 'QD', 'KD', 'AD'],
   evaluator1,
 );
 
 enabled(4) && evaluate(
-  ['6D', 'AH', 'QS'],
   ['6D', 'AH', 'QS'],
   ['2D', '5D', '7D', '8D', '9D', 'TD', 'JD', 'QD', 'KD', 'AD', '5H', '6H'],
   evaluator1,
@@ -189,7 +171,12 @@ enabled(4) && evaluate(
 
 enabled(4) && evaluate(
   ['6D', 'AH', 'QS'],
-  ['6D', 'AH', 'QS'],
   ['2D', '4D', '5D', '7D', '8D', 'TD', 'JD', 'QD', 'KD', 'AD'],
+  evaluator1,
+);
+
+enabled(5) && evaluate(
+  ['4D', '5D', 'JD', 'QD', 'KD', 'AD', 'TC', 'JC', 'QC', 'QH', 'KH'],
+  ['2C', '4C', '6C', '9C', '2S', '3S', 'JS', 'QS'],
   evaluator1,
 );
