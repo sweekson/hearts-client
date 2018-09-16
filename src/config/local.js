@@ -65,6 +65,7 @@ ${bots(options)}
 module.exports = {
   record: ${record(options.record)},
   logs: '${options.logs}',
+  reports: { round: false, deal: false, game: true },
   clients: [
     new HeartsClientLocal({
       playerNumber: 1,
