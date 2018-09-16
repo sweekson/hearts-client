@@ -281,7 +281,7 @@ class HeartsCore extends EventEmitter {
       deal.hands.add(player.playerNumber, hand);
       hand.cards.push(...deck.get(index).list);
       Object.assign(player, {
-        gameScore: 0,
+        gameScore: player.gameScore || 0,
         errorCount: 0,
         timeoutCount: 0,
         dealScore: 0,
