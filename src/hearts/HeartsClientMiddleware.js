@@ -214,13 +214,14 @@ class HeartsClientMiddleware {
     if (!this.exporting) { return; }
     const dest = this.client.options.logs;
     const dir = util.date.format(new Date(), 'mm-dd-HH-MM');
+    const target = path.join(dest, `${dir}-${this.match.self}`);
     const prod = this.client.options.prod;
     util.folder.create(dest);
-    util.folder.create(path.join(dest, dir));
-    util.file.write(path.join(dest, dir, 'detail.json'), this.detail);
-    util.file.write(path.join(dest, dir, 'actions.json'), this.actions);
-    util.file.write(path.join(dest, dir, 'candidates.json'), this.candidates);
-    !prod && util.file.write(path.join(dest, dir, 'events.json'), this.events);
+    util.folder.create(target);
+    util.file.write(path.join(target, 'detail.json'), this.detail);
+    util.file.write(path.join(target, 'actions.json'), this.actions);
+    util.file.write(path.join(target, 'candidates.json'), this.candidates);
+    !prod && util.file.write(path.join(target, 'events.json'), this.events);
   }
 }
 
