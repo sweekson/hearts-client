@@ -44,6 +44,7 @@ module.exports = {
   playerName: '${options.name}',
   bot: new ${options.bot}(),
   logs: path.join(__dirname, '${options.logs}'),
+  exporting: true,
 };
 `;
 
