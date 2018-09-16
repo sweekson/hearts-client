@@ -99,11 +99,11 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
     }
     if (played('KS')) {
       detail.rule = 2004;
-      return has('AS') ? 'AS' : pickNoneSpadesRiskyOrPickSafety();
+      return has('AS') ? valid.find('AS') : pickNoneSpadesRiskyOrPickSafety();
     }
     if (played('AS')) {
       detail.rule = 2005;
-      return has('KS') ? 'KS' : pickNoneSpadesRiskyOrPickSafety();
+      return has('KS') ? valid.find('KS') : pickNoneSpadesRiskyOrPickSafety();
     }
     detail.rule = 2006;
     return pickNoneSpadesRiskyOrPickSafety();
