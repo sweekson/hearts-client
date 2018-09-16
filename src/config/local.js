@@ -72,6 +72,7 @@ module.exports = {
       bot: new ${options.bot1}(),
       middlewares: [HeartsClientMiddleware],
       logs: path.join(__dirname, '${options.logs}'),
+      exporting: true,
     }),
     new HeartsClientLocal({
       playerNumber: 2,
@@ -79,6 +80,7 @@ module.exports = {
       bot: new ${options.bot2}(),
       middlewares: [HeartsClientMiddleware],
       logs: path.join(__dirname, '${options.logs}'),
+      exporting: true,
     }),
     new HeartsClientLocal({
       playerNumber: 3,
@@ -86,6 +88,7 @@ module.exports = {
       bot: new ${options.bot3}(),
       middlewares: [HeartsClientMiddleware],
       logs: path.join(__dirname, '${options.logs}'),
+      exporting: true,
     }),
     new HeartsClientLocal({
       playerNumber: 4,
@@ -93,6 +96,7 @@ module.exports = {
       bot: new ${options.bot4}(),
       middlewares: [HeartsClientMiddleware],
       logs: path.join(__dirname, '${options.logs}'),
+      exporting: true,
     }),
   ],
 };
