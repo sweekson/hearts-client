@@ -7,11 +7,51 @@ const {
   Cards, Card, PlayedCard, Round
 } = require('./HeartsDataModels');
 
+class Reports {
+  constructor (core, options = {}) {
+    this.core = core;
+    this.options = options;
+    this.logger = options.logger || new Logger('info');
+  }
+
+  onGameEnd () {
+    const { core, logger } = this;
+    const { match } = core;
+    const deals = match.games.first.deals;
+    logger.info(`Game End`);
+    match.players.each(player => {
+      const number = player.playerNumber;
+      const score = player.gameScore;
+      const scores = [];
+      deals.each(v => scores.push(v.hands.get(number).score));
+      logger.info(`Player: ${number}, Game Score: ${score} (${scores.join(', ')})`);
+    });
+  }
+
+  onDealEnd () {
+    const { core, logger } = this;
+    const { deal } = core;
+    logger.info(`Deal End: ${deal.number}`);
+    deal.hands.each(hand => {
+      logger.info(`Player: ${hand.player}, Score: ${hand.score}`);
+    });
+    logger.info();
+  }
+
+  onRoundEnd () {
+    const { core, logger } = this;
+    const { round } = core;
+    logger.info(`Round End: ${round.number}, Won: ${round.won.player}, Card: ${round.won.value}`);
+    round.number === 13 && logger.info();
+  }
+}
+
 class HeartsCore extends EventEmitter {
   constructor (options) {
     super();
     this.options = options || {};
     this.logger = options.logger || new Logger('info');
+    this.reports = Object.assign({ round: false, deal: true, game: true }, options.reports);
     this.clients = new Collection();
     this.match = new Match();
     this.targets = new Map();
@@ -56,6 +96,7 @@ class HeartsCore extends EventEmitter {
       });
     });
     this.notify('game_end', summary);
+    this.reports.game && new Reports(this, this.options.reports).onGameEnd();
   }
 
   doDealEnd () {
@@ -83,6 +124,7 @@ class HeartsCore extends EventEmitter {
       roundNumber: round.number,
       players: players.list,
     });
+    this.reports.deal && new Reports(this, this.options.reports).onDealEnd();
     deal.number < 4 ? this.doNewDeal() : this.doGameEnd();
   }
 
@@ -105,6 +147,7 @@ class HeartsCore extends EventEmitter {
       players: players.list,
       roundPlayer: player.playerName,
     });
+    this.reports.round && new Reports(this, this.options.reports).onRoundEnd();
     round.number < 13 ? this.doNewRound() : this.doDealEnd();
   }
 
