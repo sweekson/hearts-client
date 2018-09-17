@@ -49,6 +49,7 @@ As default, log files are exported at `/logs/*/detail.json` and `/logs/*/events.
 
 ### Create configuration file
 Run commands as following to create a configuration file for local game execution.
+PS. A configuration file can be created manually without preparing environment.
 
 ```
 npm run configure -- --mode local
@@ -125,3 +126,13 @@ Clean untagged images
 ```
 make clean
 ```
+
+## Available Bots
+Currently, there are 2 bots for the Trend Hearts. Configuration file must be configured with one bot for running the client agent. To generate configuration file please see **Create configuration file**.
+
+### ScoreLessBot
+ScoreLessBot is a rules-based bot, which is designed by Hanwen, and implemented by Austin. This bot will evaluate card scores for playing the cards for not winning scores.
+
+### HeartsRiskEvaluateBot
+HeartsRiskEvaluateBot is a rules-based bot, which is designed and implemented by Wilson, and reviewed with Austin. There are two strategies of the bot, which evaluates card risk for each round. First, it will try to play the safest card for not winning scores. And the second strategy tries to play the riskiest card for winning all score-cards (SHOOT THE MOON).
+
