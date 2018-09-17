@@ -180,3 +180,9 @@ enabled(5) && evaluate(
   ['2C', '4C', '6C', '9C', '2S', '3S', 'JS', 'QS'],
   evaluator1,
 );
+
+enabled(6) && evaluate(
+  ['2S', '3S', 'KS', '2H', 'TH', 'KH', '2D', 'KD', '5C', '6C', 'JC', 'QC', 'KC'],
+  [],
+  evaluator1,
+);
