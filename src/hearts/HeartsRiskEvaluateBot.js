@@ -86,7 +86,7 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
     const pickNoneSpadesRiskyOrPickSafety = _ => valid.skip(...valid.spades.values).risky || valid.safety;
     if (hasGainedQueenSpade || !hasRiskySpade) {
       detail.rule = 2001;
-      return valid.risky;
+      return valid.safety.risk < -3 ? valid.safety : valid.risky;
     }
     // hasGainedQueenSpade === false && hasRiskySpade === true
     if (played('KS') && played('AS')) {
