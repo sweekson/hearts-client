@@ -1,8 +1,9 @@
 const HeartsBotBase = require('./HeartsBotBase');
 const { Cards, Card } = require('./HeartsDataModels');
+const HeartsRiskEvaluateBot = require('./HeartsRiskEvaluateBot');
 
 class ScoreLessBot extends HeartsBotBase {
-  constructor () {
+  constructor() {
     super();
     this.isFirst = false;
     this.valid = {};
@@ -10,10 +11,15 @@ class ScoreLessBot extends HeartsBotBase {
     this.AS = new Card('AS');
     this.KS = new Card('KS');
     this.QS = new Card('QS');
+    this.REVABot = new HeartsRiskEvaluateBot();
   }
-  pass (middleware) {
+  pass(middleware) {
     const cards = middleware.hand.cards;
     const high = [];
+    console.log('(Pass)isShootTheMoon? ' + this.REVABot.shootTheMoon);
+    if (this.REVABot.shootTheMoon) {
+      return this.REVABot.pass(middleware);
+    }
     high.push(
       ...cards.spades.sort(false).list.slice(0, 3),
       ...cards.hearts.sort(false).list.slice(0, 3),
@@ -23,11 +29,11 @@ class ScoreLessBot extends HeartsBotBase {
     return high.sort((a, b) => b.number - a.number).slice(0, 3);
   }
 
-  expose (middleware) {
-    return [];
+  expose(middleware) {
+    return this.REVABot.shootTheMoon ? ['AH'] : [];
   }
 
-  pick (middleware) {
+  pick(middleware) {
     const round = middleware.round;
     const hand = middleware.hand;
     const deal = middleware.deal;
@@ -36,58 +42,67 @@ class ScoreLessBot extends HeartsBotBase {
     const roundPlayedCard = round.played;
     this.isFirst = round.isFirst;
     this.valid = hand.valid;
+    this.detail = round.detail;
     this.dealPlayedCards = deal.played;
-
-    if(handCards.length === 1 || this.valid.length === 1) {
+    console.log('(Pick)isShootTheMoon? ' + this.REVABot.shootTheMoon);
+    if (handCards.length === 1 || this.valid.length === 1) {
       return this.valid.max;
     }
-
-    if(this.isFirst) {
-      const formulaCard = this.confirmCards();
-      return formulaCard;
+    //Shoot The Moon
+    if (this.REVABot.shootTheMoon) {
+      console.log('(HeartREVABotPick)');
+      return this.REVABot.pick(middleware);
     }
-    else {
-      if (!hand.canFollowLead) { // Case “0”: void
-        // get formula card
-        const formulaCard = this.confirmCards();
-        return this.valid.find('QS') || this.valid.find('AS') || this.valid.find('KS') || formulaCard;
+    //Leader
+    if (this.isFirst) {
+      console.log('(*****Leader*****)');
+      this.detail.picked = this.confirmCards();
+      return this.confirmCards();
+    }
+    //Void
+    if (!hand.canFollowLead) {
+      console.log('(*****Void*****)');
+      this.detail.picked = this.confirmCards();
+      return this.valid.find('QS') || this.valid.find('AS') || this.valid.find('KS') || this.confirmCards();
+    }
+    //Follow
+    if (followed) {
+      if (round.isLast && !round.hasPenaltyCard) {
+        console.log('(*****Follow[noScore]*****)');
+        return (roundPlayedCard.contains('KS', 'AS') && this.valid.find('QS')) ? this.valid.find('QS') : this.valid.skip('QS').max
       }
-
-      if(followed){
-        if (round.isLast && !round.hasPenaltyCard) { //no score on this round
-          if((roundPlayedCard.find('KS') || roundPlayedCard.find('AS')) && this.valid.find('QS')){
-            return this.valid.find('QS');
-          }
-          return this.valid.skip('QS').max;
-        }
-        if (round.isLast && round.hasPenaltyCard) { //have score on this round
-          return this.valid.lt(followed.max).max || this.valid.skip('QS').max;
-        }
-        if(!round.isLast){ //Case “2nd or 3rd player”
-          return this.valid.lt(followed.max).max || this.valid.skip('QS').min;
-        }
+      if (round.isLast && round.hasPenaltyCard) {
+        console.log('(*****Follow[haveScore]*****)');
+        return this.valid.lt(followed.max).max || this.valid.skip('QS').max;
+      }
+      if (!round.isLast) {
+        console.log('(*****Follow[2nd or 3rd player]*****)');
+        return this.valid.lt(followed.max).max || this.valid.skip('QS').min;
       }
     }
   }
 
   confirmCards() {
     const candidateCards = this.getCandidateCards();
-    const pick = { card: null, score: 0, length: 0, lessSmallCardCount: 0};
+    const pick = { card: null, score: 0, length: 0, lessSmallCardCount: 0 };
     const select = (card, score, length, lessSmallCardCount) => {
       pick.card = card;
       pick.score = score;
       pick.length = length;
       pick.lessSmallCardCount = lessSmallCardCount;
     };
-    candidateCards.each( card => {
+    this.detail.isFirst = this.isFirst;
+    this.detail.candidateCards = candidateCards;
+    this.detail.evaluated = [];
+    candidateCards.each(card => {
       const number = card.number;
       const length = this.valid.suit(card.suit).length;
       const smallPlayedCount = this.dealPlayedCards.suit(card.suit).lt(card).length;
       const largePlayedCount = this.dealPlayedCards.suit(card.suit).gt(card).length;
       const score = this.getScore(number, length, smallPlayedCount, largePlayedCount);
       const lessSmallCardCount = number - 2 - smallPlayedCount //2 is the small card number
-      
-      if((card.is(this.QS.value) || card.is(this.KS.value)) && length === 1) { return ; } //** Never play only KS or QS
+      this.detail.evaluated.push(card.value + `(${score})`);
+      if ((card.is(this.QS.value) || card.is(this.KS.value)) && length === 1) { return; } //** Never play only KS or QS
       !pick.card && select(card, score, length, lessSmallCardCount);
       score > pick.score && select(card, score, length, lessSmallCardCount);
       score === pick.score && (this.isFirst ? lessSmallCardCount < pick.lessSmallCardCount : lessSmallCardCount > pick.lessSmallCardCount) && select(card, score, length, lessSmallCardCount);
@@ -114,12 +129,30 @@ class ScoreLessBot extends HeartsBotBase {
 
   getScore(number, length, smallPlayedCount, largePlayedCount) {
     const a = number - 2 - smallPlayedCount;
-    const b = 14 - number - (length - 1 ) - largePlayedCount;   
-    const c = length*length;
-    const coefficient = (b+a)/c;
-    const score = this.isFirst ? (b-a) + coefficient : (a-b) + coefficient;
+    const b = 14 - number - (length - 1) - largePlayedCount;
+    const c = length * length;
+    const coefficient = (b + a) / c;
+    const score = this.isFirst ? (b - a) + coefficient : (a - b) + coefficient;
     return score;
- } 
+  }
+
+  onNewDeal(middleware) {
+    middleware.hand.detail = {};
+    this.REVABot.onNewDeal(middleware);
+  }
+
+  onPassCardsEnd(middleware) {
+    this.REVABot.onPassCardsEnd(middleware);
+  }
+
+  onNewRound(middleware) {
+    middleware.round.detail = {};
+    this.REVABot.onNewRound(middleware);
+  }
+
+  onRoundEnd(middleware) {
+    this.REVABot.onRoundEnd(middleware);
+  }
 }
 
 module.exports = ScoreLessBot;
