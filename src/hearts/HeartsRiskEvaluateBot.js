@@ -283,6 +283,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const hl = h.length;
     const dl = d.length;
     const cl = c.length;
+    const hasAtLeast4Hearts = hl >= 4;
     const hasHalfSpades = sl >= 6;
     const hasHalfHearts = hl >= 6;
     const hasHalfDiamonds = dl >= 6;
@@ -310,14 +311,14 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const has2HighHearts = h.ge('TH').length >= 2;
     const has2HighDiamonds = d.ge('TD').length >= 2;
     const has2HighClubs = c.ge('TC').length >= 2;
-    const hasTwo2HighCards = ((has2HighSpades ? 1 : 0) + (has2HighHearts ? 1 : 0) + (has2HighDiamonds ? 1 : 0) + (has2HighClubs ? 1 : 0)) >= 2;
+    const hasTwo2HighCards = [has2HighSpades, has2HighDiamonds, has2HighClubs].filter(v => v).length >=2;
     const hasGreatHighCards = has3HighSpades && has3HighHearts && has3HighDiamonds && has3HighClubs;
-    const has2GreatHighCards = ((has3HighSpades ? 1 : 0) + (has3HighHearts ? 1 : 0) + (has3HighDiamonds ? 1 : 0) + (has3HighClubs ? 1 : 0)) >= 2;
+    const has2GreatHighCards = [has3HighSpades, has3HighHearts, has3HighDiamonds, has3HighClubs].filter(v => v).length >=2;
     const hasBigSpades = s.ge('JS').length >= 1;
     const hasBigHearts = h.ge('JH').length >= 1;
     const hasBigDiamonds = d.ge('JD').length >= 1;
     const hasBigClubs = c.ge('JC').length >= 1;
-    if (hasTwo2HighCards) { return true; }
+    if (hasTwo2HighCards && hasBigHearts && hasAtLeast4Hearts) { return true; }
     if (hasOneHalfSuit && has2GreatHighCards) { return true; }
     if (hasOneHalfSuit && hasOneHighSpades && hasBigHearts && hasBigDiamonds && hasBigClubs) { return true; }
     if (hasOneHighSpades && has3HighHearts && has3HighDiamonds && has3HighClubs) { return true; }
