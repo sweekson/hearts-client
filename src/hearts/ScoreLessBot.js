@@ -16,7 +16,7 @@ class ScoreLessBot extends HeartsBotBase {
   pass(middleware) {
     const cards = middleware.hand.cards;
     const high = [];
-    console.log('(Pass)isShootTheMoon? ' + this.REVABot.shootTheMoon);
+    //console.log('(Pass)isShootTheMoon? ' + this.REVABot.shootTheMoon);
     if (this.REVABot.shootTheMoon) {
       return this.REVABot.pass(middleware);
     }
@@ -44,39 +44,39 @@ class ScoreLessBot extends HeartsBotBase {
     this.valid = hand.valid;
     this.detail = round.detail;
     this.dealPlayedCards = deal.played;
-    console.log('(Pick)isShootTheMoon? ' + this.REVABot.shootTheMoon);
+    //console.log('(Pick)isShootTheMoon? ' + this.REVABot.shootTheMoon);
     if (handCards.length === 1 || this.valid.length === 1) {
       return this.valid.max;
     }
     //Shoot The Moon
     if (this.REVABot.shootTheMoon) {
-      console.log('(HeartREVABotPick)');
+      //console.log('(HeartREVABotPick)');
       return this.REVABot.pick(middleware);
     }
     //Leader
     if (this.isFirst) {
-      console.log('(*****Leader*****)');
+      //console.log('(*****Leader*****)');
       this.detail.picked = this.confirmCards();
       return this.confirmCards();
     }
     //Void
     if (!hand.canFollowLead) {
-      console.log('(*****Void*****)');
+      //console.log('(*****Void*****)');
       this.detail.picked = this.confirmCards();
       return this.valid.find('QS') || this.valid.find('AS') || this.valid.find('KS') || this.confirmCards();
     }
     //Follow
     if (followed) {
       if (round.isLast && !round.hasPenaltyCard) {
-        console.log('(*****Follow[noScore]*****)');
+        //console.log('(*****Follow[noScore]*****)');
         return (roundPlayedCard.contains('KS', 'AS') && this.valid.find('QS')) ? this.valid.find('QS') : this.valid.skip('QS').max
       }
       if (round.isLast && round.hasPenaltyCard) {
-        console.log('(*****Follow[haveScore]*****)');
+        //console.log('(*****Follow[haveScore]*****)');
         return this.valid.lt(followed.max).max || this.valid.skip('QS').max;
       }
       if (!round.isLast) {
-        console.log('(*****Follow[2nd or 3rd player]*****)');
+        //console.log('(*****Follow[2nd or 3rd player]*****)');
         return this.valid.lt(followed.max).max || this.valid.skip('QS').min;
       }
     }
