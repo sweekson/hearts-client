@@ -274,11 +274,11 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
 
   shouldShootTheMoon (middleware) {
     const hand = middleware.hand;
-    const { cards, detail }  = hand;
-    const s = cards.spades;
-    const h = cards.hearts;
-    const d = cards.diamonds;
-    const c = cards.clubs;
+    const { current, detail }  = hand;
+    const s = current.spades;
+    const h = current.hearts;
+    const d = current.diamonds;
+    const c = current.clubs;
     const sl = s.length;
     const hl = h.length;
     const dl = d.length;
