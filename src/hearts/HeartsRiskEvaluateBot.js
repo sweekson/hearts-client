@@ -238,24 +238,24 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
       detail.rule = 1101;
       return valid.find('QS') || valid.find('TC') || valid.risky;
     }
-    if (round.isLast && hasPenaltyCard /* && hand.canFollowLead */) {
+    if (shouldPickQueenSpade /* && hand.canFollowLead */) {
       detail.rule = 1201;
-      return valid.lt(followed.max).max || valid.max;
-    }
-    if (round.isLast && shouldPickQueenSpade /* && !hasPenaltyCard && hand.canFollowLead */) {
-      detail.rule = 1202;
       return valid.find('QS');
     }
-    if (round.isLast && shouldPickTenClub /* && !shouldPickQueenSpade && !hasPenaltyCard && hand.canFollowLead */) {
-      detail.rule = 1203;
+    if (shouldPickTenClub /* && hand.canFollowLead */) {
+      detail.rule = 1202;
       return valid.find('TC');
     }
+    if (round.isLast && hasPenaltyCard /* && hand.canFollowLead */) {
+      detail.rule = 1301;
+      return valid.lt(followed.max).max || valid.max;
+    }
     if (round.isLast /* && !shouldPickTenClub && !shouldPickQueenSpade && !hasPenaltyCard && hand.canFollowLead */) {
-      detail.rule = 1204;
+      detail.rule = 1302;
       return valid.skip('QS', 'TC').max || valid.max;
     }
-    detail.rule = 1301;
-    return this.findBetterCard(middleware) || valid.lt(followed.max).max || valid.safety;
+    detail.rule = 1203;
+    return this.findBetterCard(middleware) || valid.lt(followed.max).max || valid.skip('QS', 'TC').min || valid.last;
   }
 
   /**
