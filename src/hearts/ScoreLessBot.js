@@ -31,6 +31,8 @@ class ScoreLessBot extends HeartsBotBase {
     this.valid = hand.valid;
     this.detail = round.detail;
     this.dealPlayedCards = deal.played;
+    const shouldPickQueenSpade = followed.gt('QS').length && this.valid.contains('QS');
+    const shouldPickTenClub = followed.gt('TC').length && this.valid.contains('TC');
     if (handCards.length === 1 || this.valid.length === 1) {
       return this.valid.max;
     }
@@ -49,20 +51,20 @@ class ScoreLessBot extends HeartsBotBase {
       return this.valid.find('QS') || this.valid.find('AS') || this.valid.find('KS') || this.valid.find('TC') || this.confirmCards();
     }
     //Follow
-    if (round.isLast && !round.hasPenaltyCard && followed.gt('QS')) {
-      return this.valid.contains('QS') ? this.valid.find('QS') : this.valid.max;
+    if (shouldPickQueenSpade) {
+      return this.valid.find('QS');
     }
-    if (round.isLast && !round.hasPenaltyCard && followed.gt('TC')) {
-      return this.valid.contains('TC') ? this.valid.find('TC') : this.valid.max;
+    if (shouldPickTenClub) {
+      return this.valid.find('TC');
     }
     if (round.isLast && !round.hasPenaltyCard) {
       return this.valid.skip('QS', 'TC').max || this.valid.max;
     }
     if (round.isLast && round.hasPenaltyCard) {
-      return this.valid.lt(followed.max).max || this.valid.skip('QS').max;
+      return this.valid.lt(followed.max).max || this.valid.max;
     }
     if (!round.isLast) {
-      return this.REVABot.findBetterCard(middleware) || this.valid.lt(followed.max).max || this.valid.skip('QS').min;
+      return this.REVABot.findBetterCard(middleware) || this.valid.lt(followed.max).max || this.valid.skip('QS', 'TC').min || this.valid.min;
     }
   }
 
