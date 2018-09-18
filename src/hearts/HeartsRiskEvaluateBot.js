@@ -138,11 +138,11 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
     }
     if (played('KS')) {
       detail.rule = 2106;
-      return has('AS') ? valid.max : valid.min;
+      return has('AS') ? valid.find('AS') : valid.min;
     }
     if (played('AS')) {
       detail.rule = 2107;
-      return has('KS') ? valid.max : valid.min;
+      return has('KS') && !followed.contains('AS') ? valid.find('KS') : valid.min;
     }
     detail.rule = 2108;
     return valid.contains('KS', 'AS') ? valid.max : valid.min;
