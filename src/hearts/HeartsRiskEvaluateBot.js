@@ -159,7 +159,7 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
     const hasPenaltyCard = round.played.contains('QS') || round.played.suit('H').length > 0;
     if (canFollowLead && hasPenaltyCard) {
       detail.rule = 2201;
-      return valid.suit(lead.suit).gt(followed.max).min || valid.max;
+      return valid.gt(followed.max).min || valid.max;
     }
     if (!canFollowLead) {
       detail.rule = 2202;
