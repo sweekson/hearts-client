@@ -241,7 +241,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     }
     if (round.isLast /* && !hasPenaltyCard && hand.canFollowLead */) {
       detail.rule = 1202;
-      return valid.skip('QS', 'TC').max || valid.max;
+      return followed.contains('KS', 'AS') && valid.contains('QS') ? valid.find('QS') : (valid.skip('QS', 'TC').max || valid.max);
     }
     detail.rule = 1301;
     return valid.lt(followed.max).max || valid.safety;
