@@ -224,6 +224,8 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const followed = round.followed;
     const shootTheMoon = detail.shootTheMoon = this.shootTheMoon;
     const hasPenaltyCard = detail.hasPenaltyCard = round.hasPenaltyCard;
+    const shouldPickQueenSpade = followed.gt('QS').length && valid.contains('QS');
+    const shouldPickTenClub = followed.gt('TC').length && valid.contains('TC');
     if (shootTheMoon) {
       return new HeartsMoonShooterV1(middleware).pick();
     }
@@ -233,15 +235,23 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     }
     if (!hand.canFollowLead) {
       detail.rule = 1101;
-      return valid.find('QS') || valid.risky;
+      return valid.find('QS') || valid.find('TC') || valid.risky;
     }
     if (round.isLast && hasPenaltyCard /* && hand.canFollowLead */) {
       detail.rule = 1201;
       return valid.lt(followed.max).max || valid.max;
     }
-    if (round.isLast /* && !hasPenaltyCard && hand.canFollowLead */) {
+    if (round.isLast && shouldPickQueenSpade /* && !hasPenaltyCard && hand.canFollowLead */) {
       detail.rule = 1202;
-      return followed.contains('KS', 'AS') && valid.contains('QS') ? valid.find('QS') : (valid.skip('QS', 'TC').max || valid.max);
+      return valid.find('QS');
+    }
+    if (round.isLast && shouldPickTenClub /* && !shouldPickQueenSpade && !hasPenaltyCard && hand.canFollowLead */) {
+      detail.rule = 1203;
+      return valid.find('TC');
+    }
+    if (round.isLast /* && !shouldPickTenClub && !shouldPickQueenSpade && !hasPenaltyCard && hand.canFollowLead */) {
+      detail.rule = 1204;
+      return valid.skip('QS', 'TC').max || valid.max;
     }
     detail.rule = 1301;
     return this.findBetterCard(middleware) || valid.lt(followed.max).max || valid.safety;
