@@ -46,11 +46,17 @@ class ScoreLessBot extends HeartsBotBase {
     //Void
     if (!hand.canFollowLead) {
       this.detail.picked = this.confirmCards();
-      return this.valid.find('QS') || this.valid.find('AS') || this.valid.find('KS') || this.confirmCards();
+      return this.valid.find('QS') || this.valid.find('AS') || this.valid.find('KS') || this.valid.find('TC') || this.confirmCards();
     }
     //Follow
+    if (round.isLast && !round.hasPenaltyCard && followed.gt('QS')) {
+      return this.valid.contains('QS') ? this.valid.find('QS') : this.valid.max;
+    }
+    if (round.isLast && !round.hasPenaltyCard && followed.gt('TC')) {
+      return this.valid.contains('TC') ? this.valid.find('TC') : this.valid.max;
+    }
     if (round.isLast && !round.hasPenaltyCard) {
-      return (followed.contains('KS', 'AS') && this.valid.contains('QS')) ? this.valid.find('QS') : (this.valid.skip('QS', 'TC').max || this.valid.max)
+      return this.valid.skip('QS', 'TC').max || this.valid.max;
     }
     if (round.isLast && round.hasPenaltyCard) {
       return this.valid.lt(followed.max).max || this.valid.skip('QS').max;
