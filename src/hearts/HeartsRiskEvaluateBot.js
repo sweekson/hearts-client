@@ -79,6 +79,7 @@ class HeartsCardPickerBase {
 class HeartsMoonShooterV1 extends HeartsCardPickerBase {
   turn1() {
     const { hand, valid, spades, hearts, detail } = this;
+    const shouldPickSmallCard = valid.length > hearts.length;
     const validExcludesHearts = valid.skip(...hearts.values);
     const hasGainedQueenSpade = hand.gained.contains('QS');
     const hasRiskySpade = valid.risky.isSpade;
@@ -87,7 +88,7 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
     const pickNoneSpadesRiskyOrPickSafety = _ => valid.skip(...spades.values).risky || valid.safety;
     if (hasGainedQueenSpade || !hasRiskySpade) {
       detail.rule = 2001;
-      return validExcludesHearts.safety.risk < -3 ? validExcludesHearts.safety : valid.risky;
+      return shouldPickSmallCard && validExcludesHearts.safety.risk < -3 ? validExcludesHearts.safety : valid.risky;
     }
     // hasGainedQueenSpade === false && hasRiskySpade === true
     if (played('KS') && played('AS')) {
