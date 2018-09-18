@@ -223,21 +223,25 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const valid = detail.evaluated = RiskCards.evaluate(hand.valid);
     const followed = round.followed;
     const shootTheMoon = detail.shootTheMoon = this.shootTheMoon;
+    const hasPenaltyCard = detail.hasPenaltyCard = round.hasPenaltyCard;
     if (shootTheMoon) {
       return new HeartsMoonShooterV1(middleware).pick();
     }
     if (round.isFirst) {
       detail.rule = 1001;
-      return valid.safety;
+      return valid.skip('QS', 'TC').safety || valid.find('TC') || valid.safety;
     }
     if (!hand.canFollowLead) {
       detail.rule = 1101;
       return valid.find('QS') || valid.risky;
     }
-    if (round.isLast) {
+    if (round.isLast && hasPenaltyCard /* && hand.canFollowLead */) {
       detail.rule = 1201;
-      detail.hasPenaltyCard = round.hasPenaltyCard;
-      return round.hasPenaltyCard ? (valid.lt(followed.max).max || valid.max) : (valid.skip('QS').max || valid.max);
+      return valid.lt(followed.max).max || valid.max;
+    }
+    if (round.isLast /* && !hasPenaltyCard && hand.canFollowLead */) {
+      detail.rule = 1202;
+      return valid.skip('QS', 'TC').max || valid.max;
     }
     detail.rule = 1301;
     return valid.lt(followed.max).max || valid.safety;
