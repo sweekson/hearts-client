@@ -27,7 +27,6 @@ class ScoreLessBot extends HeartsBotBase {
     const deal = middleware.deal;
     const handCards = hand.current;
     const followed = round.followed;
-    const roundPlayedCard = round.played;
     this.isFirst = round.isFirst;
     this.valid = hand.valid;
     this.detail = round.detail;
@@ -42,7 +41,7 @@ class ScoreLessBot extends HeartsBotBase {
     //Leader
     if (this.isFirst) {
       this.detail.picked = this.confirmCards();
-      return this.confirmCards() || this.valid.skip('QS').min || this.valid.min;
+      return this.REVABot.findBetterCard(middleware) || this.confirmCards() || this.valid.skip('QS').min || this.valid.min;
     }
     //Void
     if (!hand.canFollowLead) {
@@ -57,7 +56,7 @@ class ScoreLessBot extends HeartsBotBase {
       return this.valid.lt(followed.max).max || this.valid.skip('QS').max;
     }
     if (!round.isLast) {
-      return this.valid.lt(followed.max).max || this.valid.skip('QS').min;
+      return this.REVABot.findBetterCard(middleware) || this.valid.lt(followed.max).max || this.valid.skip('QS').min;
     }
   }
 
