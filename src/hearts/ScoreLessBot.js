@@ -50,16 +50,14 @@ class ScoreLessBot extends HeartsBotBase {
       return this.valid.find('QS') || this.valid.find('AS') || this.valid.find('KS') || this.confirmCards();
     }
     //Follow
-    if (followed) {
-      if (round.isLast && !round.hasPenaltyCard) {
-        return (roundPlayedCard.contains('KS', 'AS') && this.valid.find('QS')) ? this.valid.find('QS') : this.valid.skip('QS', 'TC').max
-      }
-      if (round.isLast && round.hasPenaltyCard) {
-        return this.valid.lt(followed.max).max || this.valid.skip('QS').max;
-      }
-      if (!round.isLast) {
-        return this.valid.lt(followed.max).max || this.valid.skip('QS').min;
-      }
+    if (round.isLast && !round.hasPenaltyCard) {
+      return (followed.contains('KS', 'AS') && this.valid.contains('QS')) ? this.valid.find('QS') : (this.valid.skip('QS', 'TC').max || this.valid.max)
+    }
+    if (round.isLast && round.hasPenaltyCard) {
+      return this.valid.lt(followed.max).max || this.valid.skip('QS').max;
+    }
+    if (!round.isLast) {
+      return this.valid.lt(followed.max).max || this.valid.skip('QS').min;
     }
   }
 
