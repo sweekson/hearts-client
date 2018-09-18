@@ -2,22 +2,22 @@ const HeartsBotBase = require('./HeartsBotBase');
 const { Cards, Card } = require('./HeartsDataModels');
 
 class RiskCard extends Card {
-  constructor (value, risk) {
+  constructor(value, risk) {
     super(value);
     this.risk = risk;
   }
 
-  toJSON () {
+  toJSON() {
     return `${this.value}(${this.risk})`;
   }
 }
 
 class RiskCards extends Cards {
-  get risky () {
+  get risky() {
     return this.list.slice(0).sort((a, b) => b.risk - a.risk)[0];
   }
 
-  get safety () {
+  get safety() {
     return this.list.slice(0).sort((a, b) => a.risk - b.risk)[0];
   }
 }
@@ -40,12 +40,12 @@ RiskCards.evaluate = (cards, played = new Cards()) => {
       const risk = card.number + vlt - vgt + olt - ogt - plt + pgt + pl;
       return new RiskCard(card.value, risk);
     })
-    .sort((a, b) => a.risk - b.risk)
+      .sort((a, b) => a.risk - b.risk)
   );
 };
 
 class HeartsCardPickerBase {
-  constructor ({ match, game, deal, hand, round }) {
+  constructor({ match, game, deal, hand, round }) {
     this.match = match;
     this.players = this.match.players;
     this.game = game;
@@ -64,20 +64,20 @@ class HeartsCardPickerBase {
     this.followed = round.followed;
     this.detail = round.detail;
   }
-  pick () {
+  pick() {
     if (this.round.isFirst) { return this.turn1(); }
     if (this.round.played.length === 1) { return this.turn2(); }
     if (this.round.played.length === 2) { return this.turn3(); }
     return this.turn4(); // this.round.isLast
   }
-  turn1 () {}
-  turn2 () {}
-  turn3 () {}
-  turn4 () {}
+  turn1() { }
+  turn2() { }
+  turn3() { }
+  turn4() { }
 }
 
 class HeartsMoonShooterV1 extends HeartsCardPickerBase {
-  turn1 () {
+  turn1() {
     const { hand, valid, detail } = this;
     const hasGainedQueenSpade = hand.gained.contains('QS');
     const hasRiskySpade = valid.risky.isSpade;
@@ -109,7 +109,7 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
     return pickNoneSpadesRiskyOrPickSafety();
   }
 
-  turn2 () {
+  turn2() {
     const { valid, spades, diamonds, clubs, lead, followed, canFollowLead, detail } = this;
     const dc = new RiskCards(diamonds.list.concat(clubs.list));
     const has = value => valid.contains(value);
@@ -147,11 +147,11 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
     return valid.contains('KS', 'AS') ? valid.max : valid.min;
   }
 
-  turn3 () {
+  turn3() {
     return this.turn2();
   }
 
-  turn4 () {
+  turn4() {
     const { valid, spades, diamonds, clubs, round, lead, followed, canFollowLead, detail } = this;
     const dc = new RiskCards(diamonds.list.concat(clubs.list));
     const hasPenaltyCard = round.played.contains('QS') || round.played.suit('H').length > 0;
@@ -173,39 +173,39 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
 }
 
 class HeartsRiskEvaluateBot extends HeartsBotBase {
-  constructor () {
+  constructor() {
     super();
     this.shootTheMoon = false;
   }
 
-  pass (middleware) {
+  pass(middleware) {
     middleware.hand.detail.picked = this.findPassingCards(middleware);
     return middleware.hand.detail.picked.map(v => v.value);
   }
 
-  expose (middleware) {
+  expose(middleware) {
     return this.shootTheMoon ? ['AH'] : [];
   }
 
-  pick (middleware) {
+  pick(middleware) {
     middleware.round.detail.picked = this.findBestCard(middleware);
     return middleware.round.detail.picked.value;
   }
 
-  onNewDeal (middleware) {
+  onNewDeal(middleware) {
     middleware.hand.detail = {};
     this.shootTheMoon = middleware.hand.detail.shootTheMoon = this.shouldShootTheMoon(middleware);
   }
 
-  onPassCardsEnd (middleware) {
+  onPassCardsEnd(middleware) {
     this.shootTheMoon = middleware.hand.detail.shootTheMoon = this.shouldShootTheMoon(middleware);
   }
 
-  onNewRound (middleware) {
+  onNewRound(middleware) {
     middleware.round.detail = {};
   }
 
-  onRoundEnd (middleware) {
+  onRoundEnd(middleware) {
     const match = middleware.match;
     const round = middleware.round;
     const detail = round.detail;
@@ -216,7 +216,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     isOpponentWon && (hasHearts || hasQueenSpade) && (this.shootTheMoon = false);
   }
 
-  findBestCard (middleware) {
+  findBestCard(middleware) {
     const round = middleware.round;
     const detail = round.detail;
     const hand = middleware.hand;
@@ -252,7 +252,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
    * 2. This method DO NOT handle situation which self CAN NOT follow lead
    * @param {HeartsClientMiddleware} middleware
    */
-  findBetterCard ({ deal, hand, round } /* :HeartsClientMiddleware */) {
+  findBetterCard({ deal, hand, round } /* :HeartsClientMiddleware */) {
     const played = deal.played;
     const { spades, hearts, diamonds, clubs } = hand.valid;
     const { isFirst, lead } = round;
@@ -269,12 +269,12 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
       candidate = diamonds.max;
     }
     if (!candidate && deal.isHeartBroken && (isFirst || lead.isHeart) && played.hearts.length <= 2) {
-      candidate = hearts.lt('4H').max;
+      candidate = hearts.lt('5H').max;
     }
     return candidate;
   }
 
-  findPassingCards (middleware) {
+  findPassingCards(middleware) {
     const hand = middleware.hand;
     const { cards, detail } = hand;
     const spades = cards.spades;
@@ -288,7 +288,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     return valid.list.slice(0, 3);
   }
 
-  findGreatestSuit (cards) {
+  findGreatestSuit(cards) {
     const s = cards.spades;
     const h = cards.hearts;
     const d = cards.diamonds;
@@ -303,7 +303,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     return suits[0].suit;
   }
 
-  obtainEvaluatedCards (middleware) {
+  obtainEvaluatedCards(middleware) {
     const detail = middleware.round.detail;
     if (detail.evaluated) {
       return detail.evaluated;
@@ -311,9 +311,9 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     return detail.evaluated = RiskCards.evaluate(middleware.hand.valid);
   }
 
-  shouldShootTheMoon (middleware) {
+  shouldShootTheMoon(middleware) {
     const hand = middleware.hand;
-    const { current, detail }  = hand;
+    const { current, detail } = hand;
     const s = current.spades;
     const h = current.hearts;
     const d = current.diamonds;
@@ -350,9 +350,9 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const has2HighHearts = h.ge('TH').length >= 2;
     const has2HighDiamonds = d.ge('TD').length >= 2;
     const has2HighClubs = c.ge('TC').length >= 2;
-    const hasTwo2HighCards = [has2HighSpades, has2HighDiamonds, has2HighClubs].filter(v => v).length >=2;
+    const hasTwo2HighCards = [has2HighSpades, has2HighDiamonds, has2HighClubs].filter(v => v).length >= 2;
     const hasGreatHighCards = has3HighSpades && has3HighHearts && has3HighDiamonds && has3HighClubs;
-    const has2GreatHighCards = [has3HighSpades, has3HighHearts, has3HighDiamonds, has3HighClubs].filter(v => v).length >=2;
+    const has2GreatHighCards = [has3HighSpades, has3HighHearts, has3HighDiamonds, has3HighClubs].filter(v => v).length >= 2;
     const hasBigSpades = s.ge('JS').length >= 1;
     const hasBigHearts = h.ge('JH').length >= 1;
     const hasBigDiamonds = d.ge('JD').length >= 1;
