@@ -266,17 +266,17 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
   findBetterCard({ deal, hand, round } /* :HeartsClientMiddleware */) {
     const played = deal.played;
     const { spades, hearts, diamonds, clubs } = hand.valid;
-    const { isFirst, lead } = round;
+    const { isFirst, lead, hasPenaltyCard } = round;
     const hasQueenSpade = spades.contains('QS');
     const hasTenClub = clubs.contains('TC');
     let candidate;
-    if ((isFirst || lead.isSpade) && played.spades.length <= 2) {
+    if (!hasPenaltyCard && (isFirst || lead.isSpade) && played.spades.length <= 2) {
       candidate = hasQueenSpade ? spades.find('AS') || spades.find('KS') || spades.lt('QS').max : spades.lt('QS').max;
     }
-    if (!candidate && (isFirst || lead.isClub) && played.clubs.length <= 2) {
+    if (!hasPenaltyCard && !candidate && (isFirst || lead.isClub) && played.clubs.length <= 2) {
       candidate = hasTenClub ? clubs.gt('TC').max || clubs.lt('TC').max : clubs.lt('TC').max;
     }
-    if (!candidate && (isFirst || lead.isDiamond) && played.diamonds.length <= 2) {
+    if (!hasPenaltyCard && !candidate && (isFirst || lead.isDiamond) && played.diamonds.length <= 2) {
       candidate = diamonds.max;
     }
     if (!candidate && deal.isHeartBroken && (isFirst || lead.isHeart) && played.hearts.length <= 2) {
