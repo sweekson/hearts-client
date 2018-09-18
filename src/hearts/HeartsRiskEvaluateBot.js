@@ -220,7 +220,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const round = middleware.round;
     const detail = round.detail;
     const hand = middleware.hand;
-    const valid = detail.evaluated = RiskCards.evaluate(hand.valid);
+    const valid = this.obtainEvaluatedCards(middleware);
     const followed = round.followed;
     const shootTheMoon = detail.shootTheMoon = this.shootTheMoon;
     const hasPenaltyCard = detail.hasPenaltyCard = round.hasPenaltyCard;
@@ -229,7 +229,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     }
     if (round.isFirst) {
       detail.rule = 1001;
-      return valid.skip('QS', 'TC').safety || valid.find('TC') || valid.safety;
+      return valid.find('2C') || this.findBetterCard(middleware) || valid.skip('QS', 'TC').safety || valid.find('TC') || valid.safety;
     }
     if (!hand.canFollowLead) {
       detail.rule = 1101;
@@ -244,7 +244,34 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
       return followed.contains('KS', 'AS') && valid.contains('QS') ? valid.find('QS') : (valid.skip('QS', 'TC').max || valid.max);
     }
     detail.rule = 1301;
-    return valid.lt(followed.max).max || valid.safety;
+    return this.findBetterCard(middleware) || valid.lt(followed.max).max || valid.safety;
+  }
+
+  /**
+   * 1. This method might return `undefined`
+   * 2. This method DO NOT handle situation which self CAN NOT follow lead
+   * @param {HeartsClientMiddleware} middleware
+   */
+  findBetterCard ({ deal, hand, round } /* :HeartsClientMiddleware */) {
+    const played = deal.played;
+    const { spades, hearts, diamonds, clubs } = hand.valid;
+    const { isFirst, lead } = round;
+    const hasQueenSpade = spades.contains('QS');
+    const hasTenClub = clubs.contains('TC');
+    let candidate;
+    if ((isFirst || lead.isSpade) && played.spades.length <= 2) {
+      candidate = hasQueenSpade ? spades.find('AS') || spades.find('KS') || spades.lt('QS').max : spades.lt('QS').max;
+    }
+    if (!candidate && (isFirst || lead.isClub) && played.clubs.length <= 2) {
+      candidate = hasTenClub ? clubs.gt('TC').max || clubs.lt('TC').max : clubs.lt('TC').max;
+    }
+    if (!candidate && (isFirst || lead.isDiamond) && played.diamonds.length <= 2) {
+      candidate = diamonds.max;
+    }
+    if (!candidate && deal.isHeartBroken && (isFirst || lead.isHeart) && played.hearts.length <= 2) {
+      candidate = hearts.lt('4H').max;
+    }
+    return candidate;
   }
 
   findPassingCards (middleware) {
@@ -274,6 +301,14 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     ];
     suits.sort((a, b) => b.length - a.length);
     return suits[0].suit;
+  }
+
+  obtainEvaluatedCards (middleware) {
+    const detail = middleware.round.detail;
+    if (detail.evaluated) {
+      return detail.evaluated;
+    }
+    return detail.evaluated = RiskCards.evaluate(middleware.hand.valid);
   }
 
   shouldShootTheMoon (middleware) {
