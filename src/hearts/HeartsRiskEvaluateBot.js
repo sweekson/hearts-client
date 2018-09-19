@@ -6,7 +6,6 @@ const { Cards, Card } = require('./HeartsDataModels');
  * 1. Passing cards
  * 2. Stop opponent shoot the moon
  * 3. Conditions for shooting the moon
- * 4. Check shoot the moon after getting the first penalty card
  */
 
 class RiskCard extends Card {
@@ -251,7 +250,9 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
 class HeartsRiskEvaluateBot extends HeartsBotBase {
   constructor() {
     super();
+    this.shootTheMoonBegin = false;
     this.shootTheMoon = false;
+    this.shootTheMoonNow = false;
   }
 
   pass(middleware) {
@@ -269,12 +270,17 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
   }
 
   onNewDeal(middleware) {
-    middleware.hand.detail = {};
-    this.shootTheMoon = middleware.hand.detail.shootTheMoon = this.shouldShootTheMoon(middleware);
+    const { hand } = middleware;
+    hand.detail = {};
+    this.shootTheMoon = hand.detail.shootTheMoon = this.shouldShootTheMoon(middleware);
+    this.shootTheMoonBegin = hand.detail.shootTheMoonBegin = this.shootTheMoon;
   }
 
   onPassCardsEnd(middleware) {
-    this.shootTheMoon = middleware.hand.detail.shootTheMoon = this.shouldShootTheMoon(middleware);
+    const { hand } = middleware;
+    hand.detail = {};
+    this.shootTheMoon = hand.detail.shootTheMoon = this.shouldShootTheMoon(middleware);
+    this.shootTheMoonBegin = hand.detail.shootTheMoonBegin = this.shootTheMoon;
   }
 
   onNewRound(middleware) {
@@ -292,6 +298,15 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     isOpponentWon && (hasHearts || hasQueenSpade) && (this.shootTheMoon = false);
   }
 
+  onDealEnd (middleware) {
+    const { cards, score, detail } = middleware.hand;
+    const { shootTheMoonBegin, shootTheMoon, shootTheMoonNow } = this;
+    shootTheMoonBegin && score < 0 && (detail.message = 'FAILED: STM BEGIN');
+    !shootTheMoonBegin && shootTheMoonNow && score < 0 && (detail.message = 'FAILED: STM NOW');
+    !shootTheMoonBegin && shootTheMoonNow && score > 0 && (detail.message = 'SUCCESS: STM NOW');
+    detail.message && console.log(detail.message, score, JSON.stringify(cards));
+  }
+
   findBestCard(middleware) {
     const round = middleware.round;
     const detail = round.detail;
@@ -299,10 +314,11 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const valid = this.obtainEvaluatedCards(middleware);
     const followed = round.followed;
     const shootTheMoon = detail.shootTheMoon = this.shootTheMoon;
+    const shootTheMoonNow = detail.shootTheMoonNow = this.shootTheMoonNow = this.shouldShootTheMoonNow(middleware);
     const hasPenaltyCard = detail.hasPenaltyCard = round.hasPenaltyCard;
     const shouldPickQueenSpade = followed.gt('QS').length && valid.contains('QS');
     const shouldPickTenClub = followed.gt('TC').length && valid.contains('TC');
-    if (shootTheMoon) {
+    if (shootTheMoon || shootTheMoonNow) {
       return new HeartsMoonShooterV1(middleware).pick();
     }
     if (round.isFirst) {
@@ -452,6 +468,21 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     if (hasOneHighSpades && has3HighHearts && has3HighDiamonds && has3HighClubs) { return true; }
     if (hasOneLongHighSuit && hasOneHighSpades) { return true; }
     return false;
+  }
+
+  shouldShootTheMoonNow (middleware) {
+    if (this.didOpponentGetScore(middleware)) { return false; }
+    if (middleware.hand.valid.contains('2S', '3S', '2H', '3H', '2D', '3D', '3C')) { return false; }
+    if (this.shootTheMoonNow) { return true; }
+    const { deal: { played } , hand: { current } } = middleware;
+    const evaluated = PowerRiskCards.evaluate(RiskCards.evaluate(current, played), played);
+    return evaluated.strong.length > Math.ceil(current.length * .5);
+  }
+
+  didOpponentGetScore (middleware) {
+    const { match, deal } = middleware;
+    const opponents = deal.hands.list.filter(v => v.player !== match.self);
+    return opponents.some(v => v.gained.score < 0);
   }
 }
 
