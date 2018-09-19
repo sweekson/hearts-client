@@ -26,6 +26,11 @@ tag-rank:
 untag-rank:
 	sudo docker rmi $(REGISTRY)/$(team)/$(PROJECT):rank
 
+## Create a tag with practice an rank
+tag-all:
+	sudo docker tag $(PROJECT):latest $(REGISTRY)/$(team)/$(PROJECT):practice
+	sudo docker tag $(PROJECT):latest $(REGISTRY)/$(team)/$(PROJECT):rank
+
 ## Log in to a Docker registry
 login:
 	sudo docker login $(REGISTRY)
@@ -36,6 +41,11 @@ push-practice:
 
 ## Push an image with rank to Docker registry
 push-rank:
+	sudo docker push $(REGISTRY)/$(team)/$(PROJECT):rank
+
+## Push images with practice and rank to Docker registry
+push-all:
+	sudo docker push $(REGISTRY)/$(team)/$(PROJECT):practice
 	sudo docker push $(REGISTRY)/$(team)/$(PROJECT):rank
 
 ## Clean untagged images
