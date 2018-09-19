@@ -2,7 +2,17 @@
 PROJECT=trend-hearts
 REGISTRY=ai.registry.trendmicro.com
 
-# Build an image
+## Build an image
+## Create a tag with practice an rank
+## Push images with practice and rank to Docker registry
+auto:
+	sudo docker build -t $(PROJECT):latest -f Dockerfile .
+	sudo docker tag $(PROJECT):latest $(REGISTRY)/$(team)/$(PROJECT):practice
+	sudo docker tag $(PROJECT):latest $(REGISTRY)/$(team)/$(PROJECT):rank
+	sudo docker push $(REGISTRY)/$(team)/$(PROJECT):practice
+	sudo docker push $(REGISTRY)/$(team)/$(PROJECT):rank
+
+## Build an image
 build:
 	sudo docker build -t $(PROJECT):latest -f Dockerfile .
 
