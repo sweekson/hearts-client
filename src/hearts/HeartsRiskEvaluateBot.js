@@ -370,6 +370,8 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const hasBigHearts = h.ge('JH').length >= 1;
     const hasBigDiamonds = d.ge('JD').length >= 1;
     const hasBigClubs = c.ge('JC').length >= 1;
+    const hasSmallHearts = h.le('4H').length > 0;
+    if (hasSmallHearts) { return false; }
     if (hasTwo2HighCards && hasBigHearts && hasAtLeast4Hearts) { return true; }
     if (hasOneHalfSuit && has2GreatHighCards) { return true; }
     if (hasOneHalfSuit && hasOneHighSpades && hasBigHearts && hasBigDiamonds && hasBigClubs) { return true; }
