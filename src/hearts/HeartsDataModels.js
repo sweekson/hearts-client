@@ -53,6 +53,22 @@ class Deal {
     this.played = new Cards();
     this.isHeartBroken = false;
   }
+
+  get isDeal1 () {
+    return this.number === 1;
+  }
+
+  get isDeal2 () {
+    return this.number === 2;
+  }
+
+  get isDeal3 () {
+    return this.number === 3;
+  }
+
+  get isDeal4 () {
+    return this.number === 4;
+  }
 }
 
 class Cards extends Collection {
