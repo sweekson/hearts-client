@@ -6,6 +6,7 @@ const { Cards, Card } = require('./HeartsDataModels');
  * 1. Passing cards
  * 2. Stop opponent shoot the moon
  * 3. Conditions for shooting the moon
+ * 4. Check shoot the moon after getting the first penalty card
  */
 
 class RiskCard extends Card {
