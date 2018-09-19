@@ -53,7 +53,7 @@ class HeartsCardPickerBase {
     this.played = deal.played;
     this.hand = hand;
     this.cards = hand.cards;
-    this.valid = RiskCards.evaluate(hand.valid);
+    this.valid = RiskCards.evaluate(hand.valid, deal.played);
     this.spades = this.valid.spades;
     this.hearts = this.valid.hearts;
     this.diamonds = this.valid.diamonds;
@@ -316,11 +316,12 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
   }
 
   obtainEvaluatedCards(middleware) {
+    const played = middleware.deal.played;
     const detail = middleware.round.detail;
     if (detail.evaluated) {
       return detail.evaluated;
     }
-    return detail.evaluated = RiskCards.evaluate(middleware.hand.valid);
+    return detail.evaluated = RiskCards.evaluate(middleware.hand.valid, played);
   }
 
   shouldShootTheMoon(middleware) {
