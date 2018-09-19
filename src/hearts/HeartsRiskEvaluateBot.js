@@ -1,6 +1,13 @@
 const HeartsBotBase = require('./HeartsBotBase');
 const { Cards, Card } = require('./HeartsDataModels');
 
+/**
+ * TODO
+ * 1. Passing cards
+ * 2. Stop opponent shoot the moon
+ * 3. Conditions for shooting the moon
+ */
+
 class RiskCard extends Card {
   constructor(value, risk) {
     super(value);
@@ -40,7 +47,69 @@ RiskCards.evaluate = (cards, played = new Cards()) => {
       const risk = card.number + vlt - vgt + olt - ogt - plt + pgt + pl;
       return new RiskCard(card.value, risk);
     })
-      .sort((a, b) => a.risk - b.risk)
+    .sort((a, b) => a.risk - b.risk)
+  );
+};
+
+class PowerRiskCard extends RiskCard {
+  constructor(value, risk, power = 0) {
+    super(value);
+    this.risk = risk;
+    this.power = power;
+  }
+
+  toJSON() {
+    return `${this.value}(${this.risk})(${this.power})`;
+  }
+}
+
+class PowerRiskCards extends RiskCards {
+  get strong() {
+    return new this.constructor(this.list.filter(v => v.power === 100));
+  }
+
+  get medium() {
+    return new this.constructor(this.list.filter(v => v.power >= 0));
+  }
+
+  get weak() {
+    return new this.constructor(this.list.filter(v => v.power < 0));
+  }
+
+  get strongest() {
+    return this.list.slice(0).sort((a, b) => b.power - a.power)[0];
+  }
+
+  get weakest() {
+    return this.list.slice(0).sort((a, b) => a.power - b.power)[0];
+  }
+}
+
+PowerRiskCards.evaluate = (cards, played = new PowerRiskCards()) => {
+  const evaluated = new PowerRiskCards(
+    cards.list.map(card => {
+      const vsuit = cards.suit(card.suit);
+      const psuit = played.suit(card.suit);
+      const all = Cards.instanciate(Cards.deck).suit(card.suit);
+      const available = all.skip(...psuit.values);
+      const others = available.skip(...vsuit.values);
+      const ogt = others.gt(card.value).length;
+      return new PowerRiskCard(card.value, card.risk, ogt === 0 ? 100 : ogt * -1);
+    })
+  );
+  if (evaluated.strong.length) {
+    return evaluated;
+  }
+  return new PowerRiskCards(
+    cards.list.map(card => {
+      const vsuit = cards.suit(card.suit);
+      const psuit = played.suit(card.suit);
+      const all = Cards.instanciate(Cards.deck).suit(card.suit);
+      const available = all.skip(...psuit.values);
+      const others = available.skip(...vsuit.values);
+      const olt = others.lt(card.value).length;
+      return new PowerRiskCard(card.value, card.risk, olt);
+    })
   );
 };
 
@@ -53,7 +122,7 @@ class HeartsCardPickerBase {
     this.played = deal.played;
     this.hand = hand;
     this.cards = hand.cards;
-    this.valid = RiskCards.evaluate(hand.valid, deal.played);
+    this.valid = hand.valid;
     this.spades = this.valid.spades;
     this.hearts = this.valid.hearts;
     this.diamonds = this.valid.diamonds;
@@ -77,38 +146,42 @@ class HeartsCardPickerBase {
 }
 
 class HeartsMoonShooterV1 extends HeartsCardPickerBase {
+  constructor({ match, game, deal, hand, round }) {
+    super({ match, game, deal, hand, round });
+    this.valid = PowerRiskCards.evaluate(RiskCards.evaluate(hand.valid, deal.played), deal.played);
+    this.spades = this.valid.spades;
+    this.hearts = this.valid.hearts;
+    this.diamonds = this.valid.diamonds;
+    this.clubs = this.valid.clubs;
+  }
+
   turn1() {
-    const { hand, valid, spades, hearts, detail } = this;
-    const shouldPickSmallCard = valid.length > hearts.length;
-    const validExcludesHearts = valid.skip(...hearts.values);
-    const hasGainedQueenSpade = hand.gained.contains('QS');
-    const hasRiskySpade = valid.risky.isSpade;
-    const has = value => valid.contains(value);
-    const played = value => this.played.contains(value);
-    const pickNoneSpadesRiskyOrPickSafety = _ => valid.skip(...spades.values).risky || valid.safety;
-    if (hasGainedQueenSpade || !hasRiskySpade) {
+    const { deal, valid, spades, hearts, detail } = this;
+    const { strong, medium, weak, weakest } = valid;
+    const weaker = weakest.power < -3 ? new PowerRiskCards(weak.list.filter(v => v.power === weakest.power)) : new PowerRiskCards();
+    const strongExcludesHearts = strong.skip(...hearts.values);
+    const weakerExcludesHearts = weaker.skip(...hearts.values);
+    const weakerExcludesSpadesHearts = weakerExcludesHearts.skip(...spades.values);
+    const isHeartBroken = deal.isHeartBroken;
+    const shouldPickMaxHeart = valid.length === hearts.length;
+    if (shouldPickMaxHeart) {
       detail.rule = 2001;
-      return shouldPickSmallCard && validExcludesHearts.safety.risk < -3 ? validExcludesHearts.safety : valid.risky;
+      return strong.min || valid.max;
     }
-    // hasGainedQueenSpade === false && hasRiskySpade === true
-    if (played('KS') && played('AS')) {
+    if (weaker.length && (weakerExcludesHearts.length || weakerExcludesSpadesHearts.length) /* && !shouldPickMaxHeart */) {
       detail.rule = 2002;
-      return valid.find('QS') || pickNoneSpadesRiskyOrPickSafety();
+      return spades.contains('QS') ? weakerExcludesHearts.min : weakerExcludesSpadesHearts.min || weakerExcludesHearts.min;
     }
-    if (has('QS')) {
+    if (strong.length && isHeartBroken) {
       detail.rule = 2003;
-      return valid.find('AS') || valid.find('KS') || valid.lt('QS').min || valid.find('QS');
+      return strong.min;
     }
-    if (played('KS')) {
+    if (strongExcludesHearts.length /* && !isHeartBroken */) {
       detail.rule = 2004;
-      return has('AS') ? valid.find('AS') : pickNoneSpadesRiskyOrPickSafety();
+      return strongExcludesHearts.min;
     }
-    if (played('AS')) {
-      detail.rule = 2005;
-      return has('KS') ? valid.find('KS') : pickNoneSpadesRiskyOrPickSafety();
-    }
-    detail.rule = 2006;
-    return pickNoneSpadesRiskyOrPickSafety();
+    detail.rule = 2005;
+    return isHeartBroken ? medium.strongest : medium.skip(...hearts.values).strongest;
   }
 
   turn2() {
