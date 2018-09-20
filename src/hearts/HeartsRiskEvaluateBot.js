@@ -323,11 +323,11 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     }
     if (round.isFirst) {
       detail.rule = 1001;
-      return valid.find('2C') || this.findBetterCard(middleware) || valid.skip('QS', 'TC').safety || valid.find('TC') || valid.safety;
+      return valid.find('2C') || this.findBetterCard(middleware) || valid.skip('QS', 'TC').weakest || valid.find('TC') || valid.weakest;
     }
     if (!hand.canFollowLead) {
       detail.rule = 1101;
-      return valid.find('QS') || valid.find('TC') || valid.risky;
+      return valid.find('QS') || valid.find('TC') || valid.strong.max || valid.strongest;
     }
     if (shouldPickQueenSpade /* && hand.canFollowLead */) {
       detail.rule = 1201;
@@ -411,7 +411,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     if (detail.evaluated) {
       return detail.evaluated;
     }
-    return detail.evaluated = RiskCards.evaluate(middleware.hand.valid, played);
+    return detail.evaluated = PowerRiskCards.evaluate(RiskCards.evaluate(middleware.hand.valid, played), played);
   }
 
   shouldShootTheMoon(middleware) {
