@@ -299,12 +299,12 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
   }
 
   onDealEnd (middleware) {
-    const { cards, score, detail } = middleware.hand;
-    const { shootTheMoonBegin, shootTheMoon, shootTheMoonNow } = this;
+    const { begin, score, detail } = middleware.hand;
+    const { shootTheMoonBegin, shootTheMoonNow } = this;
     shootTheMoonBegin && score < 0 && (detail.message = 'FAILED: STM BEGIN');
     !shootTheMoonBegin && shootTheMoonNow && score < 0 && (detail.message = 'FAILED: STM NOW');
     !shootTheMoonBegin && shootTheMoonNow && score > 0 && (detail.message = 'SUCCESS: STM NOW');
-    detail.message && console.log(detail.message, score, JSON.stringify(cards));
+    detail.message && console.log(detail.message, score, JSON.stringify(begin));
   }
 
   findBestCard(middleware) {
