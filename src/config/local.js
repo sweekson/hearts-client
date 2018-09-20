@@ -67,38 +67,38 @@ module.exports = {
   logs: '${options.logs}',
   reports: { round: false, deal: false, game: true },
   clients: [
-    new HeartsClientLocal({
+    {
       playerNumber: 1,
       playerName: '${options.name1}',
       bot: new ${options.bot1}(),
       middlewares: [HeartsClientMiddleware],
       logs: path.join(__dirname, '${options.logs}'),
       exporting: true,
-    }),
-    new HeartsClientLocal({
+    },
+    {
       playerNumber: 2,
       playerName: '${options.name2}',
       bot: new ${options.bot2}(),
       middlewares: [HeartsClientMiddleware],
       logs: path.join(__dirname, '${options.logs}'),
       exporting: true,
-    }),
-    new HeartsClientLocal({
+    },
+    {
       playerNumber: 3,
       playerName: '${options.name3}',
       bot: new ${options.bot3}(),
       middlewares: [HeartsClientMiddleware],
       logs: path.join(__dirname, '${options.logs}'),
       exporting: true,
-    }),
-    new HeartsClientLocal({
+    },
+    {
       playerNumber: 4,
       playerName: '${options.name4}',
       bot: new ${options.bot4}(),
       middlewares: [HeartsClientMiddleware],
       logs: path.join(__dirname, '${options.logs}'),
       exporting: true,
-    }),
+    },
   ],
 };
 `;
