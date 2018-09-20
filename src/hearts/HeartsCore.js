@@ -98,7 +98,7 @@ class HeartsCore extends EventEmitter {
     });
     this.notify('game_end', summary);
     this.reports.game && new Reports(this, this.options.reports).onGameEnd();
-    this.emit('GAME_END');
+    this.emit('game-end');
   }
 
   doDealEnd () {
@@ -126,6 +126,7 @@ class HeartsCore extends EventEmitter {
       roundNumber: round.number,
       players: players.list,
     });
+    this.emit('deal-end');
     this.reports.deal && new Reports(this, this.options.reports).onDealEnd();
     deal.number < 4 ? this.doNewDeal() : this.doGameEnd();
   }
@@ -149,6 +150,7 @@ class HeartsCore extends EventEmitter {
       players: players.list,
       roundPlayer: player.playerName,
     });
+    this.emit('round-end');
     this.reports.round && new Reports(this, this.options.reports).onRoundEnd();
     round.number < 13 ? this.doNewRound() : this.doDealEnd();
   }
