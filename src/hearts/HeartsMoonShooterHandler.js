@@ -35,7 +35,7 @@ class HeartsMoonShooterHandler extends HeartsAverageScoreHandler {
       const beginFail = begin ? (begin0 / begin * 100).toFixed(2) : 0;
       const middleDone = middle ? (middle1 / middle * 100).toFixed(2) : 0;
       const middleFail = middle ? (middle0 / middle * 100).toFixed(2) : 0;
-      console.log(
+      (begin || middle) && console.log(
         `Player ${number}:`,
         `Begin ${begin} TRY, ${begin1} WIN (${beginDone}%), ${begin0} FAIL (${beginFail}%)`,
         `Middle ${middle} TRY, ${middle1} WIN (${middleDone}%), ${middle0} FAIL (${middleFail}%)`,
