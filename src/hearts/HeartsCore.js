@@ -97,6 +97,7 @@ class HeartsCore extends EventEmitter {
     });
     this.notify('game_end', summary);
     this.reports.game && new Reports(this, this.options.reports).onGameEnd();
+    this.emit('GAME_END');
   }
 
   doDealEnd () {
