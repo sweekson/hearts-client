@@ -283,6 +283,11 @@ class Hand {
     this.hadShotTheMoon = false;
   }
 
+  get begin () {
+    const { cards, pass, receive } = this;
+    return pass ? cards.skip(...pass.cards.values).push(...receive.cards.list) : cards;
+  }
+
   get current () {
     const current = new Cards(this.cards.list);
     this.pass && current.discard(...this.pass.cards.values);
