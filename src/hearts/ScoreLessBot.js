@@ -33,11 +33,13 @@ class ScoreLessBot extends HeartsBotBase {
     this.dealPlayedCards = deal.played;
     const shouldPickQueenSpade = followed.gt('QS').length && this.valid.contains('QS');
     const shouldPickTenClub = followed.gt('TC').length && this.valid.contains('TC');
+    const shootTheMoonNow = this.REVABot.shouldShootTheMoonNow(middleware);
+
     if (handCards.length === 1 || this.valid.length === 1) {
       return this.valid.max;
     }
     //Shoot The Moon
-    if (this.REVABot.shootTheMoon) {
+    if (this.REVABot.shootTheMoon || shootTheMoonNow) {
       return this.REVABot.pick(middleware);
     }
     //Leader
