@@ -4,8 +4,9 @@ const util = require('./src/shared/util');
 const HeartsCore = require('./src/hearts/HeartsCore');
 const HeartsClientLocal = require('./src/hearts/HeartsClientLocal');
 const HeartsAverageScoreHandler = require('./src/hearts/HeartsAverageScoreHandler');
+const HeartsMoonShooterHandler = require('./src/hearts/HeartsMoonShooterHandler');
 const config = require('./local.config');
-const Handlers = { HeartsAverageScoreHandler };
+const Handlers = { HeartsAverageScoreHandler, HeartsMoonShooterHandler };
 
 const times = grab('--times');
 const handler = grab('--handler');
