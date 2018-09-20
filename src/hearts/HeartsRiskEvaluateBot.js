@@ -248,8 +248,8 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
 }
 
 class HeartsRiskEvaluateBot extends HeartsBotBase {
-  constructor() {
-    super();
+  constructor(options) {
+    super(options);
     this.shootTheMoonBegin = false;
     this.shootTheMoon = false;
     this.shootTheMoonNow = false;
@@ -305,7 +305,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     shootTheMoonBegin && score < 0 && (detail.message = 'FAILED: STM BEGIN');
     !shootTheMoonBegin && shootTheMoonNow && score < 0 && (detail.message = 'FAILED: STM NOW');
     !shootTheMoonBegin && shootTheMoonNow && score > 0 && (detail.message = 'SUCCESS: STM NOW');
-    detail.message && console.log(detail.message, score, JSON.stringify(begin));
+    detail.message && this.logger.info(detail.message, score, JSON.stringify(begin));
   }
 
   findBestCard(middleware) {
