@@ -2,6 +2,9 @@ const {
   Match, Game, Player, Deal, Hand,
   Cards, Card, PlayedCard, Pass, Round
 } = require('./HeartsDataModels');
+const {
+  RiskCards, PowerRiskCards
+} = require('./HeartsRiskEvaluateBot');
 
 describe('Test Card', function () {
   it('should create a Card', function () {
@@ -341,6 +344,42 @@ describe('Test Cards', function () {
       const score = Cards.scoring(cards, v.isAceHeartExposed);
       expect(score).toEqual(v.expect);
     });
+  });
+});
+
+describe('Test PowerRiskCards', function () {
+  it('should still work with an empty cards', function () {
+    const cards = Cards.instanciate([]);
+    const evaluated = PowerRiskCards.evaluate(RiskCards.evaluate(cards));
+    const { spades, hearts, diamonds, clubs, strong, medium, weak, strongest, weakest } = evaluated;
+    expect(spades.length).toEqual(0);
+    expect(hearts.length).toEqual(0);
+    expect(diamonds.length).toEqual(0);
+    expect(clubs.length).toEqual(0);
+
+    expect(strong.length).toEqual(0);
+    expect(medium.length).toEqual(0);
+    expect(weak.length).toEqual(0);
+
+    expect(strongest).toEqual(undefined);
+    expect(weakest).toEqual(undefined);
+  });
+
+  it('should still work with all of hearts', function () {
+    const cards = Cards.instanciate(['7H', 'TH', 'JH', 'AH']);
+    const evaluated = PowerRiskCards.evaluate(RiskCards.evaluate(cards));
+    const { spades, hearts, diamonds, clubs, strong, medium, weak, strongest, weakest } = evaluated;
+    expect(spades.length).toEqual(0);
+    expect(hearts.length).toEqual(4);
+    expect(diamonds.length).toEqual(0);
+    expect(clubs.length).toEqual(0);
+
+    expect(strong.length).toEqual(1);
+    expect(medium.length).toEqual(0);
+    expect(weak.length).toEqual(3);
+
+    expect(strongest.value).toEqual('AH');
+    expect(weakest.value).toEqual('7H');
   });
 });
 
