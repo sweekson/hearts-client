@@ -1,5 +1,10 @@
+const Logger = require('../shared/Logger');
 
 class HeartsBotBase {
+  constructor () {
+    this.logger = new Logger('info');
+  }
+
   pass (middleware) {
   }
 
