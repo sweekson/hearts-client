@@ -64,6 +64,36 @@ describe('Test Card', function () {
 describe('Test Cards', function () {
   const values = ['KS', '5S', '4S', 'QH', '8H', '5H', 'AC', '5C', '4C', '2C', 'AD', 'TD', '5D'];
 
+  it('should still work with an empty cards', function () {
+    const cards = new Cards();
+    expect(cards.length).toEqual(0);
+    expect(cards.list.length).toEqual(0);
+
+    expect(cards.spades.length).toEqual(0);
+    expect(cards.hearts.length).toEqual(0);
+    expect(cards.diamonds.length).toEqual(0);
+    expect(cards.clubs.length).toEqual(0);
+
+    expect(cards.spades.list.length).toEqual(0);
+    expect(cards.hearts.list.length).toEqual(0);
+    expect(cards.diamonds.list.length).toEqual(0);
+    expect(cards.clubs.list.length).toEqual(0);
+
+    expect(cards.spades.values.length).toEqual(0);
+    expect(cards.hearts.values.length).toEqual(0);
+    expect(cards.diamonds.values.length).toEqual(0);
+    expect(cards.clubs.values.length).toEqual(0);
+
+    expect(cards.values.length).toEqual(0);
+
+    expect(cards.skip(...[]).length).toEqual(0);
+    expect(cards.find('2C')).toEqual(undefined);
+    expect(cards.finds(...[]).length).toEqual(0);
+    expect(cards.contains(...[])).toBe(false);
+    expect(cards.covers(...[])).toBe(true);
+    expect(cards.discard(...[]).length).toEqual(0);
+  })
+
   it('should create a Card list', function () {
     const cards = Cards.create(values);
     expect(cards.length).toEqual(13);
