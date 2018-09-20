@@ -26,6 +26,7 @@ class Reports {
       deals.each(v => scores.push(v.hands.get(number).score));
       logger.info(`Player: ${number}, Game Score: ${score} (${scores.join(', ')})`);
     });
+    logger.info();
   }
 
   onDealEnd () {
