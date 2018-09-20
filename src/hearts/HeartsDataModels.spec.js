@@ -68,6 +68,7 @@ describe('Test Cards', function () {
     const cards = new Cards();
     expect(cards.length).toEqual(0);
     expect(cards.list.length).toEqual(0);
+    expect(cards.score).toEqual(0);
 
     expect(cards.spades.length).toEqual(0);
     expect(cards.hearts.length).toEqual(0);
@@ -86,6 +87,12 @@ describe('Test Cards', function () {
 
     expect(cards.values.length).toEqual(0);
 
+    expect(cards.suit('C').length).toEqual(0);
+    expect(cards.lt('AC').length).toEqual(0);
+    expect(cards.gt('2C').length).toEqual(0);
+    expect(cards.le('6C').length).toEqual(0);
+    expect(cards.ge('6C').length).toEqual(0);
+    expect(cards.sort().length).toEqual(0);
     expect(cards.skip(...[]).length).toEqual(0);
     expect(cards.find('2C')).toEqual(undefined);
     expect(cards.finds(...[]).length).toEqual(0);
