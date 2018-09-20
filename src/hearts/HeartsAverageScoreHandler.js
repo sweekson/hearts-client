@@ -1,6 +1,8 @@
+const HeartsLocalHandlerBase = require('./HeartsLocalHandlerBase');
 
-class HeartsAverageScoreHandler {
+class HeartsAverageScoreHandler extends HeartsLocalHandlerBase {
   constructor () {
+    super();
     this.players = new Map();
     this.games = 0;
   }
