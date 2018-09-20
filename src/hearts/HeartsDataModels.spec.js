@@ -310,6 +310,23 @@ describe('Test Cards', function () {
 describe('Test Hand', function () {
   const values = ['KS', '5S', '4S', 'QH', '8H', '5H', 'AC', '5C', '4C', '2C', 'AD', 'TD', '5D'];
 
+  it('should get begin cards from cards, pass, and receive', function () {
+    const cards = Cards.instanciate(values);
+    const hand = new Hand(1);
+    const pass = new Pass(2, Cards.instanciate(['KS', 'QH', 'TD']));
+    const receive = new Pass(4, Cards.instanciate(['QS', 'AS', 'KC']));
+    hand.cards.push(...cards.list);
+    expect(hand.cards.length).toEqual(13);
+    expect(hand.begin.length).toEqual(13);
+    expect(hand.begin.covers(...hand.cards.values)).toBe(true);
+    hand.pass = pass;
+    hand.receive = receive;
+    expect(hand.begin.length).toEqual(13);
+    expect(hand.begin.contains(...pass.cards.values)).toBe(false);
+    expect(hand.begin.contains(...receive.cards.values)).toBe(true);
+    expect(hand.begin.covers(...hand.cards.values)).toBe(false);
+  });
+
   it('should get current from cards, played, pass, and receive', function () {
     const cards = Cards.instanciate(values);
     const played = cards.finds('4S', 'AC', 'AD');
