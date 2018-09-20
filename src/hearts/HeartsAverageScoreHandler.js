@@ -21,9 +21,11 @@ class HeartsAverageScoreHandler extends HeartsLocalHandlerBase {
   }
 
   complete (core) {
+    console.log('Average Game Score');
     [...this.players.values()].forEach(player => {
-      console.log(`${player.number}: ${player.total / this.games}`);
+      console.log(`Player ${player.number}: ${player.total / this.games}`);
     });
+    console.log();
   }
 }
 
