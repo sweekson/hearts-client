@@ -491,5 +491,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
 
 HeartsRiskEvaluateBot.RiskCard = RiskCard;
 HeartsRiskEvaluateBot.RiskCards = RiskCards;
+HeartsRiskEvaluateBot.PowerRiskCard = PowerRiskCard;
+HeartsRiskEvaluateBot.PowerRiskCards = PowerRiskCards;
 
 module.exports = HeartsRiskEvaluateBot;
