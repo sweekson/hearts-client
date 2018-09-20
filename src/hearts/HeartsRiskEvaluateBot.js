@@ -253,6 +253,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     this.shootTheMoonBegin = false;
     this.shootTheMoon = false;
     this.shootTheMoonNow = false;
+    this.stopOpponentShootTheMoon = false;
   }
 
   pass(middleware) {
@@ -308,16 +309,15 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
   }
 
   findBestCard(middleware) {
-    const round = middleware.round;
-    const detail = round.detail;
-    const hand = middleware.hand;
-    const valid = this.obtainEvaluatedCards(middleware);
-    const followed = round.followed;
-    const shootTheMoon = detail.shootTheMoon = this.shootTheMoon;
-    const shootTheMoonNow = detail.shootTheMoonNow = this.shootTheMoonNow = this.shouldShootTheMoonNow(middleware);
-    const hasPenaltyCard = detail.hasPenaltyCard = round.hasPenaltyCard;
+    const { hand, round } = middleware;
+    const { detail, followed, hasPenaltyCard } = round;
+    const shootTheMoon = this.shootTheMoon;
+    const shootTheMoonNow = this.shootTheMoonNow = this.shouldShootTheMoonNow(middleware);
+    const stopOpponentShootTheMoon = this.stopOpponentShootTheMoon = this.shouldStopOpponentShootTheMoon(middleware);
+    const valid = this.obtainEvaluatedCards(middleware, stopOpponentShootTheMoon);
     const shouldPickQueenSpade = followed.gt('QS').length && valid.contains('QS');
     const shouldPickTenClub = followed.gt('TC').length && valid.contains('TC');
+    Object.assign(detail, { shootTheMoon, shootTheMoonNow, stopOpponentShootTheMoon, hasPenaltyCard });
     if (shootTheMoon || shootTheMoonNow) {
       return new HeartsMoonShooterV1(middleware).pick();
     }
@@ -405,13 +405,16 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     return suits[0].suit;
   }
 
-  obtainEvaluatedCards(middleware) {
-    const played = middleware.deal.played;
-    const detail = middleware.round.detail;
-    if (detail.evaluated) {
-      return detail.evaluated;
-    }
-    return detail.evaluated = PowerRiskCards.evaluate(RiskCards.evaluate(middleware.hand.valid, played), played);
+  obtainEvaluatedCards(middleware, stopOpponentShootTheMoon) {
+    const { deal, hand, round } = middleware;
+    const played = deal.played;
+    const valid = hand.valid;
+    const evaluated = PowerRiskCards.evaluate(RiskCards.evaluate(valid, played), played);
+    const { hearts } = evaluated;
+    const shouldKidnapOneHeart = stopOpponentShootTheMoon && hearts.length > 1;
+    const kidnappedHeart = hearts.weakest;
+    Object.assign(round.detail, { evaluated, shouldKidnapOneHeart, kidnappedHeart });
+    return shouldKidnapOneHeart ? evaluated.skip(kidnappedHeart) : evaluated;
   }
 
   shouldShootTheMoon(middleware) {
@@ -480,6 +483,21 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const { deal: { played } , hand: { current } } = middleware;
     const evaluated = PowerRiskCards.evaluate(RiskCards.evaluate(current, played), played);
     return evaluated.strong.length >= Math.ceil(current.length * .5);
+  }
+
+  shouldStopOpponentShootTheMoon (middleware) {
+    const { shootTheMoon, shootTheMoonNow } = this;
+    const { match, deal } = middleware;
+    const opponents = deal.hands.list.filter(v => v.player !== match.self);
+    const didOpponentsGetScore = opponents.filter(v => v.gained.score < 0).length > 1;
+    if (didOpponentsGetScore) { return false; }
+    return !shootTheMoon && !shootTheMoonNow;
+  }
+
+  didOpponentShootTheMoon (middleware) {
+    const { match, deal } = middleware;
+    const opponents = deal.hands.list.filter(v => v.player !== match.self);
+    return opponents.some(v => v.gained.score > 0);
   }
 
   didOpponentGetScore (middleware) {
