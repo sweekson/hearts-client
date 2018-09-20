@@ -69,7 +69,7 @@ class PowerRiskCards extends RiskCards {
   }
 
   get medium() {
-    return new this.constructor(this.list.filter(v => v.power >= 0));
+    return new this.constructor(this.list.filter(v => v.power >= 0 && v.power < 100));
   }
 
   get weak() {
