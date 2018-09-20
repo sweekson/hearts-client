@@ -19,7 +19,9 @@ const start = core => {
 };
 const repeat = (times, handler) => {
   const core = new HeartsCore(options);
-  times ? start(core) : handler.complete(core);;
+  times ? start(core) : handler.complete(core);
+  core.on('round-end', _ => handler.onRoundEnd(core));
+  core.on('deal-end', _ => handler.onDealEnd(core));
   core.on('game-end', _ => {
     --times;
     handler.onGameEnd(core);
