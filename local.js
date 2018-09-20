@@ -22,7 +22,7 @@ const repeat = (times, handler) => {
   times ? start(core) : handler.complete(core);;
   core.on('game-end', _ => {
     --times;
-    handler.execute(core);
+    handler.onGameEnd(core);
     repeat(times, handler);
   });
 };

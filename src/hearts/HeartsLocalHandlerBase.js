@@ -1,6 +1,6 @@
 
 class HeartsLocalHandlerBase {
-  execute (core) {}
+  onGameEnd (core) {}
   complete (core) {}
 }
 

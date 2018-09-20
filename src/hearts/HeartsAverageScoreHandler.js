@@ -7,7 +7,7 @@ class HeartsAverageScoreHandler extends HeartsLocalHandlerBase {
     this.games = 0;
   }
 
-  execute (core) {
+  onGameEnd (core) {
     ++this.games;
     core.match.players.each(player => {
       const number = player.playerNumber;
