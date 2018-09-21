@@ -4,8 +4,7 @@ const { Cards, Card } = require('./HeartsDataModels');
 /**
  * TODO
  * 1. Passing cards
- * 2. Stop opponent shoot the moon
- * 3. Conditions for shooting the moon
+ * 2. Change to AGGRESIVE strategy when compete with all defensive opponents
  */
 
 class RiskCard extends Card {
