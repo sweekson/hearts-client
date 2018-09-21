@@ -411,8 +411,8 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const valid = hand.valid;
     const evaluated = PowerRiskCards.evaluate(RiskCards.evaluate(valid, played), played);
     const { hearts } = evaluated;
-    const shouldKidnapOneHeart = stopOpponentShootTheMoon && hearts.length > 1;
-    const kidnappedHeart = hearts.weakest;
+    const shouldKidnapOneHeart = stopOpponentShootTheMoon && hearts.length > 0 && valid.length > 1;
+    const kidnappedHeart = hearts.lt('TH').max || hearts.min;
     Object.assign(round.detail, { evaluated, shouldKidnapOneHeart, kidnappedHeart });
     return shouldKidnapOneHeart ? evaluated.skip(kidnappedHeart) : evaluated;
   }
