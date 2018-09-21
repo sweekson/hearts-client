@@ -279,7 +279,6 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
 
   onPassCardsEnd(middleware) {
     const { hand } = middleware;
-    hand.detail = {};
     this.shootTheMoon = hand.detail.shootTheMoon = this.shouldShootTheMoon(middleware);
     this.shootTheMoonBegin = hand.detail.shootTheMoonBegin = this.shootTheMoon;
   }
