@@ -1,5 +1,5 @@
 const HeartsRiskEvaluateBot = require('./HeartsRiskEvaluateBot');
-const { HeartsMoonShooterV1 } = HeartsRiskEvaluateBot;
+const HeartsMoonShooterV1 = require('./HeartsMoonShooterV1');
 
 class HeartsMoonShooterBot extends HeartsRiskEvaluateBot {
   pass (middleware) {
