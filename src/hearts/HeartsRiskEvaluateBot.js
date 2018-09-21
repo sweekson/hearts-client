@@ -453,10 +453,10 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const has3HighHearts = hasOneHighHearts && h.ge('TH').length >= 3;
     const has3HighDiamonds = hasOneHighDiamonds && d.ge('TD').length >= 3;
     const has3HighClubs = hasOneHighClubs && c.ge('TC').length >= 3;
-    const has2HighSpades = s.ge('TS').length >= 2;
-    const has2HighHearts = h.ge('TH').length >= 2;
-    const has2HighDiamonds = d.ge('TD').length >= 2;
-    const has2HighClubs = c.ge('TC').length >= 2;
+    const has2HighSpades = hasOneHighSpades && s.gt('TS').length >= 2;
+    const has2HighHearts = hasOneHighHearts && h.gt('TH').length >= 2;
+    const has2HighDiamonds = hasOneHighDiamonds && d.gt('TD').length >= 2;
+    const has2HighClubs = hasOneHighClubs && c.gt('TC').length >= 2;
     const hasTwo2HighCards = [has2HighSpades, has2HighDiamonds, has2HighClubs].filter(v => v).length >= 2;
     const hasGreatHighCards = has3HighSpades && has3HighHearts && has3HighDiamonds && has3HighClubs;
     const has2GreatHighCards = [has3HighSpades, has3HighHearts, has3HighDiamonds, has3HighClubs].filter(v => v).length >= 2;
