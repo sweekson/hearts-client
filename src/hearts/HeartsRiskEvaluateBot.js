@@ -513,5 +513,6 @@ HeartsRiskEvaluateBot.RiskCard = RiskCard;
 HeartsRiskEvaluateBot.RiskCards = RiskCards;
 HeartsRiskEvaluateBot.PowerRiskCard = PowerRiskCard;
 HeartsRiskEvaluateBot.PowerRiskCards = PowerRiskCards;
+HeartsRiskEvaluateBot.HeartsMoonShooterV1 = HeartsMoonShooterV1;
 
 module.exports = HeartsRiskEvaluateBot;
