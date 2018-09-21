@@ -71,6 +71,115 @@ class Deal {
   }
 }
 
+class Card {
+  constructor (value) {
+    this.value = value;
+  }
+
+  eq (card) {
+    return this.number === card.number;
+  }
+
+  le (card) {
+    return this.number <= card.number;
+  }
+
+  lt (card) {
+    return this.number < card.number;
+  }
+
+  ge (card) {
+    return this.number >= card.number;
+  }
+
+  gt (card) {
+    return this.number > card.number;
+  }
+
+  is (value) {
+    return this.value === value;
+  }
+
+  get score () {
+    if (this.suit === 'H') { return -1; }
+    if (this.value === 'QS') { return -13; }
+    return 0;
+  }
+
+  get isSpade () {
+    return this.suit === 'S';
+  }
+
+  get isHeart () {
+    return this.suit === 'H';
+  }
+
+  get isDiamond () {
+    return this.suit === 'D';
+  }
+
+  get isClub () {
+    return this.suit === 'C';
+  }
+
+  get isPenal () {
+    return this.suit === 'H' || this.value === 'QS' || this.value === 'TC';
+  }
+
+  get number () {
+    return Card.numbers[this.rank];
+  }
+
+  get strength () {
+    return Card.strength[this.fullsuit][this.number - 2];
+  }
+
+  get rank () {
+    return this.value[0];
+  }
+
+  get fullsuit () {
+    return Cards.suits[this.suit];
+  }
+
+  get suit () {
+    return this.value[1];
+  }
+
+  toString () {
+    return this.value;
+  }
+
+  toJSON () {
+    return this.value;
+  }
+}
+
+Card.numbers = {
+  2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9,
+  T: 10, J: 11, Q: 12, K: 13, A: 14
+};
+
+Card.strength = {
+  spades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 13, 14, 15],
+  hearts: [0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6],
+  diamonds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
+  clubs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3],
+};
+
+class PlayedCard extends Card {
+  constructor (player, value) {
+    super(value);
+    this.player = player;
+  }
+
+  toJSON () {
+    const player = this.player;
+    const card = this.value;
+    return { player, card };
+  }
+}
+
 class Cards extends Collection {
   random () {
     const random = Math.floor(Math.random() * this.length);
@@ -251,6 +360,111 @@ Cards.diamonds = ['2D', '3D', '4D', '5D', '6D', '7D', '8D', '9D', 'TD', 'JD', 'Q
 Cards.clubs = ['2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', 'TC', 'JC', 'QC', 'KC', 'AC'];
 Cards.deck = [].concat(Cards.spades, Cards.hearts, Cards.diamonds, Cards.clubs);
 
+class RiskCard extends Card {
+  constructor(value, risk) {
+    super(value);
+    this.risk = risk;
+  }
+
+  toJSON() {
+    return `${this.value}(${this.risk})`;
+  }
+}
+
+class RiskCards extends Cards {
+  get risky() {
+    return this.list.slice(0).sort((a, b) => b.risk - a.risk)[0];
+  }
+
+  get safety() {
+    return this.list.slice(0).sort((a, b) => a.risk - b.risk)[0];
+  }
+}
+
+RiskCards.evaluate = (cards, played = new Cards()) => {
+  return new RiskCards(
+    cards.list.map(card => {
+      const vsuit = cards.suit(card.suit);
+      const psuit = played.suit(card.suit);
+      const all = Cards.instanciate(Cards.deck).suit(card.suit);
+      const available = all.skip(...psuit.values);
+      const others = available.skip(...vsuit.values);
+      const pl = psuit.length;
+      const vlt = vsuit.lt(card.value).length;
+      const vgt = vsuit.gt(card.value).length;
+      const olt = others.lt(card.value).length;
+      const ogt = others.gt(card.value).length;
+      const plt = psuit.lt(card.value).length;
+      const pgt = psuit.gt(card.value).length;
+      const risk = card.number + vlt - vgt + olt - ogt - plt + pgt + pl;
+      return new RiskCard(card.value, risk);
+    })
+    .sort((a, b) => a.risk - b.risk)
+  );
+};
+
+class PowerRiskCard extends RiskCard {
+  constructor(value, risk, power = 0) {
+    super(value);
+    this.risk = risk;
+    this.power = power;
+  }
+
+  toJSON() {
+    return `${this.value}(${this.risk})(${this.power})`;
+  }
+}
+
+class PowerRiskCards extends RiskCards {
+  get strong() {
+    return new this.constructor(this.list.filter(v => v.power === 100));
+  }
+
+  get medium() {
+    return new this.constructor(this.list.filter(v => v.power >= 0 && v.power < 100));
+  }
+
+  get weak() {
+    return new this.constructor(this.list.filter(v => v.power < 0));
+  }
+
+  get strongest() {
+    return this.list.slice(0).sort((a, b) => b.power - a.power)[0];
+  }
+
+  get weakest() {
+    return this.list.slice(0).sort((a, b) => a.power - b.power)[0];
+  }
+}
+
+PowerRiskCards.evaluate = (cards, played = new PowerRiskCards()) => {
+  const evaluated = new PowerRiskCards(
+    cards.list.map(card => {
+      const vsuit = cards.suit(card.suit);
+      const psuit = played.suit(card.suit);
+      const all = Cards.instanciate(Cards.deck).suit(card.suit);
+      const available = all.skip(...psuit.values);
+      const others = available.skip(...vsuit.values);
+      const ogt = others.gt(card.value).length;
+      return new PowerRiskCard(card.value, card.risk, ogt === 0 ? 100 : ogt * -1);
+    })
+  );
+  if (evaluated.strong.length) {
+    return evaluated;
+  }
+  return new PowerRiskCards(
+    cards.list.map(card => {
+      const vsuit = cards.suit(card.suit);
+      const psuit = played.suit(card.suit);
+      const all = Cards.instanciate(Cards.deck).suit(card.suit);
+      const available = all.skip(...psuit.values);
+      const others = available.skip(...vsuit.values);
+      const olt = others.lt(card.value).length;
+      return new PowerRiskCard(card.value, card.risk, olt);
+    })
+  );
+};
+
 class Voids {
   constructor () {
     this.spades = false;
@@ -296,115 +510,6 @@ class Hand {
   }
 }
 
-class Card {
-  constructor (value) {
-    this.value = value;
-  }
-
-  eq (card) {
-    return this.number === card.number;
-  }
-
-  le (card) {
-    return this.number <= card.number;
-  }
-
-  lt (card) {
-    return this.number < card.number;
-  }
-
-  ge (card) {
-    return this.number >= card.number;
-  }
-
-  gt (card) {
-    return this.number > card.number;
-  }
-
-  is (value) {
-    return this.value === value;
-  }
-
-  get score () {
-    if (this.suit === 'H') { return -1; }
-    if (this.value === 'QS') { return -13; }
-    return 0;
-  }
-
-  get isSpade () {
-    return this.suit === 'S';
-  }
-
-  get isHeart () {
-    return this.suit === 'H';
-  }
-
-  get isDiamond () {
-    return this.suit === 'D';
-  }
-
-  get isClub () {
-    return this.suit === 'C';
-  }
-
-  get isPenal () {
-    return this.suit === 'H' || this.value === 'QS' || this.value === 'TC';
-  }
-
-  get number () {
-    return Card.numbers[this.rank];
-  }
-
-  get strength () {
-    return Card.strength[this.fullsuit][this.number - 2];
-  }
-
-  get rank () {
-    return this.value[0];
-  }
-
-  get fullsuit () {
-    return Cards.suits[this.suit];
-  }
-
-  get suit () {
-    return this.value[1];
-  }
-
-  toString () {
-    return this.value;
-  }
-
-  toJSON () {
-    return this.value;
-  }
-}
-
-Card.numbers = {
-  2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9,
-  T: 10, J: 11, Q: 12, K: 13, A: 14
-};
-
-Card.strength = {
-  spades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 13, 14, 15],
-  hearts: [0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6],
-  diamonds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
-  clubs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3],
-};
-
-class PlayedCard extends Card {
-  constructor (player, value) {
-    super(value);
-    this.player = player;
-  }
-
-  toJSON () {
-    const player = this.player;
-    const card = this.value;
-    return { player, card };
-  }
-}
-
 class Pass {
   constructor (player, cards) {
     this.player = player;
@@ -442,4 +547,5 @@ class Round {
 module.exports = {
   Match, Game, Player, Deal, Hand, Round,
   Cards, Card, PlayedCard, Voids, Pass,
+  RiskCard, RiskCards, PowerRiskCard, PowerRiskCards,
 };

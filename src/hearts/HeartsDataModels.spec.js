@@ -1,10 +1,8 @@
 const {
   Match, Game, Player, Deal, Hand,
-  Cards, Card, PlayedCard, Pass, Round
-} = require('./HeartsDataModels');
-const {
+  Cards, Card, PlayedCard, Pass, Round,
   RiskCards, PowerRiskCards
-} = require('./HeartsRiskEvaluateBot');
+} = require('./HeartsDataModels');
 
 describe('Test Card', function () {
   it('should create a Card', function () {

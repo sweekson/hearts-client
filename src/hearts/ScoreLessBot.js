@@ -1,6 +1,5 @@
-const { Cards, Card } = require('./HeartsDataModels');
+const { Cards, Card, PowerRiskCard, PowerRiskCards } = require('./HeartsDataModels');
 const HeartsRiskEvaluateBot = require('./HeartsRiskEvaluateBot');
-const { PowerRiskCard, PowerRiskCards } = HeartsRiskEvaluateBot;
 
 class ScoreLessBot extends HeartsRiskEvaluateBot {
   constructor(options) {
