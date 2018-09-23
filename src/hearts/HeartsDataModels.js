@@ -526,6 +526,7 @@ class Round {
     this.score = 0;
     this.played = new Cards();
     this.isHeartBroken = false;
+    this.detail = {};
   }
 
   get hasPenaltyCard () {
