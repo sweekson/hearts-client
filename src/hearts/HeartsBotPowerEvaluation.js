@@ -161,7 +161,7 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
   }
 
   shouldStopOpponentShootTheMoon (middleware) {
-    if (!this.roles.guard) { return false; }
+    if (!this.roles.terminator) { return false; }
     const { shootTheMoon, shootTheMoonNow } = this;
     const { match, deal } = middleware;
     const opponents = deal.hands.list.filter(v => v.player !== match.self);

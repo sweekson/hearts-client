@@ -2,7 +2,7 @@ const Logger = require('../shared/Logger');
 
 /**
  * - roles.shooter (Default: true) Try to shoot the moon if matching default rules
- * - roles.guard (Default: true) Try to stop opponent shoot the moon in each deal
+ * - roles.terminator (Default: true) Try to stop opponent shoot the moon in each deal
  *
  * - observed.radicals (Default: []) Oppnents who often try to shoot the moon
  * - observed.terminators (Default: []) Oppnents who often stop others shoot the moon
@@ -16,7 +16,7 @@ const Logger = require('../shared/Logger');
 class HeartsBotBase {
   constructor (options = {}) {
     this.options = options;
-    this.roles = Object.assign({ shooter: true,  guard: true }, options.roles);
+    this.roles = Object.assign({ shooter: true,  terminator: true }, options.roles);
     this.observed = Object.assign({ radicals: [], terminators: [] }, options.observed);
     this.hasRadical = true;
     this.hasTerminator = false;
