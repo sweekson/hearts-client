@@ -1,7 +1,7 @@
 const HeartsBotBase = require('./HeartsBotBase');
 const { Cards, Card } = require('./HeartsDataModels');
 
-class HeartsRandomBot extends HeartsBotBase {
+class HeartsBotRandom extends HeartsBotBase {
   pass (middleware) {
     return middleware.hand.cards.shuffle().list.slice(0, 3);
   }
@@ -15,4 +15,4 @@ class HeartsRandomBot extends HeartsBotBase {
   }
 }
 
-module.exports = HeartsRandomBot;
+module.exports = HeartsBotRandom;

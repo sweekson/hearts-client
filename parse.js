@@ -6,7 +6,7 @@ const Logger = require('./src/shared/Logger');
 const HeartsClientMiddleware = require('./src/hearts/HeartsClientMiddleware');
 const HeartsClientBase = require('./src/hearts/HeartsClientBase');
 const HeartsBotBase = require('./src/hearts/HeartsBotBase');
-const HeartsLogCardScoreHandler = require('./src/hearts/HeartsLogCardScoreHandler');
+const HeartsLogHandlerCardScore = require('./src/hearts/HeartsLogHandlerCardScore');
 const parser = {
   file: (source, exporting = true) => {
     const filepath = path.resolve(__dirname, `${source}.json`);
@@ -49,7 +49,7 @@ const parser = {
 const source = grab('--source');
 const dir = grab('--dir');
 const handler = grab('--handler');
-const Handlers = { HeartsLogCardScoreHandler };
+const Handlers = { HeartsLogHandlerCardScore };
 const root = path.resolve(__dirname);
 
 source && parser.file(source);

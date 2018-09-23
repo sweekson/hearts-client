@@ -1,7 +1,7 @@
-const HeartsRiskEvaluateBot = require('./HeartsRiskEvaluateBot');
-const HeartsMoonShooterV1 = require('./HeartsMoonShooterV1');
+const HeartsBotPowerEvaluation = require('./HeartsBotPowerEvaluation');
+const HeartsCardPickerMoonShooterV1 = require('./HeartsCardPickerMoonShooterV1');
 
-class HeartsMoonShooterBot extends HeartsRiskEvaluateBot {
+class HeartsBotMoonShooterV1 extends HeartsBotPowerEvaluation {
   pass (middleware) {
     return middleware.hand.cards.shuffle().list.slice(0, 3);
   }
@@ -11,7 +11,7 @@ class HeartsMoonShooterBot extends HeartsRiskEvaluateBot {
   }
 
   pick (middleware) {
-    return new HeartsMoonShooterV1(middleware).pick().value;
+    return new HeartsCardPickerMoonShooterV1(middleware).pick().value;
   }
 
   onNewDeal(middleware) {
@@ -26,4 +26,4 @@ class HeartsMoonShooterBot extends HeartsRiskEvaluateBot {
   }
 }
 
-module.exports = HeartsMoonShooterBot;
+module.exports = HeartsBotMoonShooterV1;

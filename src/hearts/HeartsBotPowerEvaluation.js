@@ -1,7 +1,7 @@
 const HeartsBotBase = require('./HeartsBotBase');
 const { Cards, Card, RiskCards, PowerRiskCards  } = require('./HeartsDataModels');
-const HeartsSmallCardPicker = require('./HeartsSmallCardPicker');
-const HeartsMoonShooterV1 = require('./HeartsMoonShooterV1');
+const HeartsCardPickerSmallFirst = require('./HeartsCardPickerSmallFirst');
+const HeartsCardPickerMoonShooterV1 = require('./HeartsCardPickerMoonShooterV1');
 
 /**
  * TODO
@@ -9,7 +9,7 @@ const HeartsMoonShooterV1 = require('./HeartsMoonShooterV1');
  * 2. Change to AGGRESIVE strategy when compete with all defensive opponents
  */
 
-class HeartsRiskEvaluateBot extends HeartsBotBase {
+class HeartsBotPowerEvaluation extends HeartsBotBase {
   constructor(options) {
     super(options);
     this.shootTheMoonBegin = false;
@@ -80,11 +80,11 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const shouldPickTenClub = followed.gt('TC').length && valid.contains('TC');
     Object.assign(detail, { shootTheMoon, shootTheMoonNow, stopOpponentShootTheMoon, hasPenaltyCard });
     if (shootTheMoon || shootTheMoonNow) {
-      return HeartsMoonShooterV1.create(middleware).pick();
+      return HeartsCardPickerMoonShooterV1.create(middleware).pick();
     }
     if (round.isFirst) {
       detail.rule = 1001;
-      return valid.find('2C') || HeartsSmallCardPicker.create(middleware).pick() || valid.skip('QS', 'TC').weakest || valid.find('TC') || valid.weakest;
+      return valid.find('2C') || HeartsCardPickerSmallFirst.create(middleware).pick() || valid.skip('QS', 'TC').weakest || valid.find('TC') || valid.weakest;
     }
     if (!hand.canFollowLead) {
       detail.rule = 1101;
@@ -107,7 +107,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
       return valid.skip('QS', 'TC').max || valid.max;
     }
     detail.rule = 1203;
-    return HeartsSmallCardPicker.create(middleware).pick() || valid.lt(followed.max).max || valid.skip('QS', 'TC').min || valid.last;
+    return HeartsCardPickerSmallFirst.create(middleware).pick() || valid.lt(followed.max).max || valid.skip('QS', 'TC').min || valid.last;
   }
 
   findPassingCards(middleware) {
@@ -153,7 +153,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
 
   shouldShootTheMoon(middleware) {
     if (!this.roles.shooter) { return false; }
-    return HeartsMoonShooterV1.shouldShootTheMoon(middleware);
+    return HeartsCardPickerMoonShooterV1.shouldShootTheMoon(middleware);
   }
 
   shouldShootTheMoonNow (middleware) {
@@ -188,4 +188,4 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
   }
 }
 
-module.exports = HeartsRiskEvaluateBot;
+module.exports = HeartsBotPowerEvaluation;

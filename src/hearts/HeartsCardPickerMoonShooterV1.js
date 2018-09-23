@@ -1,7 +1,7 @@
 const HeartsCardPickerBase = require('./HeartsCardPickerBase');
 const { RiskCards, PowerRiskCards  } = require('./HeartsDataModels');
 
-class HeartsMoonShooterV1 extends HeartsCardPickerBase {
+class HeartsCardPickerMoonShooterV1 extends HeartsCardPickerBase {
   constructor({ match, game, deal, hand, round }) {
     super({ match, game, deal, hand, round });
     this.valid = PowerRiskCards.evaluate(RiskCards.evaluate(hand.valid, deal.played), deal.played);
@@ -103,9 +103,9 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
   }
 }
 
-HeartsMoonShooterV1.create = middleware => new HeartsMoonShooterV1(middleware);
+HeartsCardPickerMoonShooterV1.create = middleware => new HeartsCardPickerMoonShooterV1(middleware);
 
-HeartsMoonShooterV1.shouldShootTheMoon = ({ hand }) => {
+HeartsCardPickerMoonShooterV1.shouldShootTheMoon = ({ hand }) => {
   const { current, detail } = hand;
   const s = current.spades;
   const h = current.hearts;
@@ -163,4 +163,4 @@ HeartsMoonShooterV1.shouldShootTheMoon = ({ hand }) => {
   return false;
 };
 
-module.exports = HeartsMoonShooterV1;
+module.exports = HeartsCardPickerMoonShooterV1;

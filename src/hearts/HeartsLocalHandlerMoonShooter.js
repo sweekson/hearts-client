@@ -1,6 +1,6 @@
-const HeartsAverageScoreHandler = require('./HeartsAverageScoreHandler');
+const HeartsLocalHandlerAverageScore = require('./HeartsLocalHandlerAverageScore');
 
-class HeartsMoonShooterHandler extends HeartsAverageScoreHandler {
+class HeartsLocalHandlerMoonShooter extends HeartsLocalHandlerAverageScore {
   constructor () {
     super();
     this.shooter = new Map();
@@ -45,4 +45,4 @@ class HeartsMoonShooterHandler extends HeartsAverageScoreHandler {
   }
 }
 
-module.exports = HeartsMoonShooterHandler;
+module.exports = HeartsLocalHandlerMoonShooter;

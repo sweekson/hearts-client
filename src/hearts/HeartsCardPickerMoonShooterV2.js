@@ -1,11 +1,11 @@
-const HeartsMoonShooterV1 = require('./HeartsMoonShooterV1');
+const HeartsCardPickerMoonShooterV1 = require('./HeartsCardPickerMoonShooterV1');
 
-class HeartsMoonShooterV2 extends HeartsMoonShooterV1 {
+class HeartsCardPickerMoonShooterV2 extends HeartsCardPickerMoonShooterV1 {
 }
 
-HeartsMoonShooterV2.create = middleware => new HeartsMoonShooterV2(middleware);
+HeartsCardPickerMoonShooterV2.create = middleware => new HeartsCardPickerMoonShooterV2(middleware);
 
-HeartsMoonShooterV2.shouldShootTheMoon = ({ hand }) => {
+HeartsCardPickerMoonShooterV2.shouldShootTheMoon = ({ hand }) => {
   const { current } = hand;
   const s = current.spades;
   const h = current.hearts;
@@ -47,4 +47,4 @@ HeartsMoonShooterV2.shouldShootTheMoon = ({ hand }) => {
   return false;
 };
 
-module.exports = HeartsMoonShooterV2;
+module.exports = HeartsCardPickerMoonShooterV2;

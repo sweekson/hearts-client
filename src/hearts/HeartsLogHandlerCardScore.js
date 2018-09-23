@@ -6,7 +6,7 @@ const { Cards } = require('./HeartsDataModels');
 const scoring = cards => cards.list.reduce((total, played) => total + played.score, 0);
 const totalling = scores => scores.reduce((total, score) => total + score, 0);
 
-class HeartsLogCardScoreHandler extends HeartsLogHandlerBase {
+class HeartsLogHandlerCardScore extends HeartsLogHandlerBase {
   constructor (options) {
     super(options);
     this.cards = new Map(Cards.deck.map(c => [c, []]));
@@ -34,4 +34,4 @@ class HeartsLogCardScoreHandler extends HeartsLogHandlerBase {
   }
 }
 
-module.exports = HeartsLogCardScoreHandler;
+module.exports = HeartsLogHandlerCardScore;

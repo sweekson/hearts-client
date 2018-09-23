@@ -1,10 +1,10 @@
-const HeartsRiskEvaluateBot = require('./HeartsRiskEvaluateBot');
-const HeartsMoonShooterV2 = require('./HeartsMoonShooterV2');
+const HeartsBotPowerEvaluation = require('./HeartsBotPowerEvaluation');
+const HeartsCardPickerMoonShooterV2 = require('./HeartsCardPickerMoonShooterV2');
 
-class HeartsMoonShooterBotV2 extends HeartsRiskEvaluateBot {
+class HeartsBotMoonShooterV2 extends HeartsBotPowerEvaluation {
   pick (middleware) {
     if (this.shootTheMoon) {
-      return HeartsMoonShooterV2.create(middleware).pick().value;
+      return HeartsCardPickerMoonShooterV2.create(middleware).pick().value;
     }
     return this.findBestCard(middleware).value;
   }
@@ -20,8 +20,8 @@ class HeartsMoonShooterBotV2 extends HeartsRiskEvaluateBot {
 
   shouldShootTheMoon(middleware) {
     if (!this.roles.shooter) { return false; }
-    return HeartsMoonShooterV2.shouldShootTheMoon(middleware);
+    return HeartsCardPickerMoonShooterV2.shouldShootTheMoon(middleware);
   }
 }
 
-module.exports = HeartsMoonShooterBotV2;
+module.exports = HeartsBotMoonShooterV2;

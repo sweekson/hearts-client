@@ -4,10 +4,10 @@ const grab = require('ps-grab');
 const util = require('./src/shared/util');
 const HeartsCore = require('./src/hearts/HeartsCore');
 const HeartsClientLocal = require('./src/hearts/HeartsClientLocal');
-const HeartsAverageScoreHandler = require('./src/hearts/HeartsAverageScoreHandler');
-const HeartsMoonShooterHandler = require('./src/hearts/HeartsMoonShooterHandler');
+const HeartsLocalHandlerAverageScore = require('./src/hearts/HeartsLocalHandlerAverageScore');
+const HeartsLocalHandlerMoonShooter = require('./src/hearts/HeartsLocalHandlerMoonShooter');
 const config = require('./local.config');
-const Handlers = { HeartsAverageScoreHandler, HeartsMoonShooterHandler };
+const Handlers = { HeartsLocalHandlerAverageScore, HeartsLocalHandlerMoonShooter };
 
 const times = limit = grab('--times');
 const handler = grab('--handler');

@@ -4,7 +4,7 @@ const ratings = {
   0: 20, 1: 5, 2: -5, 3: -20
 };
 
-class HeartsAverageScoreHandler extends HeartsLocalHandlerBase {
+class HeartsLocalHandlerAverageScore extends HeartsLocalHandlerBase {
   constructor () {
     super();
     this.players = new Map();
@@ -41,4 +41,4 @@ class HeartsAverageScoreHandler extends HeartsLocalHandlerBase {
   }
 }
 
-module.exports = HeartsAverageScoreHandler;
+module.exports = HeartsLocalHandlerAverageScore;
