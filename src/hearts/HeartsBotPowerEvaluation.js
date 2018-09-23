@@ -2,6 +2,7 @@ const HeartsBotBase = require('./HeartsBotBase');
 const { Cards, Card, RiskCards, PowerRiskCards  } = require('./HeartsDataModels');
 const HeartsCardPickerSmallFirst = require('./HeartsCardPickerSmallFirst');
 const HeartsCardPickerMoonShooterV1 = require('./HeartsCardPickerMoonShooterV1');
+const HeartsCardPickerMoonShooterV2 = require('./HeartsCardPickerMoonShooterV2');
 
 /**
  * TODO
@@ -147,7 +148,10 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
   }
 
   shouldShootTheMoon(middleware) {
-    if (!this.roles.shooter) { return false; }
+    if (!this.roles.shooter || this.hasTerminator) { return false; }
+    if (!this.hasRadical || this.strategies.aggressive) {
+      return HeartsCardPickerMoonShooterV2.shouldShootTheMoon(middleware);
+    }
     return HeartsCardPickerMoonShooterV1.shouldShootTheMoon(middleware);
   }
 
