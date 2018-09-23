@@ -52,6 +52,7 @@ class Deal {
     this.exposed = new Cards();
     this.played = new Cards();
     this.isHeartBroken = false;
+    this.detail = {};
   }
 
   get isDeal1 () {
