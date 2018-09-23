@@ -1,5 +1,6 @@
 const { Cards, Card, PowerRiskCard, PowerRiskCards } = require('./HeartsDataModels');
 const HeartsRiskEvaluateBot = require('./HeartsRiskEvaluateBot');
+const HeartsSmallCardPicker = require('./HeartsSmallCardPicker');
 
 class ScoreLessBot extends HeartsRiskEvaluateBot {
   constructor(options) {
@@ -39,7 +40,7 @@ class ScoreLessBot extends HeartsRiskEvaluateBot {
     }
     //Leader
     if (this.isFirst) {
-      return this.findBetterCard(middleware) || this.confirmCards() || this.valid.skip('QS').min || this.valid.min;
+      return HeartsSmallCardPicker.create(middleware).pick() || this.confirmCards() || this.valid.skip('QS').min || this.valid.min;
     }
     //Void
     if (!hand.canFollowLead) {
@@ -59,7 +60,7 @@ class ScoreLessBot extends HeartsRiskEvaluateBot {
       return this.valid.lt(followed.max).max || this.valid.max;
     }
     if (!round.isLast) {
-      return this.findBetterCard(middleware) || this.valid.lt(followed.max).max || this.valid.skip('QS', 'TC').min || this.valid.min;
+      return HeartsSmallCardPicker.create(middleware).pick() || this.valid.lt(followed.max).max || this.valid.skip('QS', 'TC').min || this.valid.min;
     }
   }
 

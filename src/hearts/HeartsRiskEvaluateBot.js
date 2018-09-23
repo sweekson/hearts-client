@@ -1,5 +1,6 @@
 const HeartsBotBase = require('./HeartsBotBase');
 const { Cards, Card, RiskCards, PowerRiskCards  } = require('./HeartsDataModels');
+const HeartsSmallCardPicker = require('./HeartsSmallCardPicker');
 const HeartsMoonShooterV1 = require('./HeartsMoonShooterV1');
 
 /**
@@ -79,11 +80,11 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
     const shouldPickTenClub = followed.gt('TC').length && valid.contains('TC');
     Object.assign(detail, { shootTheMoon, shootTheMoonNow, stopOpponentShootTheMoon, hasPenaltyCard });
     if (shootTheMoon || shootTheMoonNow) {
-      return new HeartsMoonShooterV1(middleware).pick();
+      return HeartsMoonShooterV1.create(middleware).pick();
     }
     if (round.isFirst) {
       detail.rule = 1001;
-      return valid.find('2C') || this.findBetterCard(middleware) || valid.skip('QS', 'TC').weakest || valid.find('TC') || valid.weakest;
+      return valid.find('2C') || HeartsSmallCardPicker.create(middleware).pick() || valid.skip('QS', 'TC').weakest || valid.find('TC') || valid.weakest;
     }
     if (!hand.canFollowLead) {
       detail.rule = 1101;
@@ -106,34 +107,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
       return valid.skip('QS', 'TC').max || valid.max;
     }
     detail.rule = 1203;
-    return this.findBetterCard(middleware) || valid.lt(followed.max).max || valid.skip('QS', 'TC').min || valid.last;
-  }
-
-  /**
-   * 1. This method might return `undefined`
-   * 2. This method DO NOT handle situation which self CAN NOT follow lead
-   * @param {HeartsClientMiddleware} middleware
-   */
-  findBetterCard({ deal, hand, round } /* :HeartsClientMiddleware */) {
-    const played = deal.played;
-    const { spades, hearts, diamonds, clubs } = hand.valid;
-    const { isFirst, lead, hasPenaltyCard } = round;
-    const hasQueenSpade = spades.contains('QS');
-    const hasTenClub = clubs.contains('TC');
-    let candidate;
-    if (!hasPenaltyCard && (isFirst || lead.isSpade) && played.spades.length <= 2) {
-      candidate = hasQueenSpade ? spades.find('AS') || spades.find('KS') || spades.lt('QS').max : spades.lt('QS').max;
-    }
-    if (!hasPenaltyCard && !candidate && (isFirst || lead.isClub) && played.clubs.length <= 2) {
-      candidate = hasTenClub ? clubs.gt('TC').max || clubs.lt('TC').max : clubs.lt('TC').max;
-    }
-    if (!hasPenaltyCard && !candidate && (isFirst || lead.isDiamond) && played.diamonds.length <= 2) {
-      candidate = diamonds.max;
-    }
-    if (!candidate && deal.isHeartBroken && (isFirst || lead.isHeart) && played.hearts.length <= 2) {
-      candidate = hearts.lt('5H').max;
-    }
-    return candidate;
+    return HeartsSmallCardPicker.create(middleware).pick() || valid.lt(followed.max).max || valid.skip('QS', 'TC').min || valid.last;
   }
 
   findPassingCards(middleware) {

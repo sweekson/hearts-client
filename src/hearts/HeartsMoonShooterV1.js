@@ -103,4 +103,6 @@ class HeartsMoonShooterV1 extends HeartsCardPickerBase {
   }
 }
 
+HeartsMoonShooterV1.create = middleware => new HeartsMoonShooterV1(middleware);
+
 module.exports = HeartsMoonShooterV1;
