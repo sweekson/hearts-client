@@ -495,6 +495,7 @@ class Hand {
     this.receive = null;
     this.canFollowLead = false;
     this.hadShotTheMoon = false;
+    this.detail = {};
   }
 
   get begin () {
