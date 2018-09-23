@@ -34,7 +34,6 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
 
   onNewDeal(middleware) {
     const { hand } = middleware;
-    hand.detail = {};
     this.shootTheMoon = hand.detail.shootTheMoon = this.shouldShootTheMoon(middleware);
     this.shootTheMoonBegin = hand.detail.shootTheMoonBegin = this.shootTheMoon;
   }
@@ -43,10 +42,6 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
     const { hand } = middleware;
     this.shootTheMoon = hand.detail.shootTheMoon = this.shouldShootTheMoon(middleware);
     this.shootTheMoonBegin = hand.detail.shootTheMoonBegin = this.shootTheMoon;
-  }
-
-  onNewRound(middleware) {
-    middleware.round.detail = {};
   }
 
   onRoundEnd(middleware) {
