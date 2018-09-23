@@ -10,7 +10,7 @@ const HeartsMoonShooterV1 = require('./HeartsMoonShooterV1');
 
 class HeartsRiskEvaluateBot extends HeartsBotBase {
   constructor(options) {
-    super(Object.assign({ moonShooter: true, moonGuard: true }, options));
+    super(options);
     this.shootTheMoonBegin = false;
     this.shootTheMoon = false;
     this.shootTheMoonNow = false;
@@ -178,7 +178,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
   }
 
   shouldShootTheMoon(middleware) {
-    if (!this.options.moonShooter) { return false; }
+    if (!this.roles.shooter) { return false; }
     const hand = middleware.hand;
     const { current, detail } = hand;
     const s = current.spades;
@@ -247,7 +247,7 @@ class HeartsRiskEvaluateBot extends HeartsBotBase {
   }
 
   shouldStopOpponentShootTheMoon (middleware) {
-    if (!this.options.moonGuard) { return false; }
+    if (!this.roles.guard) { return false; }
     const { shootTheMoon, shootTheMoonNow } = this;
     const { match, deal } = middleware;
     const opponents = deal.hands.list.filter(v => v.player !== match.self);
