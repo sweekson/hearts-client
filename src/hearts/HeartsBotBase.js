@@ -18,6 +18,7 @@ class HeartsBotBase {
     this.options = options;
     this.roles = Object.assign({ shooter: true,  terminator: true }, options.roles);
     this.observed = Object.assign({ radicals: [], terminators: [] }, options.observed);
+    this.strategies = Object.assign({ aggressive: false }, options.strategies);
     this.hasRadical = true;
     this.hasTerminator = false;
     this.logger = options.logger || new Logger('info');
