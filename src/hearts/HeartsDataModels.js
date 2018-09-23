@@ -5,6 +5,7 @@ class Match {
     this.games = new Collection();
     this.players = new Collection();
     this.self = 0;
+    this.detail = {};
   }
 }
 
