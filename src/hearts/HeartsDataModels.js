@@ -13,6 +13,7 @@ class Game {
   constructor (number) {
     this.number = number;
     this.deals = new Collection();
+    this.detail = {};
   }
 
   getPassToPlayer (dealNumber, playerNumber) {
