@@ -8,9 +8,9 @@ const Logger = require('../shared/Logger');
  * - observed.terminators (Default: []) Oppnents who often stop others shoot the moon
  *
  * - hasRadical (Default: true)
- *   Using STRICT rules for shooting the moon if at least one current oppnent is listed in observed.dedicals; otherwise, change strategy to aggressive which using LOOSE rules during a game
+ *   Stop to shoot the moon at the beginning of each deal if at least one current oppnent existing in observed.dedicals
  * - hasTerminator (Default: false)
- *   Try to shoot the moon if there is not any oppnent is listed in observed.terminators; otherwise, change strategy to strictest which won't shoot the moon during a game
+ *   Try to shoot the moon using default rules if there is not any oppnent existing in observed.terminators; otherwise, stop to shoot the moon at the beginning of each deal
  */
 
 class HeartsBotBase {
@@ -19,7 +19,7 @@ class HeartsBotBase {
     this.roles = Object.assign({ shooter: true,  terminator: true }, options.roles);
     this.observed = Object.assign({ radicals: [], terminators: [] }, options.observed);
     this.strategies = Object.assign({ aggressive: false }, options.strategies);
-    this.hasRadical = true;
+    this.hasRadical = false;
     this.hasTerminator = false;
     this.logger = options.logger || new Logger('info');
   }
