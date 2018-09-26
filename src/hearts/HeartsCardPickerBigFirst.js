@@ -4,7 +4,7 @@ const HeartsCardPickerBase = require('./HeartsCardPickerBase');
  * 1. This model might return `undefined`
  * 2. This model DO NOT handle situation which self CAN NOT follow lead
  */
-class HeartsCardPickerSmallFirst extends HeartsCardPickerBase {
+class HeartsCardPickerBigFirst extends HeartsCardPickerBase {
   pick () {
     const { deal, hand, round } = this;
     const played = deal.played;
@@ -29,6 +29,6 @@ class HeartsCardPickerSmallFirst extends HeartsCardPickerBase {
   }
 }
 
-HeartsCardPickerSmallFirst.create = middleware => new HeartsCardPickerSmallFirst(middleware);
+HeartsCardPickerBigFirst.create = middleware => new HeartsCardPickerBigFirst(middleware);
 
-module.exports = HeartsCardPickerSmallFirst;
+module.exports = HeartsCardPickerBigFirst;

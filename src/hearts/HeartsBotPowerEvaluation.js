@@ -1,6 +1,6 @@
 const HeartsBotBase = require('./HeartsBotBase');
 const { Cards, Card, RiskCards, PowerRiskCards  } = require('./HeartsDataModels');
-const HeartsCardPickerSmallFirst = require('./HeartsCardPickerSmallFirst');
+const HeartsCardPickerBigFirst = require('./HeartsCardPickerBigFirst');
 const HeartsCardPickerMoonShooterV1 = require('./HeartsCardPickerMoonShooterV1');
 const HeartsCardPickerMoonShooterV2 = require('./HeartsCardPickerMoonShooterV2');
 
@@ -80,7 +80,7 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
     }
     if (round.isFirst) {
       detail.rule = 1001;
-      return valid.find('2C') || HeartsCardPickerSmallFirst.create(middleware).pick() || valid.skip('QS', 'TC').weakest || valid.find('TC') || valid.weakest;
+      return valid.find('2C') || HeartsCardPickerBigFirst.create(middleware).pick() || valid.skip('QS', 'TC').weakest || valid.find('TC') || valid.weakest;
     }
     if (!hand.canFollowLead) {
       detail.rule = 1101;
@@ -103,7 +103,7 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
       return valid.skip('QS', 'TC').max || valid.max;
     }
     detail.rule = 1203;
-    return HeartsCardPickerSmallFirst.create(middleware).pick() || valid.lt(followed.max).max || valid.skip('QS', 'TC').min || valid.last;
+    return HeartsCardPickerBigFirst.create(middleware).pick() || valid.lt(followed.max).max || valid.skip('QS', 'TC').min || valid.last;
   }
 
   findPassingCards(middleware) {
