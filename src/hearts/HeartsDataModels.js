@@ -406,6 +406,67 @@ RiskCards.evaluate = (cards, played = new Cards()) => {
   );
 };
 
+class PowerCard extends RiskCard {
+  constructor(value, power) {
+    super(value);
+    this.power = power;
+  }
+
+  toJSON() {
+    return `${this.value}(${this.power})`;
+  }
+}
+
+class PowerCards extends Cards {
+  get strong() {
+    return new this.constructor(this.list.filter(v => v.power === 100));
+  }
+
+  get medium() {
+    return new this.constructor(this.list.filter(v => v.power >= 0 && v.power < 100));
+  }
+
+  get weak() {
+    return new this.constructor(this.list.filter(v => v.power < 0));
+  }
+
+  get strongest() {
+    return this.list.slice(0).sort((a, b) => b.power - a.power)[0];
+  }
+
+  get weakest() {
+    return this.list.slice(0).sort((a, b) => a.power - b.power)[0];
+  }
+}
+
+PowerCards.evaluate1 = (cards, played = new Cards()) => {
+  return new PowerCards(
+    cards.list.map(card => {
+      const vsuit = cards.suit(card.suit);
+      const psuit = played.suit(card.suit);
+      const all = Cards.instanciate(Cards.deck).suit(card.suit);
+      const available = all.skip(...psuit.values);
+      const others = available.skip(...vsuit.values);
+      const ogt = others.gt(card.value).length;
+      return new PowerCard(card.value, ogt === 0 ? 100 : ogt * -1);
+    })
+  );
+};
+
+PowerCards.evaluate2 = (cards, played = new Cards()) => {
+  return new PowerCards(
+    cards.list.map(card => {
+      const vsuit = cards.suit(card.suit);
+      const psuit = played.suit(card.suit);
+      const all = Cards.instanciate(Cards.deck).suit(card.suit);
+      const available = all.skip(...psuit.values);
+      const others = available.skip(...vsuit.values);
+      const olt = others.lt(card.value).length;
+      return new PowerCard(card.value, olt);
+    })
+  );
+};
+
 class PowerRiskCard extends RiskCard {
   constructor(value, risk, power = 0) {
     super(value);
@@ -553,4 +614,5 @@ module.exports = {
   Match, Game, Player, Deal, Hand, Round,
   Cards, Card, PlayedCard, Voids, Pass,
   RiskCard, RiskCards, PowerRiskCard, PowerRiskCards,
+  PowerCard, PowerCards,
 };
