@@ -182,7 +182,7 @@ class HeartsCore extends EventEmitter {
       const current = hand.current;
       const candidates = round.lead ? current.suit(round.lead.suit) : isHeartBroken ? current : current.skip(...current.hearts.list);
       Object.assign(player, {
-        candidateCards: candidates.length ? candidates.values : current.values,
+        candidateCards: candidates.length ? candidates.values : (round.number === 1 ? current.skip(...current.hearts.list, 'QS').values : current.values),
       });
       this.notify('your_turn', {
         gameNumber: game.number,
