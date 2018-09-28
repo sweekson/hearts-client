@@ -1,7 +1,7 @@
 const HeartsCardPickerBase = require('./HeartsCardPickerBase');
 const { Cards, PowerCards  } = require('./HeartsDataModels');
 
-class HeartsCardPickerMoonShooterV1 extends HeartsCardPickerBase {
+class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerBase {
   turn1() {
     const { deal, played, hand, detail } = this;
     const evaluated1 = PowerCards.evaluate1(hand.valid, played);
@@ -14,7 +14,7 @@ class HeartsCardPickerMoonShooterV1 extends HeartsCardPickerBase {
     const isHeartBroken = deal.isHeartBroken;
     const shouldPickMaxHeart = evaluated1.length === hearts.length;
     const canPickSmallSpade = (spades.length - 2) <= (13 - played.spades.length) * .25;
-    !this.startToShootTheMoon && (this.startToShootTheMoon = HeartsCardPickerMoonShooterV1.startToShootTheMoon({ deal, hand }));
+    !this.startToShootTheMoon && (this.startToShootTheMoon = HeartsCardPickerMoonShooterV5.startToShootTheMoon({ deal, hand }));
     if (shouldPickMaxHeart) {
       detail.rule = 2001;
       return hearts.max;
@@ -29,11 +29,11 @@ class HeartsCardPickerMoonShooterV1 extends HeartsCardPickerBase {
     }
     if (!this.startToShootTheMoon && !isHeartBroken) {
       detail.rule = 2004;
-      return weak.diamonds.min || weak.clubs.min || weak.spades.skip('QS').min || spades.find('QS') || strong.min;
+      return weak.diamonds.min || weak.clubs.skip('TC').min || weak.spades.skip('QS').min || spades.find('QS') || clubs.find('TC') || strong.min;
     }
     if (!this.startToShootTheMoon && isHeartBroken) {
       detail.rule = 2005;
-      return weak.diamonds.min || weak.clubs.min || weak.spades.skip('QS').min || spades.find('QS') || hearts.min || strong.min;
+      return weak.diamonds.min || weak.clubs.skip('TC').min || weak.spades.skip('QS').min || spades.find('QS') || clubs.find('TC') || hearts.min || strong.min;
     }
     if (strongExcludesHearts.length && !isHeartBroken) {
       detail.rule = 2006;
@@ -52,8 +52,10 @@ class HeartsCardPickerMoonShooterV1 extends HeartsCardPickerBase {
     const { deal, played, hand, round, lead, followed, canFollowLead, detail } = this;
     const evaluated1 = PowerCards.evaluate1(hand.valid, played);
     const { spades, hearts, diamonds, clubs, strong, weakest } = evaluated1;
+    const isLessRound4 = round.number < 4;
+    const hasPlayedQueenSpade = round.played.contains('QS');
     const hasPenaltyCard = round.played.contains('QS') || round.played.suit('H').length > 0;
-    !this.startToShootTheMoon && (this.startToShootTheMoon = HeartsCardPickerMoonShooterV1.startToShootTheMoon({ deal, hand }));
+    !this.startToShootTheMoon && (this.startToShootTheMoon = HeartsCardPickerMoonShooterV5.startToShootTheMoon({ deal, hand }));
     if (!canFollowLead) {
       detail.rule = 2101;
       return evaluated1.skip(...hearts.values, 'QS', 'TC').weakest || spades.find('QS') || clubs.find('TC') || strong.max || evaluated1.strongest;
@@ -74,16 +76,20 @@ class HeartsCardPickerMoonShooterV1 extends HeartsCardPickerBase {
       detail.rule = 2105;
       return weakest;
     }
-    if (lead.isSpade) {
+    if (lead.isSpade && isLessRound4 && hasPlayedQueenSpade) {
       detail.rule = 2106;
+      return spades.lt('QS').min || spades.min;
+    }
+    if (lead.isSpade) {
+      detail.rule = 2107;
       return spades.skip('QS').min || spades.find('QS');
     }
     if (lead.isClub) {
-      detail.rule = 2107;
+      detail.rule = 2108;
       return clubs.skip('TC').min || clubs.find('TC');
     }
     // lead.isDiamond
-    detail.rule = 2108;
+    detail.rule = 2109;
     return diamonds.min;
   }
 
@@ -96,9 +102,9 @@ class HeartsCardPickerMoonShooterV1 extends HeartsCardPickerBase {
   }
 }
 
-HeartsCardPickerMoonShooterV1.create = middleware => new HeartsCardPickerMoonShooterV1(middleware);
+HeartsCardPickerMoonShooterV5.create = middleware => new HeartsCardPickerMoonShooterV5(middleware);
 
-HeartsCardPickerMoonShooterV1.shouldShootTheMoon = ({ hand }) => {
+HeartsCardPickerMoonShooterV5.shouldShootTheMoon = ({ hand }) => {
   const { current, detail } = hand;
   const s = current.spades;
   const h = current.hearts;
@@ -156,15 +162,24 @@ HeartsCardPickerMoonShooterV1.shouldShootTheMoon = ({ hand }) => {
   return false;
 };
 
-HeartsCardPickerMoonShooterV1.startToShootTheMoon = ({ deal, hand }) => {
+HeartsCardPickerMoonShooterV5.startToShootTheMoon = ({ deal, hand }) => {
   const { played } = deal;
   const { current, gained } = hand;
+  const { spades, hearts, diamonds, clubs } = current;
   const { strong } = PowerCards.evaluate1(current, played);
   const osl = strong.spades.length ? 13 - current.spades.length - played.spades.length : (gained.contains('QS') ? 0 : 1);
   const ohl = 13 - current.hearts.length - played.hearts.length;
   const odl = strong.diamonds.length ? 13 - current.diamonds.length - played.diamonds.length : 0;
   const ocl = strong.clubs.length ? 13 - current.clubs.length - played.clubs.length : 0;
-  return strong.length * 3 > (osl + ohl + odl + ocl);
+  const ns = strong.spades.length && spades.lt(strong.spades.min).length && spades.lt(strong.spades.min).max.power > -2 ? 1 : 0;
+  const nh = strong.hearts.length && hearts.lt(strong.hearts.min).length && hearts.lt(strong.hearts.min).max.power > -2 ? 1 : 0;
+  const nd = strong.diamonds.length && diamonds.lt(strong.diamonds.min).length && diamonds.lt(strong.diamonds.min).max.power > -2 ? 1 : 0;
+  const nc = strong.clubs.length && clubs.lt(strong.clubs.min).length && clubs.lt(strong.clubs.min).max.power > -2 ? 1 : 0;
+  return (strong.length + nh) * 3 + (ns + nd + nc) > (osl + ohl + odl + ocl);
 };
 
-module.exports = HeartsCardPickerMoonShooterV1;
+HeartsCardPickerMoonShooterV5.stopToShootTheMoon = ({ deal, hand }) => {
+  return deal.number === 7 && !HeartsCardPickerMoonShooterV5.startToShootTheMoon({ deal, hand });
+};
+
+module.exports = HeartsCardPickerMoonShooterV5;
