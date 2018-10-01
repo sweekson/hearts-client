@@ -3,6 +3,7 @@ const { Cards, Card, RiskCards, PowerRiskCards  } = require('./HeartsDataModels'
 const HeartsCardPickerBigFirst = require('./HeartsCardPickerBigFirst');
 const HeartsCardPickerMoonShooterV1 = require('./HeartsCardPickerMoonShooterV1');
 const HeartsCardPickerMoonShooterV2 = require('./HeartsCardPickerMoonShooterV2');
+const HeartsCardPickerMoonShooterV5 = require('./HeartsCardPickerMoonShooterV5');
 
 /**
  * TODO
@@ -17,6 +18,7 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
     this.shootTheMoon = false;
     this.shootTheMoonNow = false;
     this.stopOpponentShootTheMoon = false;
+    this.shooter = new HeartsCardPickerMoonShooterV5();
   }
 
   pass(middleware) {
@@ -75,8 +77,9 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
     const shouldPickQueenSpade = followed.gt('QS').length && valid.contains('QS');
     const shouldPickTenClub = followed.gt('TC').length && valid.contains('TC');
     Object.assign(detail, { shootTheMoon, shootTheMoonNow, stopOpponentShootTheMoon, hasPenaltyCard });
+    this.shooter.initialize(middleware);
     if (shootTheMoon || shootTheMoonNow) {
-      return HeartsCardPickerMoonShooterV1.create(middleware).pick();
+      return this.shooter.pick();
     }
     if (round.isFirst) {
       detail.rule = 1001;
