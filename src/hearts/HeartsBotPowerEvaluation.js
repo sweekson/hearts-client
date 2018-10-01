@@ -6,12 +6,6 @@ const HeartsCardPickerMoonShooterV1 = require('./HeartsCardPickerMoonShooterV1')
 const HeartsCardPickerMoonShooterV2 = require('./HeartsCardPickerMoonShooterV2');
 const HeartsCardPickerMoonShooterV5 = require('./HeartsCardPickerMoonShooterV5');
 
-/**
- * TODO
- * 1. Passing cards
- * 2. Change to AGGRESIVE strategy when compete with all defensive opponents
- */
-
 class HeartsBotPowerEvaluation extends HeartsBotBase {
   constructor(options) {
     super(options);
