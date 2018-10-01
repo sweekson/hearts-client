@@ -22,6 +22,11 @@ class HeartsBotBase {
     this.hasRadical = false;
     this.hasTerminator = false;
     this.logger = options.logger || new Logger('info');
+    this.shootTheMoonBegin = false;
+    this.shootTheMoon = false;
+    this.shootTheMoonNow = false;
+    this.stopShootTheMoon = false;
+    this.stopOpponentShootTheMoon = false;
   }
 
   pass (middleware) {
