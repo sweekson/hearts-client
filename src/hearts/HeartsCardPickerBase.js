@@ -1,6 +1,9 @@
 
 class HeartsCardPickerBase {
-  constructor({ match, game, deal, hand, round }) {
+  constructor(middleware) {
+    middleware && this.initialize(middleware);
+  }
+  initialize({ match, game, deal, hand, round }) {
     this.match = match;
     this.players = this.match.players;
     this.game = game;
