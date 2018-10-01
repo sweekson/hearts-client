@@ -76,9 +76,9 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerBase {
       detail.rule = 2105;
       return weakest;
     }
-    if (lead.isSpade && isLessRound4 && hasPlayedQueenSpade) {
+    if (isLessRound4 && hasPlayedQueenSpade) {
       detail.rule = 2106;
-      return spades.lt('QS').min || spades.min;
+      return evaluated1.lt(followed.max).max || evaluated1.min;
     }
     if (lead.isSpade) {
       detail.rule = 2107;
