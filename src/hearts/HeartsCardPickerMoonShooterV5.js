@@ -53,6 +53,7 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerBase {
     const evaluated1 = PowerCards.evaluate1(hand.valid, played);
     const { spades, hearts, diamonds, clubs, strong, weakest } = evaluated1;
     const isLessRound4 = round.number < 4;
+    const hasTenClub = clubs.contains('TC');
     const hasPlayedQueenSpade = round.played.contains('QS');
     const hasPenaltyCard = round.played.contains('QS') || round.played.suit('H').length > 0;
     !this.startToShootTheMoon && (this.startToShootTheMoon = HeartsCardPickerMoonShooterV5.startToShootTheMoon({ deal, hand }));
@@ -86,7 +87,7 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerBase {
     }
     if (lead.isClub) {
       detail.rule = 2108;
-      return clubs.skip('TC').min || clubs.find('TC');
+      return hasTenClub && followed.gt('TC').length ? clubs.find('TC') : clubs.skip('TC').min || clubs.find('TC');
     }
     // lead.isDiamond
     detail.rule = 2109;
