@@ -9,10 +9,6 @@ const HeartsCardPickerMoonShooterV5 = require('./HeartsCardPickerMoonShooterV5')
 class HeartsBotPowerEvaluation extends HeartsBotBase {
   constructor(options) {
     super(options);
-    this.shootTheMoonBegin = false;
-    this.shootTheMoon = false;
-    this.shootTheMoonNow = false;
-    this.stopOpponentShootTheMoon = false;
     this.shooter = new HeartsCardPickerMoonShooterV5();
   }
 
