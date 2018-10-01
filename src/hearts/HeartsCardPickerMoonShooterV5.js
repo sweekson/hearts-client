@@ -51,7 +51,8 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerBase {
   turn2() {
     const { deal, played, hand, round, lead, followed, canFollowLead, detail } = this;
     const evaluated1 = PowerCards.evaluate1(hand.valid, played);
-    const { spades, hearts, diamonds, clubs, strong, weakest } = evaluated1;
+    const { spades, hearts, diamonds, clubs, strong, weak, weakest } = evaluated1;
+    const weaker = weakest.power < -3 ? new PowerCards(weak.list.filter(v => v.power === weakest.power)) : new Cards();
     const isLessRound4 = round.number < 4;
     const hasTenClub = clubs.contains('TC');
     const hasPlayedQueenSpade = round.played.contains('QS');
@@ -75,7 +76,7 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerBase {
     }
     if (weakest.power < -3) {
       detail.rule = 2105;
-      return weakest;
+      return weaker.skip('TC').min || weakest;
     }
     if (isLessRound4 && hasPlayedQueenSpade) {
       detail.rule = 2106;
