@@ -423,11 +423,11 @@ class PowerCards extends Cards {
   }
 
   get medium() {
-    return new this.constructor(this.list.filter(v => v.power >= 0 && v.power < 100));
+    return new this.constructor(this.list.filter(v => v.power >= 0 && v.power < 100).sort((a, b) => a.power - b.power));
   }
 
   get weak() {
-    return new this.constructor(this.list.filter(v => v.power < 0));
+    return new this.constructor(this.list.filter(v => v.power < 0).sort((a, b) => a.power - b.power));
   }
 
   get strongest() {
