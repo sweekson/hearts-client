@@ -1,5 +1,6 @@
 const HeartsBotBase = require('./HeartsBotBase');
-const { Cards, Card, RiskCards, PowerRiskCards  } = require('./HeartsDataModels');
+const { Cards, Card, RiskCards, PowerRiskCards, PowerCards  } = require('./HeartsDataModels');
+const HeartsCardPasserEvaluation = require('./HeartsCardPasserEvaluation');
 const HeartsCardPickerBigFirst = require('./HeartsCardPickerBigFirst');
 const HeartsCardExposerBase = require('./HeartsCardExposerBase');
 const HeartsCardPickerMoonShooterV1 = require('./HeartsCardPickerMoonShooterV1');
@@ -103,15 +104,27 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
   findPassingCards(middleware) {
     const hand = middleware.hand;
     const { cards, detail } = hand;
-    const spades = cards.spades;
-    const valid = detail.evaluated = RiskCards.evaluate(cards);
+    const evaluated = detail.evaluated = PowerCards.evaluate1(cards);
+    const { hearts } = evaluated;
+    const candidates1 = detail.hasOneHalfSuit ? evaluated.skip(...evaluated.suit(this.findGreatestSuit(cards)).values) : evaluated;
+    const candidates2 = candidates1.skip(...hearts.values, 'AS', 'KS', 'QS').sort(true, true);
+    const { weak } = candidates1;
     if (!this.shootTheMoon) {
-      return valid.skip(...spades.lt('QS').values).list.slice(-3);
+      return HeartsCardPasserEvaluation.create(middleware).pass();
     }
-    if (detail.hasOneHalfSuit) {
-      return valid.skip(...valid.suit(this.findGreatestSuit(cards)).values).list.slice(0, 3);
+    if (weak.length >= 3) {
+      return weak.select(0, 3);
     }
-    return valid.list.slice(0, 3);
+    if (hearts.length <= 7 && !weak.length) {
+      return candidates2.select(0, 3);
+    }
+    if (hearts.length <= 7 && weak.length === 1) {
+      return candidates2.select(0, 2).concat(weak.list);
+    }
+    if (hearts.length <= 7 && weak.length === 2) {
+      return candidates2.select(0, 1).concat(weak.list);
+    }
+    return candidates1.sort(true, true).select(0, 3);
   }
 
   findGreatestSuit(cards) {
@@ -136,7 +149,7 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
     const evaluated = PowerRiskCards.evaluate(RiskCards.evaluate(valid, played), played);
     const { hearts } = evaluated;
     const shouldKidnapOneHeart = stopOpponentShootTheMoon && hearts.length > 0 && valid.length > 1;
-    const kidnappedHeart = hearts.lt('TH').max || hearts.min;
+    const kidnappedHeart = hearts.max;
     Object.assign(round.detail, { evaluated, shouldKidnapOneHeart, kidnappedHeart });
     return shouldKidnapOneHeart ? evaluated.skip(kidnappedHeart) : evaluated;
   }
@@ -144,7 +157,7 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
   shouldShootTheMoon(middleware) {
     if (!this.roles.shooter || this.hasRadical || this.hasTerminator) { return false; }
     if (this.strategies.aggressive) {
-      return HeartsCardPickerMoonShooterV2.shouldShootTheMoon(middleware);
+      return HeartsCardPickerMoonShooterV5.shouldShootTheMoon(middleware);
     }
     return HeartsCardPickerMoonShooterV1.shouldShootTheMoon(middleware);
   }
