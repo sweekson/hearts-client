@@ -107,7 +107,7 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerBase {
 HeartsCardPickerMoonShooterV5.create = middleware => new HeartsCardPickerMoonShooterV5(middleware);
 
 HeartsCardPickerMoonShooterV5.shouldShootTheMoon = ({ hand }) => {
-  const { current, detail } = hand;
+  const { current } = hand;
   const s = current.spades;
   const h = current.hearts;
   const d = current.diamonds;
@@ -116,50 +116,34 @@ HeartsCardPickerMoonShooterV5.shouldShootTheMoon = ({ hand }) => {
   const hl = h.length;
   const dl = d.length;
   const cl = c.length;
-  const hasAtLeast4Hearts = hl >= 4;
   const hasHalfSpades = sl >= 6;
   const hasHalfHearts = hl >= 6;
   const hasHalfDiamonds = dl >= 6;
   const hasHalfClubs = cl >= 6;
-  const hasOneHalfSuit = detail.hasOneHalfSuit = hasHalfSpades || hasHalfHearts || hasHalfDiamonds || hasHalfClubs;
-  const hasLongSpades = sl >= 9;
-  const hasLongHearts = hl >= 9;
-  const hasLongDiamonds = dl >= 9;
-  const hasLongClubs = cl >= 9;
-  const hasLongHighSpades = hasLongSpades && s.contains('KS', 'AS');
-  const hasLongHighHearts = hasLongHearts && h.contains('KH', 'AH');
-  const hasLongHighDiamonds = hasLongDiamonds && d.contains('KD', 'AD');
-  const hasLongHighClubs = hasLongClubs && c.contains('KC', 'AC');
+  const hasOneHalfSuit = hasHalfSpades || hasHalfHearts || hasHalfDiamonds || hasHalfClubs;
+  const hasShortDiamonds = dl <= 2;
+  const hasShortClubs = cl <= 2;
+  const hasLongSpades = sl >= 8;
+  const hasLongHearts = hl >= 8;
+  const hasLongDiamonds = dl >= 8;
+  const hasLongClubs = cl >= 8;
+  const hasOneHighSpades = s.contains('QS', 'KS', 'AS');
+  const hasOneHighHearts = h.contains('JH', 'QH', 'KH', 'AH');
+  const hasOneHighDiamonds = d.contains('JD', 'QD', 'KD', 'AD');
+  const hasOneHighClubs = c.contains('JC', 'QC', 'KC', 'AC');
+  const hasLongHighSpades = hasLongSpades && hasOneHighSpades;
+  const hasLongHighHearts = hasLongHearts && hasOneHighHearts;
+  const hasLongHighDiamonds = hasLongDiamonds && hasOneHighDiamonds;
+  const hasLongHighClubs = hasLongClubs && hasOneHighClubs;
   const hasOneLongHighSuit = hasLongHighSpades || hasLongHighHearts || hasLongHighDiamonds || hasLongHighClubs;
-  const hasOneHighSpades = s.contains('KS', 'AS');
-  const hasOneHighHearts = h.contains('KH', 'AH');
-  const hasOneHighDiamonds = d.contains('KD', 'AD');
-  const hasOneHighClubs = c.contains('KC', 'AC');
-  const hasHighCards = hasOneHighSpades && hasOneHighHearts && hasOneHighDiamonds && hasOneHighClubs;
-  const has3HighSpades = hasOneHighSpades && s.ge('TS').length >= 3;
-  const has3HighHearts = hasOneHighHearts && h.ge('TH').length >= 3;
-  const has3HighDiamonds = hasOneHighDiamonds && d.ge('TD').length >= 3;
-  const has3HighClubs = hasOneHighClubs && c.ge('TC').length >= 3;
-  const has2HighSpades = hasOneHighSpades && s.gt('TS').length >= 2;
-  const has2HighHearts = hasOneHighHearts && h.gt('TH').length >= 2;
-  const has2HighDiamonds = hasOneHighDiamonds && d.gt('TD').length >= 2;
-  const has2HighClubs = hasOneHighClubs && c.gt('TC').length >= 2;
-  const hasTwo2HighCards = [has2HighSpades, has2HighDiamonds, has2HighClubs].filter(v => v).length >= 2;
-  const hasGreatHighCards = has3HighSpades && has3HighHearts && has3HighDiamonds && has3HighClubs;
-  const has2GreatHighCards = [has3HighSpades, has3HighHearts, has3HighDiamonds, has3HighClubs].filter(v => v).length >= 2;
-  const hasBigSpades = s.ge('JS').length >= 1;
-  const hasBigHearts = h.ge('JH').length >= 1;
-  const hasBigDiamonds = d.ge('JD').length >= 1;
-  const hasBigClubs = c.ge('JC').length >= 1;
-  const hasSmallSpades = s.le('3S').length > 0;
-  const hasSmallHearts = h.le('4H').length > 0;
-  const hasSmallDiamonds = d.le('3D').length > 0;
-  const hasSmallClubs = c.contains('3C');
-  if (hasSmallSpades || hasSmallHearts || hasSmallDiamonds || hasSmallClubs) { return false; }
-  if (hasTwo2HighCards && hasBigHearts && hasAtLeast4Hearts) { return true; }
-  if (hasOneHalfSuit && has2GreatHighCards) { return true; }
-  if (hasOneHalfSuit && hasOneHighSpades && hasBigHearts && hasBigDiamonds && hasBigClubs) { return true; }
-  if (hasOneHighSpades && has3HighHearts && has3HighDiamonds && has3HighClubs) { return true; }
+  const has2HighSpades = hasOneHighSpades && s.ge('TS').length >= 2 && s.ge('2S').length >= 3;
+  const has4HighHearts = hasOneHighHearts && h.ge('TH').length >= 3 && h.ge('7H').length >= 4;
+  const has3HighDiamonds = hasOneHighDiamonds && d.ge('9D').length >= 3;
+  const has3HighClubs = hasOneHighClubs && c.ge('9C').length >= 3;
+  const hasTwoHighSuit = [has2HighSpades, has4HighHearts, has3HighDiamonds, has3HighClubs].filter(v => v).length >= 2;
+  if (hasTwoHighSuit && (has2HighSpades || has4HighHearts)) { return true; }
+  if (hasShortDiamonds && hasShortClubs && hasOneHighSpades && has4HighHearts) { return true; }
+  if (hasOneHalfSuit && hasOneHighSpades && has4HighHearts) { return true; }
   if (hasOneLongHighSuit && hasOneHighSpades) { return true; }
   return false;
 };
