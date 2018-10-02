@@ -127,6 +127,7 @@ HeartsCardPickerMoonShooterV5.shouldShootTheMoon = ({ hand }) => {
   const hasLongHearts = hl >= 8;
   const hasLongDiamonds = dl >= 8;
   const hasLongClubs = cl >= 8;
+  const has3HighestSpades = s.covers('QS', 'KS', 'AS');
   const hasOneHighSpades = s.contains('QS', 'KS', 'AS');
   const hasOneHighHearts = h.contains('JH', 'QH', 'KH', 'AH');
   const hasOneHighDiamonds = d.contains('JD', 'QD', 'KD', 'AD');
@@ -144,6 +145,7 @@ HeartsCardPickerMoonShooterV5.shouldShootTheMoon = ({ hand }) => {
   if (hasTwoHighSuit && (has2HighSpades || has4HighHearts)) { return true; }
   if (hasShortDiamonds && hasShortClubs && hasOneHighSpades && has4HighHearts) { return true; }
   if (hasOneHalfSuit && hasOneHighSpades && has4HighHearts) { return true; }
+  if (hasHalfSpades && has3HighestSpades && h.ge('TH').length >= 3) { return true; }
   if (hasOneLongHighSuit && hasOneHighSpades) { return true; }
   return false;
 };
