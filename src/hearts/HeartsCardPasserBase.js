@@ -1,5 +1,5 @@
 
-class HeartsCardPassBase {
+class HeartsCardPasserBase {
   constructor({ match, game, deal, hand }) {
     this.match = match;
     this.players = this.match.players;
@@ -19,4 +19,4 @@ class HeartsCardPassBase {
   }
 }
 
-module.exports = HeartsCardPassBase;
+module.exports = HeartsCardPasserBase;

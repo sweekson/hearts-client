@@ -1,4 +1,4 @@
-const HeartsCardPassBase = require('./HeartsCardPassBase');
+const HeartsCardPasserBase = require('./HeartsCardPasserBase');
 const { Card, Cards } = require('./HeartsDataModels');
 
 class ImpactCard extends Card {
@@ -18,7 +18,7 @@ ImpactCard.impact = {
   diamonds: [1, 5, 9, 13, 17, 21, 25, 29, 33, 35, 39, 40, 41],
 }
 
-class HeartsCardPasserEvaluation extends HeartsCardPassBase {
+class HeartsCardPasserEvaluation extends HeartsCardPasserBase {
   constructor(middleware) {
     super(middleware);
     this.candidates = new Cards(this.hand.cards.list);
