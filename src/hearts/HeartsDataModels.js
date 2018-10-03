@@ -203,6 +203,7 @@ class Cards extends Collection {
   }
 
   sort (ascending = true, blend = false) {
+    if (ascending instanceof Function) { return new this.constructor(this.list.sort(ascending)); }
     const l = this.length;
     const s = this.spades;
     const h = this.hearts;
