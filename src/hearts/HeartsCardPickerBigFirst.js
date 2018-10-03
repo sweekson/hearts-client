@@ -1,10 +1,10 @@
-const HeartsCardPickerBase = require('./HeartsCardPickerBase');
+const HeartsCardPickerSkeleton = require('./HeartsCardPickerSkeleton');
 
 /**
  * 1. This model might return `undefined`
  * 2. This model DO NOT handle situation which self CAN NOT follow lead
  */
-class HeartsCardPickerBigFirst extends HeartsCardPickerBase {
+class HeartsCardPickerBigFirst extends HeartsCardPickerSkeleton {
   pick () {
     const { deal, hand, round } = this;
     const played = deal.played;

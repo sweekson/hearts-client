@@ -1,8 +1,8 @@
-const HeartsCardPickerBase = require('./HeartsCardPickerBase');
+const HeartsCardPickerSkeleton = require('./HeartsCardPickerSkeleton');
 const HeartsCardPickerBigFirst = require('./HeartsCardPickerBigFirst');
 const { Cards, PowerCards  } = require('./HeartsDataModels');
 
-class HeartsCardPickerShortFirst extends HeartsCardPickerBase {
+class HeartsCardPickerShortFirst extends HeartsCardPickerSkeleton {
   initialize (middleware) {
     super.initialize(middleware);
     this.evaluated1 = PowerCards.evaluate1(this.valid, this.played);

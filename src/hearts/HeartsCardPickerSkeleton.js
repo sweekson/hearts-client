@@ -1,5 +1,5 @@
 
-class HeartsCardPickerBase {
+class HeartsCardPickerSkeleton {
   constructor(middleware) {
     middleware && this.initialize(middleware);
   }
@@ -34,4 +34,4 @@ class HeartsCardPickerBase {
   turn4() { }
 }
 
-module.exports = HeartsCardPickerBase;
+module.exports = HeartsCardPickerSkeleton;

@@ -1,7 +1,7 @@
-const HeartsCardPickerBase = require('./HeartsCardPickerBase');
+const HeartsCardPickerSkeleton = require('./HeartsCardPickerSkeleton');
 const { RiskCards, PowerRiskCards  } = require('./HeartsDataModels');
 
-class HeartsCardPickerMoonShooterV1 extends HeartsCardPickerBase {
+class HeartsCardPickerMoonShooterV1 extends HeartsCardPickerSkeleton {
   constructor({ match, game, deal, hand, round }) {
     super({ match, game, deal, hand, round });
     this.valid = PowerRiskCards.evaluate(RiskCards.evaluate(hand.valid, deal.played), deal.played);

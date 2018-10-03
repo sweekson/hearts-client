@@ -1,4 +1,4 @@
-const HeartsCardPickerBase = require('./HeartsCardPickerBase');
+const HeartsCardPickerSkeleton = require('./HeartsCardPickerSkeleton');
 const { Card, Cards, PowerCards  } = require('./HeartsDataModels');
 
 Card.strength = {
@@ -8,7 +8,7 @@ Card.strength = {
   clubs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
 };
 
-class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerBase {
+class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
   turn1() {
     const { deal, played, hand, detail } = this;
     const evaluated1 = PowerCards.evaluate1(hand.valid, played);
