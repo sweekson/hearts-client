@@ -1,4 +1,4 @@
-const HeartsBotBase = require('./HeartsBotBase');
+const HeartsBotBaseSkeleton = require('./HeartsBotBaseSkeleton');
 const { Cards, Card, RiskCards, PowerRiskCards, PowerCards  } = require('./HeartsDataModels');
 const HeartsCardPasserEvaluation = require('./HeartsCardPasserEvaluation');
 const HeartsCardPickerBigFirst = require('./HeartsCardPickerBigFirst');
@@ -8,7 +8,7 @@ const HeartsCardPickerMoonShooterV1 = require('./HeartsCardPickerMoonShooterV1')
 const HeartsCardPickerMoonShooterV2 = require('./HeartsCardPickerMoonShooterV2');
 const HeartsCardPickerMoonShooterV5 = require('./HeartsCardPickerMoonShooterV5');
 
-class HeartsBotPowerEvaluation extends HeartsBotBase {
+class HeartsBotPowerEvaluation extends HeartsBotBaseSkeleton {
   constructor(options) {
     super(options);
     this.shooter = new HeartsCardPickerMoonShooterV5();

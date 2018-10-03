@@ -1,7 +1,7 @@
-const HeartsBotBase = require('./HeartsBotBase');
+const HeartsBotBaseSkeleton = require('./HeartsBotBaseSkeleton');
 const { Cards, Card } = require('./HeartsDataModels');
 
-class HeartsBotC0 extends HeartsBotBase {
+class HeartsBotC0 extends HeartsBotBaseSkeleton {
   pass (middleware) {
     const cards = middleware.hand.cards;
     const high = [];

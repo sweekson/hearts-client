@@ -1,4 +1,4 @@
-const HeartsBotBase = require('./HeartsBotBase');
+const HeartsBotBaseSkeleton = require('./HeartsBotBaseSkeleton');
 const { Cards } = require('./HeartsDataModels');
 
 const scores = {
@@ -80,7 +80,7 @@ const shouldShootTheMoon = cards => {
   return true;
 };
 
-class HeartsBotD0 extends HeartsBotBase {
+class HeartsBotD0 extends HeartsBotBaseSkeleton {
   constructor () {
     super();
     this.shootTheMoon = false;

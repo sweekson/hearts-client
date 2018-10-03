@@ -5,7 +5,7 @@ const util = require('./src/shared/util');
 const Logger = require('./src/shared/Logger');
 const HeartsClientMiddleware = require('./src/hearts/HeartsClientMiddleware');
 const HeartsClientBase = require('./src/hearts/HeartsClientBase');
-const HeartsBotBase = require('./src/hearts/HeartsBotBase');
+const HeartsBotBaseSkeleton = require('./src/hearts/HeartsBotBaseSkeleton');
 const HeartsLogHandlerCardScore = require('./src/hearts/HeartsLogHandlerCardScore');
 const parser = {
   file: (source, exporting = true) => {
@@ -14,7 +14,7 @@ const parser = {
     if (!util.file.exist(filepath)) { return console.log(`File '${filepath}' not exists`); }
 
     const log = util.file.read(filepath);
-    const bot = new HeartsBotBase();
+    const bot = new HeartsBotBaseSkeleton();
     const logs = path.join(__dirname, 'logs');
     const logger = new Logger('warn');
     const options = { bot, logs, logger, exporting };

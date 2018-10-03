@@ -13,7 +13,7 @@ const Logger = require('../shared/Logger');
  *   Try to shoot the moon using default rules if there is not any oppnent existing in observed.terminators; otherwise, stop to shoot the moon at the beginning of each deal
  */
 
-class HeartsBotBase {
+class HeartsBotBaseSkeleton {
   constructor (options = {}) {
     this.options = options;
     this.roles = Object.assign({ shooter: true,  terminator: true }, options.roles);
@@ -68,4 +68,4 @@ class HeartsBotBase {
   }
 }
 
-module.exports = HeartsBotBase;
+module.exports = HeartsBotBaseSkeleton;

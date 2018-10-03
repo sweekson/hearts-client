@@ -1,7 +1,7 @@
-const HeartsBotBase = require('./HeartsBotBase');
+const HeartsBotBaseSkeleton = require('./HeartsBotBaseSkeleton');
 const { Cards, Card } = require('./HeartsDataModels');
 
-class HeartsBotRandom extends HeartsBotBase {
+class HeartsBotRandom extends HeartsBotBaseSkeleton {
   pass (middleware) {
     return middleware.hand.cards.shuffle().list.slice(0, 3);
   }
