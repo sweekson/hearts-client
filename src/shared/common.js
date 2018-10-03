@@ -23,6 +23,10 @@ class Collection {
     return this.list.find(callback);
   }
 
+  filter (callback) {
+    return new this.constructor(this.list.filter(callback));
+  }
+
   each (callback) {
     this.list.forEach(callback);
     return this;
