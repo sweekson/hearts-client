@@ -1,5 +1,12 @@
 const HeartsCardPickerBase = require('./HeartsCardPickerBase');
-const { Cards, PowerCards  } = require('./HeartsDataModels');
+const { Card, Cards, PowerCards  } = require('./HeartsDataModels');
+
+Card.strength = {
+  spades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
+  hearts: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
+  diamonds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
+  clubs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
+};
 
 class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerBase {
   turn1() {
@@ -137,15 +144,12 @@ HeartsCardPickerMoonShooterV5.shouldShootTheMoon = ({ hand }) => {
   const hasLongHighDiamonds = hasLongDiamonds && hasOneHighDiamonds;
   const hasLongHighClubs = hasLongClubs && hasOneHighClubs;
   const hasOneLongHighSuit = hasLongHighSpades || hasLongHighHearts || hasLongHighDiamonds || hasLongHighClubs;
-  const has2HighSpades = hasOneHighSpades && s.ge('TS').length >= 2 && s.ge('2S').length >= 3;
-  const has4HighHearts = hasOneHighHearts && h.ge('TH').length >= 3 && h.ge('7H').length >= 4;
-  const has3HighDiamonds = hasOneHighDiamonds && d.ge('9D').length >= 3;
-  const has3HighClubs = hasOneHighClubs && c.ge('9C').length >= 3;
-  const hasTwoHighSuit = [has2HighSpades, has4HighHearts, has3HighDiamonds, has3HighClubs].filter(v => v).length >= 2;
-  if (hasTwoHighSuit && (has2HighSpades || has4HighHearts)) { return true; }
-  if (hasShortDiamonds && hasShortClubs && hasOneHighSpades && has4HighHearts) { return true; }
-  if (hasOneHalfSuit && hasOneHighSpades && has4HighHearts) { return true; }
-  if (hasHalfSpades && has3HighestSpades && h.ge('TH').length >= 3) { return true; }
+  const has2HighSpades = s.ge('JS').length >= 2 && s.ge('2S').length >= 3;
+  const has3HighHearts = h.ge('JH').length >= 3;
+  if (current.strength >= 16) { return true; }
+  if (hasShortDiamonds && hasShortClubs && has2HighSpades && has3HighHearts) { return true; }
+  if (hasOneHalfSuit && hasOneHighSpades && has3HighHearts) { return true; }
+  if (hasHalfSpades && has3HighestSpades && has3HighHearts) { return true; }
   if (hasOneLongHighSuit && hasOneHighSpades) { return true; }
   return false;
 };
