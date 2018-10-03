@@ -2,6 +2,7 @@ const HeartsBotBase = require('./HeartsBotBase');
 const { Cards, Card, RiskCards, PowerRiskCards, PowerCards  } = require('./HeartsDataModels');
 const HeartsCardPasserEvaluation = require('./HeartsCardPasserEvaluation');
 const HeartsCardPickerBigFirst = require('./HeartsCardPickerBigFirst');
+const HeartsCardPickerShortFirst = require('./HeartsCardPickerShortFirst');
 const HeartsCardExposerBase = require('./HeartsCardExposerBase');
 const HeartsCardPickerMoonShooterV1 = require('./HeartsCardPickerMoonShooterV1');
 const HeartsCardPickerMoonShooterV2 = require('./HeartsCardPickerMoonShooterV2');
@@ -60,45 +61,18 @@ class HeartsBotPowerEvaluation extends HeartsBotBase {
   }
 
   findBestCard(middleware) {
-    const { hand, round } = middleware;
-    const { detail, followed, hasPenaltyCard } = round;
+    const { round } = middleware;
+    const { detail, hasPenaltyCard } = round;
     const shootTheMoon = this.shootTheMoon;
     const shootTheMoonNow = this.shootTheMoonNow = this.shouldShootTheMoonNow(middleware);
     const stopOpponentShootTheMoon = this.stopOpponentShootTheMoon = this.shouldStopOpponentShootTheMoon(middleware);
     const valid = this.obtainEvaluatedCards(middleware, stopOpponentShootTheMoon);
-    const shouldPickQueenSpade = followed.gt('QS').length && valid.contains('QS');
-    const shouldPickTenClub = followed.gt('TC').length && valid.contains('TC');
     Object.assign(detail, { shootTheMoon, shootTheMoonNow, stopOpponentShootTheMoon, hasPenaltyCard });
     this.shooter.initialize(middleware);
     if (shootTheMoon || shootTheMoonNow) {
       return this.shooter.pick();
     }
-    if (round.isFirst) {
-      detail.rule = 1001;
-      return valid.find('2C') || HeartsCardPickerBigFirst.create(middleware).pick() || valid.skip('QS', 'TC').weakest || valid.find('TC') || valid.weakest;
-    }
-    if (!hand.canFollowLead) {
-      detail.rule = 1101;
-      return valid.find('QS') || valid.find('TC') || valid.strong.max || valid.strongest;
-    }
-    if (shouldPickQueenSpade /* && hand.canFollowLead */) {
-      detail.rule = 1201;
-      return valid.find('QS');
-    }
-    if (shouldPickTenClub /* && hand.canFollowLead */) {
-      detail.rule = 1202;
-      return valid.find('TC');
-    }
-    if (round.isLast && hasPenaltyCard /* && hand.canFollowLead */) {
-      detail.rule = 1301;
-      return valid.lt(followed.max).max || valid.max;
-    }
-    if (round.isLast /* && !shouldPickTenClub && !shouldPickQueenSpade && !hasPenaltyCard && hand.canFollowLead */) {
-      detail.rule = 1302;
-      return valid.skip('QS', 'TC').max || valid.max;
-    }
-    detail.rule = 1203;
-    return HeartsCardPickerBigFirst.create(middleware).pick() || valid.lt(followed.max).max || valid.skip('QS', 'TC').min || valid.last;
+    return HeartsCardPickerShortFirst.create(Object.assign(middleware, { valid })).pick();
   }
 
   findPassingCards(middleware) {
