@@ -2,7 +2,7 @@
 class Collection {
   constructor (list) {
     this.list = [];
-    this.map = new Map();
+    this.table = new Map();
     this.deleted = 0;
     list && list.forEach(v => this.push(v));
   }
@@ -43,14 +43,14 @@ class Collection {
   push (...items) {
     items.forEach(item => {
       this.list.push(item);
-      this.map.set(this.list.indexOf(item) + this.deleted, item);
+      this.table.set(this.list.indexOf(item) + this.deleted, item);
     });
     return this;
   }
 
   add (key, item) {
     this.list.push(item);
-    this.map.set(key, item);
+    this.table.set(key, item);
     return this;
   }
 
@@ -60,17 +60,17 @@ class Collection {
   }
 
   delete (key) {
-    if (!this.map.has(key)) { return this; }
-    const item = this.map.get(key);
+    if (!this.table.has(key)) { return this; }
+    const item = this.table.get(key);
     const index = this.list.indexOf(item);
     this.list.splice(index, 1);
-    this.map.delete(key);
+    this.table.delete(key);
     ++this.deleted;
     return this;
   }
 
   merge (key, item) {
-    Object.assign(this.map.get(key), item);
+    Object.assign(this.table.get(key), item);
     return this;
   }
 
@@ -81,16 +81,16 @@ class Collection {
   }
 
   get (key) {
-    return this.map.get(key);
+    return this.table.get(key);
   }
 
   keyof (value) {
-    return [...this.map.keys()].find(key => this.map.get(key) === value);
+    return [...this.table.keys()].find(key => this.table.get(key) === value);
   }
 
   clear () {
     this.list.splice(0);
-    this.map.clear();
+    this.table.clear();
     return this;
   }
 
