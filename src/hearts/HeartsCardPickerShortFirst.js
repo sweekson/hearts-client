@@ -48,10 +48,10 @@ class HeartsCardPickerShortFirst extends HeartsCardPickerSkeleton {
     const { spades, clubs } = valid;
     const { strong } = evaluated1;
     const { medium } = evaluated2;
-    const safe = medium.filter(v => v.power < 3);
+    const safe = medium.skip(...strong.values).filter(v => v.power < 3);
     const safer1 = safe.sort((a, b) => valid.suit(a.suit).length - valid.suit(b.suit).length);
     const safer2 = safer1.filter(v => valid.suit(v.suit).length === valid.suit(safer1.first.suit).length);
-    const risky = PowerCards.evaluate3(medium.skip('QS', 'TC').filter(v => v.power > 2), played);
+    const risky = PowerCards.evaluate3(medium.skip(...strong.values, 'QS', 'TC').filter(v => v.power > 2), played);
     const riskier1 = risky.filter(v => v.power - 1 <= risky.weakest.power);
     const riskier2 = riskier1.sort((a, b) => valid.suit(a.suit).length - valid.suit(b.suit).length);
     const riskier3 = riskier2.filter(v => valid.suit(v.suit).length === valid.suit(riskier2.first.suit).length);
