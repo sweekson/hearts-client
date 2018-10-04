@@ -1,6 +1,10 @@
 const HeartsCardPickerSkeleton = require('./HeartsCardPickerSkeleton');
 
 /**
+ * TODO
+ * 1. DO NOT return big card if a suit has more than 5 cards
+ *
+ * WARNING
  * 1. This model might return `undefined`
  * 2. This model DO NOT handle situation which self CANNOT follow lead
  */
