@@ -55,6 +55,7 @@ class HeartsBotBaseSkeleton {
   }
 
   onNewDeal (middleware) {
+    this.reset();
   }
 
   onPassCardsEnd (middleware) {
