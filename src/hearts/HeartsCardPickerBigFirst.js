@@ -1,35 +1,36 @@
 const HeartsCardPickerSkeleton = require('./HeartsCardPickerSkeleton');
+const { PowerCards  } = require('./HeartsDataModels');
 
 /**
- * TODO
- * 1. DO NOT return big card if a suit has more than 5 cards
- *
  * WARNING
  * 1. This model might return `undefined`
  * 2. This model DO NOT handle situation which self CANNOT follow lead
  */
 class HeartsCardPickerBigFirst extends HeartsCardPickerSkeleton {
   pick () {
-    const { deal, valid, round, followed } = this;
-    const played = deal.played;
+    const { deal, played, hand, round, followed } = this;
+    const valid = PowerCards.evaluate1(hand.valid, played);
     const { spades, hearts, diamonds, clubs } = valid;
     const { isFirst, lead, hasPenaltyCard } = round;
     const hasQueenSpade = spades.contains('QS');
     const hasTenClub = clubs.contains('TC');
+    const hasBig = suit => valid[suit].skip('QS', 'TC').length ? valid[suit].skip('QS', 'TC').max.power > -5 : false;
+    const hasFewPlayed = suit => played[suit].length <= 2;
+    const isShort = suit => valid[suit].length <= 5;
     let candidate;
     if (!isFirst && followed.max.gt(valid.max)) {
       return valid.max;
     }
-    if (!hasPenaltyCard && (isFirst || lead.isSpade) && played.spades.length <= 2) {
+    if (!hasPenaltyCard && (isFirst || lead.isSpade) && isShort('spades') && hasBig('spades') && hasFewPlayed('spades')) {
       candidate = hasQueenSpade ? spades.find('AS') || spades.find('KS') || spades.lt('QS').max : spades.lt('QS').max;
     }
-    if (!hasPenaltyCard && !candidate && (isFirst || lead.isClub) && played.clubs.length <= 2) {
+    if (!hasPenaltyCard && !candidate && (isFirst || lead.isClub) && isShort('clubs') && hasBig('clubs') && hasFewPlayed('clubs')) {
       candidate = hasTenClub ? clubs.gt('TC').max || clubs.lt('TC').max : clubs.lt('TC').max;
     }
-    if (!hasPenaltyCard && !candidate && (isFirst || lead.isDiamond) && played.diamonds.length <= 2) {
+    if (!hasPenaltyCard && !candidate && (isFirst || lead.isDiamond) && isShort('diamonds') && hasBig('diamonds') && hasFewPlayed('diamonds')) {
       candidate = diamonds.max;
     }
-    if (!candidate && deal.isHeartBroken && (isFirst || lead.isHeart) && played.hearts.length <= 2) {
+    if (!candidate && deal.isHeartBroken && (isFirst || lead.isHeart) && isShort('hearts') && hasFewPlayed('hearts')) {
       candidate = hearts.lt('5H').max;
     }
     return candidate;
