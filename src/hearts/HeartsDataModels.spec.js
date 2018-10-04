@@ -118,7 +118,7 @@ describe('Test Cards', function () {
     expect(cards.contains('JS')).toBe(false);
     expect(cards.covers('QH', 'AC')).toBe(true);
     expect(cards.covers('4C', '6D')).toBe(false);
-    expect(cards.map.get(0).value).toEqual('KS');
+    expect(cards.table.get(0).value).toEqual('KS');
   });
 
   it('should get strength of cards properly', function () {

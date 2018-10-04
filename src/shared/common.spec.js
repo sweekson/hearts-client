@@ -16,7 +16,7 @@ describe('Test Collection', function () {
     expect(list.contains('D')).toBe(false);
     expect(list.covers('A', 'B')).toBe(true);
     expect(list.covers('A', 'D')).toBe(false);
-    expect(list.map.get(0)).toEqual('A');
+    expect(list.table.get(0)).toEqual('A');
   });
 
   it('should push items', function () {
