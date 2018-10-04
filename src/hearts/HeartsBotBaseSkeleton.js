@@ -16,12 +16,20 @@ const Logger = require('../shared/Logger');
 class HeartsBotBaseSkeleton {
   constructor (options = {}) {
     this.options = options;
+    this.logger = options.logger || new Logger('info');
     this.roles = Object.assign({ shooter: true,  terminator: true }, options.roles);
     this.observed = Object.assign({ radicals: [], terminators: [] }, options.observed);
     this.strategies = Object.assign({ aggressive: false }, options.strategies);
     this.hasRadical = false;
     this.hasTerminator = false;
-    this.logger = options.logger || new Logger('info');
+    this.shootTheMoonBegin = false;
+    this.shootTheMoon = false;
+    this.shootTheMoonNow = false;
+    this.stopShootTheMoon = false;
+    this.stopOpponentShootTheMoon = false;
+  }
+
+  reset () {
     this.shootTheMoonBegin = false;
     this.shootTheMoon = false;
     this.shootTheMoonNow = false;
