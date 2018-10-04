@@ -13,6 +13,7 @@ Card.strength = {
  * TODO:
  * 1. Pick short suit first
  * 2. Add rules for medium cards
+ * 3. DO NOT pick small hearts too early if having big hearts
  */
 class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
   pick () {
