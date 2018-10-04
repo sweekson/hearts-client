@@ -23,35 +23,35 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
     const canPickSmallSpade = (spades.length - 2) <= (13 - played.spades.length) * .25;
     !this.startToShootTheMoon && (this.startToShootTheMoon = HeartsCardPickerMoonShooterV5.startToShootTheMoon({ deal, hand }));
     if (shouldPickMaxHeart) {
-      detail.rule = 2001;
+      detail.rule = 2101;
       return hearts.max;
     }
     if (weakerExcludesHearts.length && (hasQueenSpade || !weakerExcludesHearts.spades.length)) {
-      detail.rule = 2002;
+      detail.rule = 2102;
       return weakerExcludesHearts.min;
     }
     if (weakerExcludesHearts.spades.length && canPickSmallSpade /* && !hasQueenSpade */) {
-      detail.rule = 2003;
+      detail.rule = 2103;
       return weakerExcludesHearts.spades.min;
     }
     if (!this.startToShootTheMoon && !isHeartBroken) {
-      detail.rule = 2004;
+      detail.rule = 2104;
       return weak.diamonds.min || weak.clubs.skip('TC').min || weak.spades.skip('QS').min || spades.find('QS') || clubs.find('TC') || strong.min;
     }
     if (!this.startToShootTheMoon && isHeartBroken) {
-      detail.rule = 2005;
+      detail.rule = 2105;
       return weak.diamonds.min || weak.clubs.skip('TC').min || weak.spades.skip('QS').min || spades.find('QS') || clubs.find('TC') || hearts.min || strong.min;
     }
     if (strongExcludesHearts.length && !isHeartBroken) {
-      detail.rule = 2006;
+      detail.rule = 2106;
       return strongExcludesHearts.diamonds.min || strongExcludesHearts.clubs.min || strongExcludesHearts.spades.min;
     }
     if (strong.length && isHeartBroken) {
-      detail.rule = 2007;
+      detail.rule = 2107;
       return strong.diamonds.min || strong.clubs.min || strong.hearts.min || strong.spades.min;
     }
     const evaluated2 = PowerCards.evaluate2(hand.valid, played);
-    detail.rule = 2008;
+    detail.rule = 2108;
     return evaluated2.strongest;
   }
 
@@ -66,39 +66,39 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
     const hasPenaltyCard = round.played.contains('QS') || round.played.suit('H').length > 0;
     !this.startToShootTheMoon && (this.startToShootTheMoon = HeartsCardPickerMoonShooterV5.startToShootTheMoon({ deal, hand }));
     if (!canFollowLead) {
-      detail.rule = 2101;
+      detail.rule = 2201;
       return evaluated1.skip(...hearts.values, 'QS', 'TC').weakest || spades.find('QS') || clubs.find('TC') || strong.max || evaluated1.strongest;
     }
     if (hasPenaltyCard) {
-      detail.rule = 2102;
+      detail.rule = 2202;
       return evaluated1.gt(followed.max).min || evaluated1.max;
     }
     if (lead.isHeart) {
-      detail.rule = 2103;
+      detail.rule = 2203;
       return hearts.max;
     }
     if (this.startToShootTheMoon) {
-      detail.rule = 2104;
+      detail.rule = 2204;
       return strong.min || PowerCards.evaluate2(hand.valid, played).strongest;
     }
     if (weakest.power < -3) {
-      detail.rule = 2105;
+      detail.rule = 2205;
       return weaker.skip('TC').min || weakest;
     }
     if (isLessRound4 && hasPlayedQueenSpade) {
-      detail.rule = 2106;
+      detail.rule = 2206;
       return evaluated1.lt(followed.max).max || evaluated1.min;
     }
     if (lead.isSpade) {
-      detail.rule = 2107;
+      detail.rule = 2207;
       return spades.skip('QS').min || spades.find('QS');
     }
     if (lead.isClub) {
-      detail.rule = 2108;
+      detail.rule = 2208;
       return hasTenClub && followed.gt('TC').length ? clubs.find('TC') : clubs.skip('TC').min || clubs.find('TC');
     }
     // lead.isDiamond
-    detail.rule = 2109;
+    detail.rule = 2209;
     return diamonds.min;
   }
 
