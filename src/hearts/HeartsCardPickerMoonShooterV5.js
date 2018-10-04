@@ -10,8 +10,8 @@ Card.strength = {
 
 class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
   turn1() {
-    const { deal, played, hand, detail } = this;
-    const evaluated1 = PowerCards.evaluate1(hand.valid, played);
+    const { deal, played, hand, valid, detail } = this;
+    const evaluated1 = PowerCards.evaluate1(valid, played);
     const { spades, hearts, diamonds, clubs, strong, weak, weakest } = evaluated1;
     const weaker = weakest.power < -3 ? new PowerCards(weak.list.filter(v => v.power === weakest.power)) : new Cards();
     const dc = new PowerCards(diamonds.list.concat(clubs.list));
@@ -50,20 +50,21 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
       detail.rule = 2107;
       return strong.diamonds.min || strong.clubs.min || strong.hearts.min || strong.spades.min;
     }
-    const evaluated2 = PowerCards.evaluate2(hand.valid, played);
+    const evaluated2 = PowerCards.evaluate2(valid, played);
     detail.rule = 2108;
     return evaluated2.strongest;
   }
 
   turn2() {
-    const { deal, played, hand, round, lead, followed, canFollowLead, detail } = this;
-    const evaluated1 = PowerCards.evaluate1(hand.valid, played);
+    const { deal, played, hand, valid, round, lead, followed, canFollowLead, detail } = this;
+    const evaluated1 = PowerCards.evaluate1(valid, played);
     const { spades, hearts, diamonds, clubs, strong, weak, weakest } = evaluated1;
     const weaker = weakest.power < -3 ? new PowerCards(weak.list.filter(v => v.power === weakest.power)) : new Cards();
     const isLessRound4 = round.number < 4;
     const hasTenClub = clubs.contains('TC');
     const hasPlayedQueenSpade = round.played.contains('QS');
     const hasPenaltyCard = round.played.contains('QS') || round.played.suit('H').length > 0;
+    const shouldStopShootTheMoon = evaluated1.filter(v => v.power >= -2).length / hand.current.length < .5;
     !this.startToShootTheMoon && (this.startToShootTheMoon = HeartsCardPickerMoonShooterV5.startToShootTheMoon({ deal, hand }));
     if (!canFollowLead) {
       detail.rule = 2201;
@@ -71,15 +72,15 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
     }
     if (hasPenaltyCard) {
       detail.rule = 2202;
-      return evaluated1.gt(followed.max).min || evaluated1.max;
+      return valid.gt(followed.max).min || valid.max;
     }
     if (lead.isHeart) {
       detail.rule = 2203;
-      return hearts.max;
+      return shouldStopShootTheMoon ? hearts.min : hearts.max;
     }
     if (this.startToShootTheMoon) {
       detail.rule = 2204;
-      return strong.min || PowerCards.evaluate2(hand.valid, played).strongest;
+      return strong.min || PowerCards.evaluate2(valid, played).strongest;
     }
     if (weakest.power < -3) {
       detail.rule = 2205;
@@ -87,7 +88,7 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
     }
     if (isLessRound4 && hasPlayedQueenSpade) {
       detail.rule = 2206;
-      return evaluated1.lt(followed.max).max || evaluated1.min;
+      return valid.lt(followed.max).max || valid.min;
     }
     if (lead.isSpade) {
       detail.rule = 2207;
