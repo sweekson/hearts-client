@@ -14,20 +14,19 @@ class HeartsCardPickerBigFirst extends HeartsCardPickerSkeleton {
     const { isFirst, lead, hasPenaltyCard } = round;
     const hasQueenSpade = spades.contains('QS');
     const hasTenClub = clubs.contains('TC');
-    const hasBig = suit => valid[suit].skip('QS', 'TC').length ? valid[suit].skip('QS', 'TC').max.power > -5 : false;
     const hasFewPlayed = suit => played[suit].length <= 2;
     const isShort = suit => valid[suit].length <= 5;
     let candidate;
     if (!isFirst && followed.max.gt(valid.max)) {
       return valid.max;
     }
-    if (!hasPenaltyCard && (isFirst || lead.isSpade) && isShort('spades') && hasBig('spades') && hasFewPlayed('spades')) {
+    if (!hasPenaltyCard && (isFirst || lead.isSpade) && isShort('spades') && hasFewPlayed('spades')) {
       candidate = hasQueenSpade ? spades.find('AS') || spades.find('KS') || spades.lt('QS').max : spades.lt('QS').max;
     }
-    if (!hasPenaltyCard && !candidate && (isFirst || lead.isClub) && isShort('clubs') && hasBig('clubs') && hasFewPlayed('clubs')) {
+    if (!hasPenaltyCard && !candidate && (isFirst || lead.isClub) && isShort('clubs') && hasFewPlayed('clubs')) {
       candidate = hasTenClub ? clubs.gt('TC').max || clubs.lt('TC').max : clubs.lt('TC').max;
     }
-    if (!hasPenaltyCard && !candidate && (isFirst || lead.isDiamond) && isShort('diamonds') && hasBig('diamonds') && hasFewPlayed('diamonds')) {
+    if (!hasPenaltyCard && !candidate && (isFirst || lead.isDiamond) && isShort('diamonds') && hasFewPlayed('diamonds')) {
       candidate = diamonds.max;
     }
     if (!candidate && deal.isHeartBroken && (isFirst || lead.isHeart) && isShort('hearts') && hasFewPlayed('hearts')) {
