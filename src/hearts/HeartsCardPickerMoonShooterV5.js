@@ -157,15 +157,21 @@ HeartsCardPickerMoonShooterV5.startToShootTheMoon1 = ({ deal, hand }) => {
   const { played } = deal;
   const { current, gained } = hand;
   const { strong, weak } = PowerCards.evaluate1(current, played);
-  const ns = weak.spades.list.filter(v => v.power >= -2).length;
-  const nh = strong.hearts.length ? weak.hearts.list.filter(v => v.power >= -2).length : 0;
-  const nd = weak.diamonds.list.filter(v => v.power >= -2).length;
-  const nc = weak.clubs.list.filter(v => v.power >= -2).length;
-  const osl = strong.spades.length || ns ? 13 - current.spades.length - played.spades.length : (gained.contains('QS') ? 0 : 1);
-  const ohl = 13 - current.hearts.length - played.hearts.length;
-  const odl = strong.diamonds.length || nd ? 13 - current.diamonds.length - played.diamonds.length : 0;
-  const ocl = strong.clubs.length || nc ? 13 - current.clubs.length - played.clubs.length : 0;
-  return (strong.length + nh) * 3 + (ns + nd + nc) > (osl + ohl + odl + ocl);
+  const must = suit => {
+    const sl = strong[suit].length;
+    const ol = 13 - current[suit].length - played[suit].length;
+    if (suit === 'hearts') { return ol; }
+    return sl * 3 > ol ? ol : sl * 3;
+  };
+  const ns = weak.spades.list.filter(v => v.power >= -1).length;
+  const nh = strong.hearts.length ? weak.hearts.list.filter(v => v.power >= -1).length : 0;
+  const nd = weak.diamonds.list.filter(v => v.power >= -1).length;
+  const nc = weak.clubs.list.filter(v => v.power >= -1).length;
+  const osl = must('spades') || (gained.contains('QS') ? 0 : 1);
+  const ohl = must('hearts');
+  const odl = must('diamonds');
+  const ocl = must('clubs');
+  return (strong.length + nh + ns + nd + nc) * 3 > (osl + ohl + odl + ocl);
 };
 
 HeartsCardPickerMoonShooterV5.startToShootTheMoon2 = ({ deal, hand }) => {
