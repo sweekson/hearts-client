@@ -144,7 +144,7 @@ HeartsCardPickerMoonShooterV5.shouldShootTheMoon = ({ hand }) => {
   const hasOneLongHighSuit = hasLongHighSpades || hasLongHighHearts || hasLongHighDiamonds || hasLongHighClubs;
   const has2HighSpades = s.ge('JS').length >= 2 && s.ge('2S').length >= 3;
   const has3HighHearts = h.ge('JH').length >= 3;
-  const strength = current.strength + (hl < 5 ? 0 : h1 - 4);
+  const strength = current.strength + (hl < 5 ? 0 : hl - 4);
   if (strength > 18) { return true; }
   if (hasShortDiamonds && hasShortClubs && has2HighSpades && has3HighHearts) { return true; }
   if (hasOneHalfSuit && hasOneHighSpades && has3HighHearts) { return true; }
