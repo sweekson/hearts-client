@@ -140,11 +140,8 @@ class HeartsBotPowerEvaluation extends HeartsBotBaseSkeleton {
 
   shouldShootTheMoonNow (middleware) {
     if (this.didOpponentGetScore(middleware)) { return false; }
-    if (middleware.hand.valid.finds('2S', '3S', '2H', '3H', '2D', '3D', '3C').length > 3) { return false; }
     if (this.shootTheMoonNow) { return true; }
-    const { deal: { played } , hand: { current } } = middleware;
-    const evaluated = PowerRiskCards.evaluate(RiskCards.evaluate(current, played), played);
-    return evaluated.strong.length >= Math.ceil(current.length * .5);
+    return HeartsCardPickerMoonShooterV5.startToShootTheMoon2(middleware);
   }
 
   shouldStopOpponentShootTheMoon (middleware) {
