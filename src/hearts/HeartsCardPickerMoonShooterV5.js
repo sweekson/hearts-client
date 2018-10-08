@@ -3,8 +3,8 @@ const HeartsCardPickerSmallFirst = require('./HeartsCardPickerSmallFirst');
 const { Card, Cards, PowerCards  } = require('./HeartsDataModels');
 
 Card.strength = {
-  spades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
-  hearts: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
+  spades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 5, 6],
+  hearts: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 5, 6],
   diamonds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
   clubs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
 };
@@ -144,7 +144,8 @@ HeartsCardPickerMoonShooterV5.shouldShootTheMoon = ({ hand }) => {
   const hasOneLongHighSuit = hasLongHighSpades || hasLongHighHearts || hasLongHighDiamonds || hasLongHighClubs;
   const has2HighSpades = s.ge('JS').length >= 2 && s.ge('2S').length >= 3;
   const has3HighHearts = h.ge('JH').length >= 3;
-  if (current.strength >= 16) { return true; }
+  const strength = current.strength + (hl < 5 ? 0 : h1 - 4);
+  if (strength > 18) { return true; }
   if (hasShortDiamonds && hasShortClubs && has2HighSpades && has3HighHearts) { return true; }
   if (hasOneHalfSuit && hasOneHighSpades && has3HighHearts) { return true; }
   if (hasHalfSpades && has3HighestSpades && has3HighHearts) { return true; }
