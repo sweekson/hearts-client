@@ -66,12 +66,12 @@ class HeartsBotPowerEvaluation extends HeartsBotBaseSkeleton {
     const { round } = middleware;
     const { detail, hasPenaltyCard } = round;
     const shootTheMoon = this.shootTheMoon;
-    const shootTheMoonNow = this.shootTheMoonNow = this.shouldShootTheMoonNow(middleware);
     const stopOpponentShootTheMoon = this.stopOpponentShootTheMoon = this.shouldStopOpponentShootTheMoon(middleware);
     const valid = this.obtainEvaluatedCards(middleware, stopOpponentShootTheMoon);
-    Object.assign(detail, { shootTheMoon, shootTheMoonNow, stopOpponentShootTheMoon, hasPenaltyCard });
+    Object.assign(detail, { shootTheMoon, stopOpponentShootTheMoon, hasPenaltyCard });
+    !shootTheMoon && this.shouldShootTheMoonNow(middleware);
     this.shooter.initialize(middleware);
-    if (shootTheMoon || shootTheMoonNow) {
+    if (shootTheMoon || this.shootTheMoonNow) {
       return this.shooter.pick();
     }
     return HeartsCardPickerShortFirst.create(Object.assign(middleware, { valid })).pick();
@@ -139,9 +139,10 @@ class HeartsBotPowerEvaluation extends HeartsBotBaseSkeleton {
   }
 
   shouldShootTheMoonNow (middleware) {
+    const { detail } = middleware.round;
     if (this.didOpponentGetScore(middleware)) { return false; }
     if (this.shootTheMoonNow) { return true; }
-    return HeartsCardPickerMoonShooterV5.startToShootTheMoon2(middleware);
+    return this.shootTheMoonNow = detail.shootTheMoonNow = HeartsCardPickerMoonShooterV5.startToShootTheMoon2(middleware);
   }
 
   shouldStopOpponentShootTheMoon (middleware) {
