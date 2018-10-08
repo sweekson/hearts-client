@@ -36,10 +36,10 @@ HeartsCardPickerMoonShooterV2.shouldShootTheMoon = ({ hand }) => {
   const hasLongHighDiamonds = hasLongDiamonds && hasOneHighDiamonds;
   const hasLongHighClubs = hasLongClubs && hasOneHighClubs;
   const hasOneLongHighSuit = hasLongHighSpades || hasLongHighHearts || hasLongHighDiamonds || hasLongHighClubs;
-  const has2HighSpades = hasOneHighSpades && s.ge('8S').length >= 2;
-  const has3HighHearts = hasOneHighHearts && h.ge('8H').length >= 3;
-  const has2HighDiamonds = hasOneHighDiamonds && d.ge('8D').length >= 2;
-  const has2HighClubs = hasOneHighClubs && c.ge('8C').length >= 2;
+  const has2HighSpades = hasOneHighSpades && s.ge('TS').length >= 2;
+  const has3HighHearts = hasOneHighHearts && h.ge('9H').length >= 3;
+  const has2HighDiamonds = hasOneHighDiamonds && d.ge('TD').length >= 2;
+  const has2HighClubs = hasOneHighClubs && c.ge('TC').length >= 2;
   const hasTwoHighCards = [has2HighSpades, has3HighHearts, has2HighDiamonds, has2HighClubs].filter(v => v).length >= 2;
   if (hasTwoHighCards) { return true; }
   if (hasOneHalfSuit && hasOneHighSpades && hasBigHearts && hasBigDiamonds && hasBigClubs) { return true; }
