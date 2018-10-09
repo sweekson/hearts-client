@@ -3,13 +3,6 @@ const HeartsCardPickerSmallFirst = require('./HeartsCardPickerSmallFirst');
 const HeartsCardPickerBigMediumFirst = require('./HeartsCardPickerBigMediumFirst');
 const { Card, PowerCards  } = require('./HeartsDataModels');
 
-Card.strength = {
-  spades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 5, 6],
-  hearts: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 5, 6],
-  diamonds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
-  clubs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
-};
-
 /**
  * TODO:
  * 1. Pick short suit first
@@ -58,8 +51,9 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
 
   turn2 () {
     const { played, valid, round, lead, followed, canFollowLead, detail } = this;
-    const evaluated1 = PowerCards.evaluate1(valid, played);
-    const { spades, hearts, diamonds, clubs, strong } = evaluated1;
+    const eva1 = PowerCards.evaluate1(valid, played);
+    const eva2 = PowerCards.evaluate2(valid, played);
+    const { spades, hearts, diamonds, clubs, strong } = eva1;
     const QS = spades.find('QS');
     const TC = clubs.find('TC');
     const small = HeartsCardPickerSmallFirst.create(this).pick();
@@ -72,7 +66,7 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
     !this.startToShootTheMoon && (this.startToShootTheMoon = HeartsCardPickerMoonShooterV5.startToShootTheMoon2(this));
     if (!canFollowLead) {
       detail.rule = 2201;
-      return evaluated1.skip(...hearts.values, 'QS', 'TC').weakest || QS || TC || strong.max || evaluated1.strongest;
+      return eva1.skip(...hearts.values, 'QS', 'TC').weakest || QS || TC || strong.max || eva1.strongest;
     }
     if (hasPenaltyCard) {
       detail.rule = 2202;
@@ -80,11 +74,11 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
     }
     if (lead.isHeart) {
       detail.rule = 2203;
-      return shouldStopShootTheMoon || !hearts.gt(followed.max).length ? hearts.min : hearts.max;
+      return shouldStopShootTheMoon || hearts.max.lt(followed.max) ? hearts.min : hearts.max;
     }
     if (this.startToShootTheMoon) {
       detail.rule = 2204;
-      return strong.min || PowerCards.evaluate2(valid, played).strongest;
+      return strong.min || eva2.strongest;
     }
     if (small) {
       detail.rule = 2205;
