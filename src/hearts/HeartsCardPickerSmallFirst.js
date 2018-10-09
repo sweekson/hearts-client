@@ -4,13 +4,13 @@ const { Cards, PowerCards  } = require('./HeartsDataModels');
 /**
  * WARNING
  * 1. This model might return `undefined`
- * 2. This model DO NOT handle situation which self CAN NOT follow lead
  */
 class HeartsCardPickerSmallFirst extends HeartsCardPickerSkeleton {
   pick () {
-    const { played, valid, round } = this;
+    const { played, valid, canFollowLead, round } = this;
     const eva1 = PowerCards.evaluate1(valid, played);
-    const { spades, diamonds, clubs } = eva1.skip('QS', 'TC');
+    const eva2 = PowerCards.evaluate2(valid, played);
+    const { spades, hearts, diamonds, clubs, strong } = eva1.skip('QS', 'TC');
     const { isFirst, lead } = round;
     const hasSmall = suit => valid[suit].length ? valid[suit].min.power < -3 : false;
     const hasFewPlayed = suit => played[suit].length <= 3;
@@ -28,6 +28,13 @@ class HeartsCardPickerSmallFirst extends HeartsCardPickerSkeleton {
     candidates.length > 1 && candidates.sort((a, b) => valid.suit(a.suit).length - valid.suit(b.suit).length);
     if (isFirst) {
       return candidates.length ? candidates.first : undefined;
+    }
+    const weak = eva2.skip(...hearts.values, ...strong.values, 'QS');
+    const weaker1 = weak.filter(v => v.power - (round.number < 9 ? 1 : 0) <= weak.weakest.power);
+    const weaker2 = weaker1.sort((a, b) => valid.suit(a.suit).length - valid.suit(b.suit).length);
+    const weaker3 = weaker2.filter(v => valid.suit(v.suit).length === valid.suit(weaker2.first.suit).length);
+    if (!canFollowLead) {
+      return weaker3.weakest;
     }
     if (lead.isSpade && hasSmall('spades') && hasFewPlayed('spades')) {
       return spades.min;
