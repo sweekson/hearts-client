@@ -9,23 +9,36 @@ const { PowerCards  } = require('./HeartsDataModels');
 class HeartsCardPickerSmallFirst extends HeartsCardPickerSkeleton {
   pick () {
     const { played, valid, round } = this;
-    const evaluated1 = PowerCards.evaluate1(valid, played);
-    const { spades, diamonds, clubs } = evaluated1.skip('QS', 'TC');
+    const eva1 = PowerCards.evaluate1(valid, played);
+    const { spades, diamonds, clubs } = eva1.skip('QS', 'TC');
     const { isFirst, lead } = round;
     const hasSmall = suit => valid[suit].length ? valid[suit].min.power < -3 : false;
     const hasFewPlayed = suit => played[suit].length <= 3;
     const isShort = suit => valid[suit].length - 1 <= (13 - played[suit].length + round.played[suit].length) * .25;
-    let candidate;
-    if (!candidate && hasSmall('diamonds') && hasFewPlayed('diamonds') && (isFirst || lead.isDiamond)) {
-      candidate = isFirst ? (isShort('diamonds') ? diamonds.min : null) : diamonds.min;
+    const candidates = [];
+    if (isFirst && hasSmall('spades') && isShort('spades') && hasFewPlayed('spades')) {
+      candidates.push(spades.min);
     }
-    if (!candidate && hasSmall('clubs') && hasFewPlayed('clubs') && (isFirst || lead.isClub)) {
-      candidate = isFirst ? (isShort('clubs') ? clubs.min : null) : clubs.min;
+    if (isFirst && hasSmall('diamonds') && isShort('diamonds') && hasFewPlayed('diamonds')) {
+      candidates.push(diamonds.min);
     }
-    if (hasSmall('spades') && hasFewPlayed('spades') && (isFirst || lead.isSpade)) {
-      candidate = isFirst ? (isShort('spades') ? spades.min : null) : spades.min;
+    if (isFirst && hasSmall('clubs') && isShort('clubs') && hasFewPlayed('clubs')) {
+      candidates.push(clubs.min);
     }
-    return candidate;
+    candidates.length > 1 && candidates.sort((a, b) => valid.suit(a.suit).length - valid.suit(b.suit).length);
+    if (isFirst) {
+      return candidates.length ? candidates.first : undefined;
+    }
+    if (lead.isSpade && hasSmall('spades') && hasFewPlayed('spades')) {
+      return spades.min;
+    }
+    if (lead.isDiamond && hasSmall('diamonds') && hasFewPlayed('diamonds')) {
+      return diamonds.min;
+    }
+    if (lead.isClub && hasSmall('clubs') && hasFewPlayed('clubs')) {
+      return clubs.min;
+    }
+    return undefined;
   }
 }
 
