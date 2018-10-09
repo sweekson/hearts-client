@@ -8,9 +8,9 @@ const { PowerCards  } = require('./HeartsDataModels');
  */
 class HeartsCardPickerBigFirst extends HeartsCardPickerSkeleton {
   pick () {
-    const { deal, played, hand, round, followed } = this;
+    const { played, hand, round, followed } = this;
     const valid = PowerCards.evaluate1(hand.valid, played);
-    const { spades, hearts, diamonds, clubs } = valid;
+    const { spades, diamonds, clubs } = valid;
     const { isFirst, lead, hasPenaltyCard } = round;
     const hasQueenSpade = spades.contains('QS') || hand.gained.contains('QS');
     const hasTenClub = clubs.contains('TC') || hand.gained.contains('TC');
@@ -28,9 +28,6 @@ class HeartsCardPickerBigFirst extends HeartsCardPickerSkeleton {
     }
     if (!hasPenaltyCard && !candidate && (isFirst || lead.isDiamond) && isShort('diamonds') && hasFewPlayed('diamonds')) {
       candidate = diamonds.max;
-    }
-    if (!candidate && deal.isHeartBroken && isFirst && isShort('hearts') && hasFewPlayed('hearts')) {
-      candidate = hearts.lt('5H').max;
     }
     return candidate;
   }
