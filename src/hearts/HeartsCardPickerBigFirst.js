@@ -29,7 +29,7 @@ class HeartsCardPickerBigFirst extends HeartsCardPickerSkeleton {
     if (!hasPenaltyCard && !candidate && (isFirst || lead.isDiamond) && isShort('diamonds') && hasFewPlayed('diamonds')) {
       candidate = diamonds.max;
     }
-    if (!candidate && deal.isHeartBroken && (isFirst || lead.isHeart) && isShort('hearts') && hasFewPlayed('hearts')) {
+    if (!candidate && deal.isHeartBroken && isFirst && isShort('hearts') && hasFewPlayed('hearts')) {
       candidate = hearts.lt('5H').max;
     }
     return candidate;
