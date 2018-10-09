@@ -1,10 +1,8 @@
 const HeartsBotBaseSkeleton = require('./HeartsBotBaseSkeleton');
-const { Cards, Card, RiskCards, PowerRiskCards, PowerCards  } = require('./HeartsDataModels');
-const HeartsCardPasserEvaluation = require('./HeartsCardPasserEvaluation');
-const HeartsCardPickerBigFirst = require('./HeartsCardPickerBigFirst');
+const { RiskCards, PowerRiskCards, PowerCards  } = require('./HeartsDataModels');
+const HeartsCardPasserImpactEvaluatorV2 = require('./HeartsCardPasserImpactEvaluatorV2');
 const HeartsCardPickerShortFirst = require('./HeartsCardPickerShortFirst');
 const HeartsCardExposerBase = require('./HeartsCardExposerBase');
-const HeartsCardPickerMoonShooterV1 = require('./HeartsCardPickerMoonShooterV1');
 const HeartsCardPickerMoonShooterV2 = require('./HeartsCardPickerMoonShooterV2');
 const HeartsCardPickerMoonShooterV5 = require('./HeartsCardPickerMoonShooterV5');
 
@@ -87,7 +85,7 @@ class HeartsBotPowerEvaluation extends HeartsBotBaseSkeleton {
     const candidates2 = candidates1.skip(...hearts.values, 'AS', 'KS', 'QS').sort(true, true);
     const { weak } = candidates1;
     if (!this.shootTheMoon) {
-      return HeartsCardPasserEvaluation.create(middleware).pass();
+      return HeartsCardPasserImpactEvaluatorV2.create(middleware).pass();
     }
     if (weak.length >= 3) {
       return weak.select(0, 3);
