@@ -12,8 +12,8 @@ class HeartsCardPickerBigFirst extends HeartsCardPickerSkeleton {
     const valid = PowerCards.evaluate1(hand.valid, played);
     const { spades, hearts, diamonds, clubs } = valid;
     const { isFirst, lead, hasPenaltyCard } = round;
-    const hasQueenSpade = spades.contains('QS');
-    const hasTenClub = clubs.contains('TC');
+    const hasQueenSpade = spades.contains('QS') || hand.gained.contains('QS');
+    const hasTenClub = clubs.contains('TC') || hand.gained.contains('TC');
     const hasFewPlayed = suit => played[suit].length <= 2;
     const isShort = suit => valid[suit].length <= 5;
     let candidate;
