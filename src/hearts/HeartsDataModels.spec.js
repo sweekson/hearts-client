@@ -56,9 +56,9 @@ describe('Test Card', function () {
     const qh = new Card('QH');
     const jc = new Card('JC');
 
-    expect(as.strength).toEqual(15);
-    expect(qh.strength).toEqual(4);
-    expect(jc.strength).toEqual(0);
+    expect(as.strength).toEqual(6);
+    expect(qh.strength).toEqual(2);
+    expect(jc.strength).toEqual(1);
   });
 });
 
@@ -126,10 +126,10 @@ describe('Test Cards', function () {
     const hearts = Cards.instanciate(Cards.hearts);
     const diamonds = Cards.instanciate(Cards.diamonds);
     const clubs = Cards.instanciate(Cards.clubs);
-    expect(spades.strength).toEqual(43);
-    expect(hearts.strength).toEqual(21);
+    expect(spades.strength).toEqual(16);
+    expect(hearts.strength).toEqual(14);
     expect(diamonds.strength).toEqual(10);
-    expect(clubs.strength).toEqual(6);
+    expect(clubs.strength).toEqual(10);
   });
 
   it('should be separated by suit', function () {
