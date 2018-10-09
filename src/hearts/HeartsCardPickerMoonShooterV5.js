@@ -1,6 +1,6 @@
 const HeartsCardPickerSkeleton = require('./HeartsCardPickerSkeleton');
 const HeartsCardPickerSmallFirst = require('./HeartsCardPickerSmallFirst');
-const { Card, Cards, PowerCards  } = require('./HeartsDataModels');
+const { Card, PowerCards  } = require('./HeartsDataModels');
 
 Card.strength = {
   spades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 5, 6],
@@ -52,7 +52,7 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
     }
     if (isHeartBroken) {
       detail.rule = 210;
-      return small || weak.diamonds.min || weak.clubs.skip('TC').min || weak.spades.skip('QS').min || hearts.lt(strong.hearts.min).max || hearts.min || TC || QS || strong.min;
+      return small || weak.diamonds.min || weak.clubs.skip('TC').min || weak.spades.skip('QS').min || (strong.hearts.min && hearts.lt(strong.hearts.min).max) || hearts.min || TC || QS || strong.min;
     }
     detail.rule = 210;
     return small || weak.diamonds.min || weak.clubs.skip('TC').min || weak.spades.skip('QS').min || TC || QS || strong.min;
