@@ -9,7 +9,7 @@ class HeartsCardPickerSmallFirst extends HeartsCardPickerSkeleton {
   pick () {
     const { played, valid, round } = this;
     const evaluated1 = PowerCards.evaluate1(valid, played);
-    const { spades, diamonds, clubs } = evaluated1;
+    const { spades, diamonds, clubs } = evaluated1.skip('QS', 'TC');
     const { isFirst, lead } = round;
     const hasSmall = suit => valid[suit].length ? valid[suit].min.power < -3 : false;
     const hasFewPlayed = suit => played[suit].length <= 3;
