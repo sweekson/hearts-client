@@ -11,6 +11,7 @@ class HeartsCardPickerBigMediumFirst extends HeartsCardPickerSkeleton {
     const { played, valid, round, followed } = this;
     const eva1 = PowerCards.evaluate1(valid, played);
     const eva2 = PowerCards.evaluate2(valid, played);
+    const eva3 = PowerCards.evaluate3(valid, played);
     const medium = valid.skip('QS', 'TC').filter(v => {
       const val = v.value;
       const pl = played.suit(v.suit).length;
@@ -66,7 +67,7 @@ class HeartsCardPickerBigMediumFirst extends HeartsCardPickerSkeleton {
       return candidates.first;
     }
     if (isFirst) {
-      return eva2.medium.sort((a, b) => valid.suit(b.suit).length - valid.suit(a.suit).length).first;
+      return eva3.strongest;
     }
     if (lead.isSpade && spades.length) {
       return isShort('spades') ? spades.min : unseen('spades') >= 4 ? big.spades.min : big.spades.max;
