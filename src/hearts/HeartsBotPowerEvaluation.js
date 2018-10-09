@@ -131,11 +131,11 @@ class HeartsBotPowerEvaluation extends HeartsBotBaseSkeleton {
   }
 
   shouldShootTheMoon(middleware) {
-    if (!this.roles.shooter || this.hasRadical || this.hasTerminator) { return false; }
+    if (!this.roles.shooter) { return false; }
     if (this.strategies.aggressive) {
-      return HeartsCardPickerMoonShooterV5.shouldShootTheMoon(middleware);
+      return HeartsCardPickerMoonShooterV2.shouldShootTheMoon(middleware);
     }
-    return HeartsCardPickerMoonShooterV1.shouldShootTheMoon(middleware);
+    return HeartsCardPickerMoonShooterV5.shouldShootTheMoon(middleware);
   }
 
   shouldShootTheMoonNow (middleware) {
