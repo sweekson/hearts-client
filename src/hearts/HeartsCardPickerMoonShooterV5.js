@@ -1,5 +1,6 @@
 const HeartsCardPickerSkeleton = require('./HeartsCardPickerSkeleton');
 const HeartsCardPickerSmallFirst = require('./HeartsCardPickerSmallFirst');
+const HeartsCardPickerBigMediumFirst = require('./HeartsCardPickerBigMediumFirst');
 const { Card, PowerCards  } = require('./HeartsDataModels');
 
 Card.strength = {
@@ -30,6 +31,7 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
     const QS = spades.find('QS');
     const TC = clubs.find('TC');
     const small = HeartsCardPickerSmallFirst.create(this).pick();
+    const medium = HeartsCardPickerBigMediumFirst.create(this).pick();
     const strongExcludesHearts = strong.skip(...hearts.values);
     // const hasQueenSpade = spades.contains('QS');
     !this.startToShootTheMoon && (this.startToShootTheMoon = HeartsCardPickerMoonShooterV5.startToShootTheMoon2(this));
@@ -50,12 +52,8 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
       detail.rule = 2104;
       return evaluated2.strongest;
     }
-    if (isHeartBroken) {
-      detail.rule = 210;
-      return small || weak.diamonds.min || weak.clubs.skip('TC').min || weak.spades.skip('QS').min || (strong.hearts.min && hearts.lt(strong.hearts.min).max) || hearts.min || TC || QS || strong.min;
-    }
-    detail.rule = 210;
-    return small || weak.diamonds.min || weak.clubs.skip('TC').min || weak.spades.skip('QS').min || TC || QS || strong.min;
+    detail.rule = 2105;
+    return small || medium || strong.min || TC || QS;
   }
 
   turn2 () {
@@ -65,6 +63,7 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
     const QS = spades.find('QS');
     const TC = clubs.find('TC');
     const small = HeartsCardPickerSmallFirst.create(this).pick();
+    const medium = HeartsCardPickerBigMediumFirst.create(this).pick();
     const isLessRound4 = round.number < 4;
     const hasTenClub = clubs.contains('TC');
     const hasPlayedQueenSpade = round.played.contains('QS');
@@ -91,20 +90,24 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
       detail.rule = 2205;
       return small;
     }
-    if (isLessRound4 && hasPlayedQueenSpade) {
+    if (medium) {
       detail.rule = 2206;
+      return medium;
+    }
+    if (isLessRound4 && hasPlayedQueenSpade) {
+      detail.rule = 2207;
       return valid.lt(followed.max).max || valid.min;
     }
     if (lead.isSpade) {
-      detail.rule = 2207;
+      detail.rule = 2208;
       return spades.skip('QS').min || QS;
     }
     if (lead.isClub) {
-      detail.rule = 2208;
+      detail.rule = 2209;
       return hasTenClub && followed.gt('TC').length ? TC : clubs.skip('TC').min || TC;
     }
     // lead.isDiamond
-    detail.rule = 2209;
+    detail.rule = 2210;
     return diamonds.min;
   }
 }
