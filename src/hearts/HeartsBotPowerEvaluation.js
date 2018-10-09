@@ -63,18 +63,19 @@ class HeartsBotPowerEvaluation extends HeartsBotBaseSkeleton {
   }
 
   findBestCard(middleware) {
-    const { round } = middleware;
+    const { hand, round } = middleware;
     const { detail, hasPenaltyCard } = round;
     const shootTheMoon = this.shootTheMoon;
     const stopOpponentShootTheMoon = this.stopOpponentShootTheMoon = this.shouldStopOpponentShootTheMoon(middleware);
     const valid = this.obtainEvaluatedCards(middleware, stopOpponentShootTheMoon);
     Object.assign(detail, { shootTheMoon, stopOpponentShootTheMoon, hasPenaltyCard });
     !shootTheMoon && this.shouldShootTheMoonNow(middleware);
+    stopOpponentShootTheMoon && hand.valid.clear().push(...valid.list);
     this.shooter.initialize(middleware);
     if (shootTheMoon || this.shootTheMoonNow) {
       return this.shooter.pick();
     }
-    return HeartsCardPickerShortFirst.create(Object.assign(middleware, { valid })).pick();
+    return HeartsCardPickerShortFirst.create(middleware).pick();
   }
 
   findPassingCards(middleware) {
