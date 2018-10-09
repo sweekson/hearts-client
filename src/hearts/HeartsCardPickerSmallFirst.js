@@ -1,5 +1,5 @@
 const HeartsCardPickerSkeleton = require('./HeartsCardPickerSkeleton');
-const { PowerCards  } = require('./HeartsDataModels');
+const { Cards, PowerCards  } = require('./HeartsDataModels');
 
 /**
  * WARNING
@@ -15,7 +15,7 @@ class HeartsCardPickerSmallFirst extends HeartsCardPickerSkeleton {
     const hasSmall = suit => valid[suit].length ? valid[suit].min.power < -3 : false;
     const hasFewPlayed = suit => played[suit].length <= 3;
     const isShort = suit => valid[suit].length - 1 <= (13 - played[suit].length + round.played[suit].length) * .25;
-    const candidates = [];
+    const candidates = new Cards();
     if (isFirst && hasSmall('spades') && isShort('spades') && hasFewPlayed('spades')) {
       candidates.push(spades.min);
     }
