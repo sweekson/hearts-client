@@ -26,7 +26,7 @@ class HeartsCardPasserEvaluation extends HeartsCardPasserBase {
   pass() {
     const { cards, deal, spades, clubs, candidates } = this;
 
-    const keepSmallSpade = cards.contains('TC') && spades.le('QS').length >= 4;
+    const keepSmallSpade = cards.contains('QS') && spades.le('QS').length >= 4;
     keepSmallSpade && candidates.discard(...spades.lt('QS').values);
 
     const keepSmallClub = cards.contains('TC') && clubs.le('TC').length >= 4;
