@@ -66,7 +66,7 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
     !this.startToShootTheMoon && (this.startToShootTheMoon = HeartsCardPickerMoonShooterV5.startToShootTheMoon2(this));
     if (!canFollowLead) {
       detail.rule = 2201;
-      return eva1.skip(...hearts.values, 'QS', 'TC').weakest || QS || TC || strong.max || eva1.strongest;
+      return TC || small || strong.diamonds.max || strong.clubs.max || strong.spades.skip('QS').max || QS || strong.hearts.max || hearts.max;
     }
     if (hasPenaltyCard) {
       detail.rule = 2202;
