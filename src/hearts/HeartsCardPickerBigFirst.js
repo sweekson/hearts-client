@@ -14,6 +14,8 @@ class HeartsCardPickerBigFirst extends HeartsCardPickerSkeleton {
     const { isFirst, lead, hasPenaltyCard } = round;
     const hasQueenSpade = spades.contains('QS') || hand.gained.contains('QS');
     const hasTenClub = clubs.contains('TC') || hand.gained.contains('TC');
+    const canPickSpade = !spades.contains('QS', 'KS', 'AS') || played.contains('QS') || played.spades.length >= 10;
+    const canPickClub = !clubs.ge('TC').length || clubs.le('9H').length >= 2 || played.clubs.length >= 10;
     const hasFewPlayed = suit => played[suit].length <= 2;
     const hasBig = suit => eva1[suit].filter(v => v.power > -3).length > 0;
     const isShort = suit => valid[suit].length - 1 <= (13 - played[suit].length + round.played[suit].length) * .25;
@@ -21,10 +23,10 @@ class HeartsCardPickerBigFirst extends HeartsCardPickerSkeleton {
     if (!isFirst && followed.max.gt(valid.max)) {
       return valid.max;
     }
-    if (isFirst && isShort('spades') && hasBig('spades') && hasFewPlayed('spades')) {
+    if (isFirst && canPickSpade && isShort('spades') && hasBig('spades') && hasFewPlayed('spades')) {
       candidates.push(hasQueenSpade ? spades.find('AS') || spades.find('KS') || spades.lt('QS').max : spades.lt('QS').max);
     }
-    if (isFirst && isShort('clubs') && hasBig('clubs') && hasFewPlayed('clubs')) {
+    if (isFirst && canPickClub && isShort('clubs') && hasBig('clubs') && hasFewPlayed('clubs')) {
       candidates.push(hasTenClub ? clubs.gt('TC').max || clubs.lt('TC').max : clubs.lt('TC').max);
     }
     if (isFirst && isShort('diamonds') && hasBig('diamonds') && hasFewPlayed('diamonds')) {
