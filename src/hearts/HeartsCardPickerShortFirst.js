@@ -5,6 +5,7 @@ const { Cards, PowerCards  } = require('./HeartsDataModels');
 /**
  * TODO
  * 1. Win the stack of a round if there is only one penalty card
+ * 2. When lead cards is Spade, win the stack by KS / AS even stack contains Hearts
  */
 class HeartsCardPickerShortFirst extends HeartsCardPickerSkeleton {
   initialize (middleware) {
