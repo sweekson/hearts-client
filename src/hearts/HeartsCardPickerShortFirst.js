@@ -44,12 +44,20 @@ class HeartsCardPickerShortFirst extends HeartsCardPickerSkeleton {
   }
 
   turn1 () {
-    const { played, valid, evaluated1, evaluated2, round, detail } = this;
-    const { spades, clubs } = valid;
+    const { played, hand, valid, evaluated1, evaluated2, round, detail } = this;
+    const { spades, hearts, clubs } = valid;
     const { strong } = evaluated1;
     const { medium } = evaluated2;
-    const canPickSpade = !spades.contains('QS', 'KS', 'AS') || played.contains('QS');
-    const candidates = canPickSpade ? medium : medium.skip(...spades.values);
+    const candidates = new PowerCards(medium.list);
+    const kidnapped1 = new Cards();
+    const canPickSpade = !spades.contains('QS', 'KS', 'AS') || played.contains('QS') || played.spades.length >= 10;
+    const canPickHeart = !hand.current.hearts.gt('TH').length || hand.current.hearts.le('TH').length >= 2 || played.hearts.length >= 10;
+    const canPickClub = !clubs.ge('TC').length || clubs.le('9H').length >= 2 || played.clubs.length >= 10;
+
+    !canPickSpade && candidates.discard(...spades.values) && kidnapped1.push(...spades.list);
+    !canPickHeart && candidates.discard(...hearts.values) && kidnapped1.push(...hearts.list);
+    !canPickClub && candidates.discard(...clubs.values) && kidnapped1.push(...clubs.list);
+
     const safe = candidates.skip(...strong.values).filter(v => v.power <= round.number < 5 ? 2 : (round.number < 9 ? 1 : 0));
     const safer1 = safe.sort((a, b) => valid.suit(a.suit).length - valid.suit(b.suit).length);
     const safer2 = safer1.filter(v => valid.suit(v.suit).length === valid.suit(safer1.first.suit).length);
@@ -57,10 +65,11 @@ class HeartsCardPickerShortFirst extends HeartsCardPickerSkeleton {
     const riskier1 = risky.filter(v => v.power - (round.number < 9 ? 1 : 0) <= risky.weakest.power);
     const riskier2 = riskier1.sort((a, b) => valid.suit(a.suit).length - valid.suit(b.suit).length);
     const riskier3 = riskier2.filter(v => valid.suit(v.suit).length === valid.suit(riskier2.first.suit).length);
+    const kidnapped2 = PowerCards.evaluate4(kidnapped1.skip(...strong.values), played);
     const TC = !strong.contains('TC') ? clubs.find('TC') : null;
     const QS = !strong.contains('QS') ? spades.find('QS') : null;
     detail.rule = 1101;
-    return valid.find('2C') || HeartsCardPickerBigFirst.create(this).pick() || safer2.weakest || riskier3.weakest || TC || QS || strong.min;
+    return valid.find('2C') || HeartsCardPickerBigFirst.create(this).pick() || safer2.weakest || riskier3.weakest || kidnapped2.weakest || TC || QS || strong.min;
   }
 
   turn2 () {
