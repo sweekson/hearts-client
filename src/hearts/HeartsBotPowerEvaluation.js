@@ -31,6 +31,7 @@ class HeartsBotPowerEvaluation extends HeartsBotBaseSkeleton {
     const { hand } = middleware;
     this.shootTheMoon = hand.detail.shootTheMoon = this.shouldShootTheMoon(middleware);
     this.shootTheMoonBegin = hand.detail.shootTheMoonBegin = this.shootTheMoon;
+    this.shootTheMoonNow = false;
     this.shooter = new HeartsCardPickerMoonShooterV5();
   }
 
