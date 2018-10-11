@@ -35,13 +35,13 @@ class HeartsCardPickerBigFirst extends HeartsCardPickerSkeleton {
     if (isFirst) {
       return candidates.length ? candidates.first : undefined;
     }
-    if (lead.isSpade && !hasPenaltyCard && isShort('spades')) {
+    if (lead.isSpade && !hasPenaltyCard && isShort('spades') && hasFewPlayed('spades')) {
       return hasQueenSpade ? spades.find('AS') || spades.find('KS') || spades.lt('QS').max : spades.lt('QS').max;
     }
-    if (lead.isClub && !hasPenaltyCard && isShort('clubs')) {
+    if (lead.isClub && !hasPenaltyCard && isShort('clubs') && hasFewPlayed('clubs')) {
       return hasTenClub ? clubs.gt('TC').max || clubs.lt('TC').max : clubs.lt('TC').max;
     }
-    if (lead.isDiamond && !hasPenaltyCard && isShort('diamonds')) {
+    if (lead.isDiamond && !hasPenaltyCard && isShort('diamonds') && hasFewPlayed('diamonds')) {
       return diamonds.max;
     }
     return undefined;
