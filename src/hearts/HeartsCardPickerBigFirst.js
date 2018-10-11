@@ -16,7 +16,7 @@ class HeartsCardPickerBigFirst extends HeartsCardPickerSkeleton {
     const hasTenClub = clubs.contains('TC') || hand.gained.contains('TC');
     const hasFewPlayed = suit => played[suit].length <= 2;
     const hasBig = suit => eva1[suit].filter(v => v.power > -3).length > 0;
-    const isShort = suit => valid[suit].length - 2 <= (13 - played[suit].length + round.played[suit].length) * .25;
+    const isShort = suit => valid[suit].length - 1 <= (13 - played[suit].length + round.played[suit].length) * .25;
     const candidates = new Cards();
     if (!isFirst && followed.max.gt(valid.max)) {
       return valid.max;
