@@ -1,7 +1,7 @@
 const {
   Match, Game, Player, Deal, Hand,
   Cards, Card, PlayedCard, Pass, Round,
-  RiskCards, PowerRiskCards
+  RiskCards, PowerRiskCards, PowerCards,
 } = require('./HeartsDataModels');
 
 describe('Test Card', function () {
@@ -342,6 +342,31 @@ describe('Test Cards', function () {
       const score = Cards.scoring(cards, v.isAceHeartExposed);
       expect(score).toEqual(v.expect);
     });
+  });
+});
+
+describe('Test PowerCards', function () {
+  const values = ['KS', '5S', '4S', 'QH', '8H', '5H', 'AC', '5C', '4C', '2C', 'AD', 'TD', '5D'];
+
+  it('should evaluate cards properly', function () {
+    const cards = Cards.instanciate(values);
+    const played = Cards.instanciate(['AS', 'AH', 'KH', 'KD', 'QD', 'JD']);
+    const { strong, weak } = PowerCards.evaluate1(cards, played);
+    expect(strong.length).toEqual(5);
+    expect(strong.covers('KS', 'QH', 'AC', 'AD', 'TD')).toBe(true);
+
+    expect(strong.spades.length).toEqual(1);
+    expect(strong.hearts.length).toEqual(1);
+    expect(strong.clubs.length).toEqual(1);
+    expect(strong.diamonds.length).toEqual(2);
+
+    expect(strong.spades.max.value).toEqual('KS');
+    expect(strong.hearts.max.value).toEqual('QH');
+    expect(strong.clubs.max.value).toEqual('AC');
+    expect(strong.diamonds.max.value).toEqual('AD');
+
+    expect(weak.length).toEqual(8);
+    expect(weak.contains('KS', 'QH', 'AC', 'AD', 'TD')).toBe(false);
   });
 });
 
