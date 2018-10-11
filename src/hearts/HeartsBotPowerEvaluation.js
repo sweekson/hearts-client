@@ -139,7 +139,7 @@ class HeartsBotPowerEvaluation extends HeartsBotBaseSkeleton {
 
   shouldShootTheMoonNow (middleware) {
     const { detail } = middleware.round;
-    if (this.didOpponentGetScore(middleware)) { return false; }
+    if (this.didOpponentGetScore(middleware)) { return this.shootTheMoonNow = detail.shootTheMoonNow = false; }
     if (this.shootTheMoonNow) { return true; }
     return this.shootTheMoonNow = detail.shootTheMoonNow = HeartsCardPickerMoonShooterV5.startToShootTheMoon2(middleware);
   }
