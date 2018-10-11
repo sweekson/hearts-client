@@ -483,6 +483,19 @@ PowerCards.evaluate3 = (cards, played = new Cards()) => {
   );
 };
 
+PowerCards.evaluate4 = (cards, played = new Cards()) => {
+  return new PowerCards(
+    cards.list.map(card => {
+      const vsuit = cards.suit(card.suit);
+      const psuit = played.suit(card.suit);
+      const all = Cards.instanciate(Cards.deck).suit(card.suit);
+      const available = all.skip(...psuit.values);
+      const others = available.skip(...vsuit.values);
+      return new PowerCard(card.value, others.length);
+    })
+  );
+};
+
 class PowerRiskCard extends RiskCard {
   constructor(value, risk, power = 0) {
     super(value);
