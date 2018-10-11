@@ -82,7 +82,7 @@ class HeartsCardPickerShortFirst extends HeartsCardPickerSkeleton {
     const { valid, round, followed, detail } = this;
     if (round.hasPenaltyCard) {
       detail.rule = 1401;
-      return valid.lt(followed.max).max || valid.max;
+      return valid.lt(followed.max).max || valid.skip('QS').max || valid.max;
     }
     detail.rule = 1402;
     return valid.skip('QS', 'TC').max || valid.max;
