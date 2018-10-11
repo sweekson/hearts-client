@@ -68,6 +68,10 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
       detail.rule = 2201;
       return TC || small || strong.diamonds.max || strong.clubs.max || strong.spades.skip('QS').max || QS || strong.hearts.max || hearts.max;
     }
+    if (isLessRound4 && hasPlayedQueenSpade) {
+      detail.rule = 2207;
+      return valid.lt(followed.max).max || valid.min;
+    }
     if (hasPenaltyCard) {
       detail.rule = 2202;
       return valid.gt(followed.max).min || valid.max;
@@ -87,10 +91,6 @@ class HeartsCardPickerMoonShooterV5 extends HeartsCardPickerSkeleton {
     if (medium) {
       detail.rule = 2206;
       return medium;
-    }
-    if (isLessRound4 && hasPlayedQueenSpade) {
-      detail.rule = 2207;
-      return valid.lt(followed.max).max || valid.min;
     }
     if (lead.isSpade) {
       detail.rule = 2208;
