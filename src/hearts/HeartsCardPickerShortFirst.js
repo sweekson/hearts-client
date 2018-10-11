@@ -2,6 +2,10 @@ const HeartsCardPickerSkeleton = require('./HeartsCardPickerSkeleton');
 const HeartsCardPickerBigFirst = require('./HeartsCardPickerBigFirst');
 const { Cards, PowerCards  } = require('./HeartsDataModels');
 
+/**
+ * TODO
+ * 1. Win the stack of a round if there is only one penalty card
+ */
 class HeartsCardPickerShortFirst extends HeartsCardPickerSkeleton {
   initialize (middleware) {
     super.initialize(middleware);
